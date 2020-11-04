@@ -1,0 +1,84 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import logo from './GitGoing.jpeg';
+
+
+class LoginPage extends React.Component {
+    constructor() {
+      super();
+      this.state = {
+        username: '',
+        password: '',
+        error: '',
+      };
+  
+      this.handlePassChange = this.handlePassChange.bind(this);
+      this.handleUserChange = this.handleUserChange.bind(this);
+      this.handleSubmit = this.handleSubmit.bind(this);
+    }
+  
+  
+    handleSubmit(evt) {
+      evt.preventDefault();
+  
+      if (!this.state.username) {
+        return this.setState({ error: 'Username is required' });
+      }
+  
+      if (!this.state.password) {
+        return this.setState({ error: 'Password is required' });
+      }
+  
+      return this.setState({ error: '' });
+    }
+  
+    handleUserChange(evt) {
+      this.setState({
+        username: evt.target.value,
+      });
+    };
+  
+    handlePassChange(evt) {
+      this.setState({
+        password: evt.target.value,
+      });
+    }
+  
+    render() {
+      
+      return (
+        
+        <div className="container">
+          <form onSubmit={this.handleSubmit}>
+            {
+              this.state.error &&
+              <h1 data-test="error">
+                {this.state.error}
+              </h1>
+            }
+            <div className ="imgcontainer">
+              <img src = {logo} alt = "Avatar" class="avatar"/>
+            </div>
+            <h2>Log In and Git Going!</h2>
+            <label><b>User Name</b></label>
+            <input type="text" placeholder="Enter Username" data-test="username" value={this.state.username} onChange={this.handleUserChange} />
+  
+            <label><b>Password</b></label>
+            <input type="password" placeholder="Enter Password" data-test="password" value={this.state.password} onChange={this.handlePassChange} />
+  
+            <input type="submit" value="Log In" data-test="submit" />
+
+
+          </form>
+          <form action="/action_page.php" method="post">
+            <label>Remember Me</label>
+              <input type="checkbox" checked="checked" name="remember"/>
+              <span class="psw">Forgot <a href="/#">password?</a></span>
+          </form>
+        </div>
+        
+      );
+    }
+  }
+  ReactDOM.render(<LoginPage />, document.getElementById("root"));
