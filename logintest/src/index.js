@@ -75,29 +75,29 @@ class LoginPage extends React.Component {
           <form onSubmit={this.handleSubmit}>
             {
               this.state.error &&
-              <h1 data-test="error">
+              <h3 data-test="error">
                 {this.state.error}
-              </h1>
-            }
+              </h3>
+            }h
             <div className ="imgcontainer">
               <img src = {logo} alt = "Avatar" class="avatar"/>
             </div>
             <h2>Log In and Git Going!</h2>
-            <label for ="uname"><b>User Name</b></label>
+            <label><b>User Name</b></label>
+            <br></br>
             <input type="text" placeholder="Enter Username" data-test="username" value={this.state.username} onChange={this.handleUserChange} />
-  
-            <label for="psw"><b>Password</b></label>
+            <br></br>
+            <label><b>Password</b></label>
+            <br></br>
             <input type="password" placeholder="Enter Password" data-test="password" value={this.state.password} onChange={this.handlePassChange} />
-          
-            <input type="submit" value="Log In" data-test="submit" />
+            <br></br>
+            <input type="submit" value="Log In" data-test="submit"/><br></br>
             <label>Remember Me</label>
             <input type="checkbox" checked={this.state.checked} onChange={this.handleCheck}/>
 
           </form>
-          <form action="/action_page.php" method="post">
            
-              <span class="psw">Forgot <a href="/#">password?</a></span>
-          </form>
+          <span class="psw">Forgot <a href="/#">password?</a></span>
         </div>
         
       );
