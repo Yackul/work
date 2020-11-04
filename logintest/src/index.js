@@ -5,22 +5,33 @@ import logo from './GitGoing.jpeg';
 
 
 class LoginPage extends React.Component {
-    constructor() {
-      super();
+    constructor(props) {
+      super(props);
       this.state = {
         username: '',
         password: '',
         error: '',
+        checked: true
       };
   
       this.handlePassChange = this.handlePassChange.bind(this);
       this.handleUserChange = this.handleUserChange.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);
+      this.handleCheck = this.handleCheck.bind(this);
     }
+    componentDidMount() {
+      if (localStorage.checkbox && localStorage.username !== "") {
+          this.setState({
+              isChecked: true,
+              username: localStorage.username,
+              password: localStorage.password
+          })
+      }
+  }
   
   
     handleSubmit(evt) {
-      evt.preventDefault();
+      evt.preventDefault();    
   
       if (!this.state.username) {
         return this.setState({ error: 'Username is required' });
@@ -29,8 +40,19 @@ class LoginPage extends React.Component {
       if (!this.state.password) {
         return this.setState({ error: 'Password is required' });
       }
+      const { username, password, checked } = this.state
+      if(checked && username !== "") {
+        localStorage.username = username
+        localStorage.password = password
+        localStorage.checkbox = checked
+      }
   
       return this.setState({ error: '' });
+    }
+    handleCheck(evt) {
+      this.setState({
+        checked: evt.target.checked
+      });
     }
   
     handleUserChange(evt) {
@@ -61,19 +83,19 @@ class LoginPage extends React.Component {
               <img src = {logo} alt = "Avatar" class="avatar"/>
             </div>
             <h2>Log In and Git Going!</h2>
-            <label><b>User Name</b></label>
+            <label for ="uname"><b>User Name</b></label>
             <input type="text" placeholder="Enter Username" data-test="username" value={this.state.username} onChange={this.handleUserChange} />
   
-            <label><b>Password</b></label>
+            <label for="psw"><b>Password</b></label>
             <input type="password" placeholder="Enter Password" data-test="password" value={this.state.password} onChange={this.handlePassChange} />
-  
+          
             <input type="submit" value="Log In" data-test="submit" />
-
+            <label>Remember Me</label>
+            <input type="checkbox" checked={this.state.checked} onChange={this.handleCheck}/>
 
           </form>
           <form action="/action_page.php" method="post">
-            <label>Remember Me</label>
-              <input type="checkbox" checked="checked" name="remember"/>
+           
               <span class="psw">Forgot <a href="/#">password?</a></span>
           </form>
         </div>
