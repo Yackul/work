@@ -78,7 +78,7 @@ class LoginPage extends React.Component {
               <h3 data-test="error">
                 {this.state.error}
               </h3>
-            }h
+            }
             <div className ="imgcontainer">
               <img src = {logo} alt = "Avatar" class="avatar"/>
             </div>
