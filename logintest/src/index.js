@@ -4,7 +4,6 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 
 import LogIn from "./LogInPage";
 import RegIn from "./Registration";
-
  const rootElement = document.getElementById("root");
  ReactDOM.render(
    <BrowserRouter>

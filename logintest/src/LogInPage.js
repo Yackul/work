@@ -4,7 +4,7 @@ import './index.css';
 import logo from './GitGoing.jpeg';
 
 
-
+<title>Git Going!</title>
 class LoginPage extends React.Component {
     constructor(props) {
       super(props);
@@ -29,6 +29,7 @@ class LoginPage extends React.Component {
           })
       }
   }
+  
   
   
     handleSubmit(evt) {
