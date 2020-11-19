@@ -77,7 +77,6 @@ class RegisterPage extends React.Component {
           <br></br>
           <input type="submit" class="submit2" value="Create Account" data-test="submit"/>
           <p>Already have an account? <a href='/'>Sign In</a></p>
-          
           <div>Your username is: {this.state.username}</div>
           <div>Your password is: {this.state.password}</div>
           <div>Your password2 is: {this.state.password2}</div>

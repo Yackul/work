@@ -95,8 +95,8 @@ class LoginPage extends React.Component {
             <br></br>
             <input type="password" placeholder="Enter Password" data-test="password" value={this.state.password} onChange={this.handlePassChange} />
             <br></br>
-            <input type="submit" class="submit" value="Log In" data-test="submit"/>
-            <Link to ='/Register'><input type="submit" class="submit" value="Register"/></Link><br></br>
+            <Link to='/Home'><input type="submit" class="submit" value="Log In" data-test="submit"/></Link>
+            <Link to='/Register'><input type="submit" class="submit" value="Register"/></Link><br></br>
             
           
           </form>
