@@ -2,6 +2,7 @@ import React from 'react';
 import {Link } from "react-router-dom";
 import './index.css';
 import logo from './GitGoing.jpeg';
+import testD from './USERNAMES AND PASSWORDS TEST.txt'
 
 
 <title>Git Going!</title>
@@ -12,7 +13,7 @@ class LoginPage extends React.Component {
         username: '',
         password: '',
         error: '',
-        checked: true
+        checked: false
       };
   
       this.handlePassChange = this.handlePassChange.bind(this);
@@ -23,7 +24,7 @@ class LoginPage extends React.Component {
     componentDidMount() {
       if (localStorage.checkbox && localStorage.username !== "") {
           this.setState({
-              isChecked: true,
+              checked: true,
               username: localStorage.username,
               password: localStorage.password
           })
@@ -55,7 +56,7 @@ class LoginPage extends React.Component {
       this.setState({
         checked: evt.target.checked
       });
-    }
+    };
   
     handleUserChange(evt) {
       this.setState({
@@ -67,7 +68,11 @@ class LoginPage extends React.Component {
       this.setState({
         password: evt.target.value,
       });
-    }
+    };
+
+
+
+    
   
     render() {
       
@@ -84,7 +89,7 @@ class LoginPage extends React.Component {
               </h3>
             }
             <div className ="imgcontainer">
-              <img src = {logo} alt = "Avatar" class="avatar"/>
+              <img src = {logo} alt = "avatar" class="avatar"/>
             </div>
             <h2>Log In and Git Going!</h2>
             <label><b>User Name</b></label>
@@ -95,13 +100,25 @@ class LoginPage extends React.Component {
             <br></br>
             <input type="password" placeholder="Enter Password" data-test="password" value={this.state.password} onChange={this.handlePassChange} />
             <br></br>
-            <Link to='/Home'><input type="submit" class="submit" value="Log In" data-test="submit"/></Link>
-            <Link to='/Register'><input type="submit" class="submit" value="Register"/></Link><br></br>
-            
-          
+            <button>Log In</button>
+            {this.state.username && this.state.password && 
+            <Link to='/Home'><input type="submit" className="submit" value="Log In" /></Link>
+            }
+            {!this.state.username && this.state.password &&
+            <input type="submit" className="submit" value="Log In" data-test="submit" />
+            }
+            {this.state.username && !this.state.password &&
+            <input type="submit" className="submit" value="Log In" data-test="submit" />
+            }
+            {!this.state.username && !this.state.password &&
+            <input type="submit" className="submit" value="Log In" data-test="submit" />
+            }
+            <Link to='/Register'><input type="submit" className="submit" value="Register"/></Link><br></br>
+            <input type="checkbox" checked={this.state.checked} onChange={this.handleCheck}/>
+            <label>Remember Me?</label>
           </form>
            
-          <span class="psw">Forgot <a href="/#">password?</a></span>
+          <span className="psw">Forgot <a href="/#">password?</a></span>
           </div>
         
       );

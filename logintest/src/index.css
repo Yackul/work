@@ -49,6 +49,14 @@ img.avatar {
   width: 25%;
   border-radius: 50%;
 }
+img.avatar2 {
+  float: left;
+  width: 44px;
+  text-align:center;
+  font-size: 17px;
+  border-radius: 50%;
+  padding: 0 20px 0 20px;
+}
 
 .container {
   text-align: center;
@@ -60,3 +68,24 @@ span.psw {
   padding-top: 16px;
 }
 
+.pill-nav a {
+  display: inline-block;
+  color: black;
+  text-align: center;
+  padding: 14px;
+  text-decoration: none;
+  font-size: 17px;
+  border-radius: 50px;
+}
+
+/* Change the color of links on mouse-over */
+.pill-nav a:hover {
+  background-color:#4ab3b3e1;
+  color: black;
+}
+
+/* Add a color to the active/current link */
+.pill-nav a.active {
+  background-color:#4ab3b3e1;
+  color: black;
+}
