@@ -6,36 +6,25 @@ class ReviewCreator extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            file1: '',
-            file2: ''
+            packageFile: ''
         };
     }
 
-    setFile1 = async (e) => {
+    setFile = async (e) => {
         e.preventDefault()
         const file = e.target.files[0]
         this.setState({
-            file1: file
+            packageFile: file
         })
     }
 
-    setFile2 = async (e) => {
-        e.preventDefault()
-        const file = e.target.files[0]
-        this.setState({
-            file2: file
-        })
-    }
-
-    showFile = async (e) => {
-        e.preventDefault()
-        const reader = new FileReader()
-        reader.onload = async (e) => {
-            const text = (e.target.result)
-            console.log(text)
-            alert(text)
+    showFile() {
+        const reader = new FileReader();
+        reader.onload = function () {
+            const text = reader.result;
+            alert(reader.result)
         };
-        reader.readAsText(e.target.files[0])
+        reader.readAsText(this.state.packageFile)
     }
 
     render() {
@@ -70,20 +59,17 @@ class ReviewCreator extends React.Component {
             <div className="backdrop" style={backdropStyle}>
                 <div className="ReviewCreator" style={modalStyle}>
                     {this.props.children}
-                        <input type ="file" onChange={(e) => this.setFile1(e)} />
-                        <br></br>
-                        <input type ="file" onChange={(e) => this.setFile2(e)} />
+                        <input type ="file" onChange={(e) => this.setFile(e)} />
                         <br></br>
                         <br></br>
-                        <button onClick={this.props.onClose}>
+                        <button onClick={(e) => this.showFile(e)}>
                             Create Code Review
                         </button>
                         <br></br>
                         <button onClick={this.props.onClose}>
                             Close
                         </button>
-                        <p>{this.state.file1.name}</p>
-                        <p>{this.state.file2.name}</p>
+                        <p>{this.state.packageFile.name}</p>
                 </div>
             </div>
         );
