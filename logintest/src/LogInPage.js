@@ -2,7 +2,7 @@ import React from 'react';
 import {Link } from "react-router-dom";
 import './index.css';
 import logo from './GitGoing.jpeg';
-import testD from './USERNAMES AND PASSWORDS TEST.txt'
+
 
 
 <title>Git Going!</title>
@@ -13,7 +13,8 @@ class LoginPage extends React.Component {
         username: '',
         password: '',
         error: '',
-        checked: false
+        checked: false,
+        LoggedIn: 'false'
       };
   
       this.handlePassChange = this.handlePassChange.bind(this);
@@ -21,21 +22,19 @@ class LoginPage extends React.Component {
       this.handleSubmit = this.handleSubmit.bind(this);
       this.handleCheck = this.handleCheck.bind(this);
     }
+
     componentDidMount() {
-      if (localStorage.checkbox && localStorage.username !== "") {
+      if (localStorage.checked && localStorage.username !== "") {
           this.setState({
               checked: true,
               username: localStorage.username,
               password: localStorage.password
-          })
+        })
       }
-  }
-  
-  
-  
+    }  
+
     handleSubmit(evt) {
-      evt.preventDefault();    
-  
+      evt.preventDefault();
       if (!this.state.username) {
         return this.setState({ error: 'Username is required' });
       }
@@ -43,15 +42,34 @@ class LoginPage extends React.Component {
       if (!this.state.password) {
         return this.setState({ error: 'Password is required' });
       }
-      const { username, password, checked } = this.state
+      if(this.state.username !== 'admin') {
+        return this.setState({ error: 'Incorrect Username!'})
+      }
+      if(this.state.password !== 'admin') {
+        return this.setState({ error: 'Incorrect Password!'})
+      }
+      this.setState({
+        LoggedIn: 'true'  
+      }, () => console.log(this.state.LoggedIn));
+
+      const { username, password, checked} = this.state
+      
       if(checked && username !== "") {
         localStorage.username = username
         localStorage.password = password
-        localStorage.checkbox = checked
+        localStorage.checked = checked
       }
-  
+
+      localStorage.LoggedIn = 'true'
+
+      if(localStorage.LoggedIn === 'true') {
+        return window.location = "/Home"
+      }
+
       return this.setState({ error: '' });
+
     }
+
     handleCheck(evt) {
       this.setState({
         checked: evt.target.checked
@@ -68,18 +86,14 @@ class LoginPage extends React.Component {
       this.setState({
         password: evt.target.value,
       });
-    };
-
-
-
-    
+    };    
   
     render() {
+      if(localStorage.LoggedIn === 'true') {
+        return window.location = "/Home"
+      }
       
       return (
-
-        
-        
         <div className="container">
           <form onSubmit={this.handleSubmit}>
             {
@@ -89,7 +103,7 @@ class LoginPage extends React.Component {
               </h3>
             }
             <div className ="imgcontainer">
-              <img src = {logo} alt = "avatar" class="avatar"/>
+              <img src = {logo} alt = "avatar" className="avatar"/>
             </div>
             <h2>Log In and Git Going!</h2>
             <label><b>User Name</b></label>
@@ -100,19 +114,8 @@ class LoginPage extends React.Component {
             <br></br>
             <input type="password" placeholder="Enter Password" data-test="password" value={this.state.password} onChange={this.handlePassChange} />
             <br></br>
-            <button>Log In</button>
-            {this.state.username && this.state.password && 
-            <Link to='/Home'><input type="submit" className="submit" value="Log In" /></Link>
-            }
-            {!this.state.username && this.state.password &&
-            <input type="submit" className="submit" value="Log In" data-test="submit" />
-            }
-            {this.state.username && !this.state.password &&
-            <input type="submit" className="submit" value="Log In" data-test="submit" />
-            }
-            {!this.state.username && !this.state.password &&
-            <input type="submit" className="submit" value="Log In" data-test="submit" />
-            }
+            <input type ="submit" className="submit" onClick={this.handleSubmit} value = "Log In"/>
+            
             <Link to='/Register'><input type="submit" className="submit" value="Register"/></Link><br></br>
             <input type="checkbox" checked={this.state.checked} onChange={this.handleCheck}/>
             <label>Remember Me?</label>

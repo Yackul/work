@@ -1,5 +1,4 @@
 import React from 'react';
-import {Link } from "react-router-dom";
 import './index.css';
 
 class RegisterPage extends React.Component {
@@ -19,7 +18,6 @@ class RegisterPage extends React.Component {
       this.handleUserChange = this.handleUserChange.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);
     }
-
   
     handleSubmit(evt) {
         evt.preventDefault();    
@@ -40,11 +38,13 @@ class RegisterPage extends React.Component {
         }
         return this.setState({ error: '' });
         }
+
     handleUserChange(evt) {
         this.setState({
         username: evt.target.value,
         });
     };
+
     handleEmailChange(evt){
       this.setState({
         email: evt.target.value,
@@ -56,6 +56,7 @@ class RegisterPage extends React.Component {
         password: evt.target.value,
         });
     }
+
     handlePassChange2(evt) {
         this.setState({
         password2: evt.target.value,
@@ -87,7 +88,7 @@ class RegisterPage extends React.Component {
           <br></br>
           <input type="password" placeholder="Re-enter Password" data-test="password" value={this.state.password2} onChange={this.handlePassChange2} />
           <br></br>
-          <input type="submit" className="submit2" value="Create Account" data-test="submit"/>
+          <input type="submit" className="submit2" value="Create Account" data-test="submit" onClick={this.handleSubmit}/>
           <p>Already have an account? <a href='/'>Sign In</a></p>
      
         </form>
