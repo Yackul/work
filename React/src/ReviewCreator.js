@@ -1,24 +1,55 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import axios from "axios";
 
 class ReviewCreator extends React.Component {
 
     constructor(props) {
         super(props)
         this.state = {
-            packageFile: ''
+            packageFile: "",
+            diffFile: ""
         };
     }
 
     setFile = async (e) => {
         e.preventDefault()
         const file = e.target.files[0]
+        const reader = new FileReader()
+        const scope = this
+        reader.onload = function () {
+            const text = reader.result
+            try {
+                let result = JSON.parse(text.toString())
+                scope.setState({
+                    fileName: result.reviewInfo.fileName
+                })
+            } catch (err) {
+                alert(err)
+            }
+        }
+        reader.readAsText(file)
         this.setState({
-            packageFile: file
+            packageFile: file,
         })
     }
 
+    handleClick() {
+        axios.post('http://localhost:5000/diff', {
+            repoPath: this.state.packageFile,
+            fileName: this.state.fileName
+        })
+            .then((response) => {
+                console.log(response)
+                alert(response['data'])
+            }, (error) => {
+                console.log(error)
+                alert(error)
+            });
+    }
+
     showFile() {
+
         const reader = new FileReader();
         reader.onload = function () {
             const text = reader.result
@@ -27,19 +58,10 @@ class ReviewCreator extends React.Component {
         reader.readAsText(this.state.packageFile)
     }
 
-    parseDiffPackage() {
-        const reader = new FileReader();
-        reader.onload = function () {
-            const text = reader.result
-            alert(text)
-        };
-        reader.readAsText(this.state.packageFile)
-    }
-
     render() {
         // Render nothing if the "show" prop is false
         if (!this.props.show) {
-            return null;
+            return null
         }
 
         // The gray background
@@ -68,17 +90,17 @@ class ReviewCreator extends React.Component {
             <div className="backdrop" style={backdropStyle}>
                 <div className="ReviewCreator" style={modalStyle}>
                     {this.props.children}
-                        <input type ="file" onChange={(e) => this.setFile(e)} />
-                        <br></br>
-                        <br></br>
-                        <button onClick={(e) => this.showFile(e)}>
-                            Create Code Review
-                        </button>
-                        <br></br>
-                        <button onClick={this.props.onClose}>
-                            Close
-                        </button>
-                        <p>{this.state.packageFile.name}</p>
+                    <input type="file" onChange={(e) => this.setFile(e)}/>
+                    <br></br>
+                    <br></br>
+                    <button onClick={(e) => this.handleClick()}>
+                        Create Code Review
+                    </button>
+                    <br></br>
+                    <button onClick={this.props.onClose}>
+                        Close
+                    </button>
+                    <p>{this.state.packageFile.name}</p>
                 </div>
             </div>
         );
