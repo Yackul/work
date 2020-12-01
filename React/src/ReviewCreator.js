@@ -21,8 +21,17 @@ class ReviewCreator extends React.Component {
     showFile() {
         const reader = new FileReader();
         reader.onload = function () {
-            const text = reader.result;
+            const text = reader.result
             alert(reader.result)
+        };
+        reader.readAsText(this.state.packageFile)
+    }
+
+    parseDiffPackage() {
+        const reader = new FileReader();
+        reader.onload = function () {
+            const text = reader.result
+            alert(text)
         };
         reader.readAsText(this.state.packageFile)
     }
