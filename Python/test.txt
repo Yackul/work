@@ -1,0 +1,1 @@
+Even without any processing, you can see we already have the most basic form of information you could consider a code review; a summary of changes displayed toe the user in a readable format.

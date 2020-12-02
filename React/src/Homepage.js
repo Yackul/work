@@ -12,25 +12,12 @@ class Homepage extends React.Component {
         super(props)
         this.state = {
             isOpen: false,
-            file1: '',
-            file2: ''
           };
     }
 
     toggleModal = () => {
         this.setState({isOpen: !this.state.isOpen});
     }
-
-    showFile = async (e) => {
-        e.preventDefault() 
-        const reader = new FileReader()
-        reader.onload = async (e) => {
-          const text = (e.target.result)
-          console.log(text)
-          alert(text)
-        };
-        reader.readAsText(e.target.files[0])
-      }
 
     render() {
 
@@ -41,13 +28,15 @@ class Homepage extends React.Component {
         return (    
             <div> 
                 <div className="pill-nav">
-                <img src={logo} alt="avatar2" className="avatar2" />
-                <a className="active" href="/Home">Home</a>
-                <a href="/Me">My Profile</a>
-                <a href="#contact">Contact</a>
-                <a href="#about">About</a>
-                 </div>
-                 <br></br>
+                    <img src={logo} alt="avatar2" className="avatar2" />
+                    <a className="active" href="/Home">Home</a>
+                    <a href="/Me">My Profile</a>
+                    <a href="#contact">Contact</a>
+                    <a href="#about">About</a>
+                </div>
+                <br></br>
+                <h1>Welcome to Git Going!</h1>
+                <p> Provide us a repo path and file name through a JSON file with the create button below, and we'll give you a diff!</p>
                  <button onClick={this.toggleModal}>
                     Create Code Review
                 </button>
@@ -55,7 +44,6 @@ class Homepage extends React.Component {
                 <ReviewCreator show={this.state.isOpen}
                        onClose={this.toggleModal}>
                 </ReviewCreator>
-                <input type ="file" onChange={(e) => this.showFile(e)} />
             </div>
           );
     }
