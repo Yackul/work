@@ -3,8 +3,6 @@ import {Link } from "react-router-dom";
 import './index.css';
 import logo from './GitGoing.jpeg';
 
-
-
 <title>Git Going!</title>
 class LoginPage extends React.Component {
     constructor(props) {
@@ -32,13 +30,12 @@ class LoginPage extends React.Component {
         })
       }
     }  
-
+  
     handleSubmit(evt) {
       evt.preventDefault();
       if (!this.state.username) {
         return this.setState({ error: 'Username is required' });
-      }
-  
+      }  
       if (!this.state.password) {
         return this.setState({ error: 'Password is required' });
       }
@@ -65,9 +62,7 @@ class LoginPage extends React.Component {
       if(localStorage.LoggedIn === 'true') {
         return window.location = "/Home"
       }
-
       return this.setState({ error: '' });
-
     }
 
     handleCheck(evt) {
@@ -87,13 +82,14 @@ class LoginPage extends React.Component {
         password: evt.target.value,
       });
     };    
-  
+
     render() {
       if(localStorage.LoggedIn === 'true') {
         return window.location = "/Home"
       }
-      
+  
       return (
+        
         <div className="container">
           <form onSubmit={this.handleSubmit}>
             {
@@ -119,15 +115,11 @@ class LoginPage extends React.Component {
             <Link to='/Register'><input type="submit" className="submit" value="Register"/></Link><br></br>
             <input type="checkbox" checked={this.state.checked} onChange={this.handleCheck}/>
             <label>Remember Me?</label>
-          </form>
-           
+          </form>           
           <span className="psw">Forgot <a href="/#">password?</a></span>
-          </div>
-        
+          </div>        
       );
     }
   }
-
   export default LoginPage
-  //ReactDOM.render(<LoginPage />, document.getElementById("root"));
   
