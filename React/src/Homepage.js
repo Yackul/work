@@ -1,8 +1,6 @@
 import React from 'react';
 import './index.css';
 import ReviewCreator from './ReviewCreator'
-import ReactDOM from "react-dom";
-import {Link} from "react-router-dom";
 import logo from './GitGoing.jpeg';
 import PropTypes from 'prop-types';
 

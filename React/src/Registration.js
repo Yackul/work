@@ -18,9 +18,8 @@ class RegisterPage extends React.Component {
       this.handleUserChange = this.handleUserChange.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);
     }
-  
-    handleSubmit(evt) {
 
+    handleSubmit(evt) {
       if (!this.state.username) {
         return this.setState({ error: 'Username is required' });
       }
@@ -35,22 +34,17 @@ class RegisterPage extends React.Component {
       }
       this.setState({
         LoggedIn: 'true'  
-      }, () => console.log(this.state.LoggedIn));
-  
-      const { username, password, checked} = this.state
-       
-      if(checked && username !== "") {
-        localStorage.username = username
-        localStorage.password = password
-        localStorage.checked = checked
-      }
+      });
   
       localStorage.LoggedIn = 'true'
+      
+      return this.setState({ error: '' });
+    }
 
+    redirect(){
       if(localStorage.LoggedIn === 'true') {
         return window.location = "/Home"
       }
-      return this.setState({ error: '' });
     }
 
     handleUserChange(evt) {
@@ -79,10 +73,6 @@ class RegisterPage extends React.Component {
 
     render() {
 
-      if(localStorage.LoggedIn === 'true') {
-        return window.location = "/Home"
-      }
-
         return (
         
         <div className="container">
@@ -92,7 +82,8 @@ class RegisterPage extends React.Component {
             <h3 data-test="error">
               {this.state.error}
             </h3>
-          }        
+          }
+          </form>
           <form action="http://localhost:3002/USERS/" method="post">
           <h2>Register a new account</h2>
           <label><b>Account Details</b></label>
@@ -107,10 +98,10 @@ class RegisterPage extends React.Component {
           <br></br>
           <input type="password" placeholder="Re-enter Password" data-test="password" value={this.state.password2} onChange={this.handlePassChange2} />
           <br></br>
-          <input type="submit" className="submit2" value="Create Account" data-test="submit" onClick={this.handleSubmit}/>
+          <input type="submit" className="submit" value="Create Account" data-test="submit" onClick={this.handleSubmit}/>
+          <p><a href = '/Home'>Signed Up?</a></p>          
           <p>Already have an account? <a href='/'>Sign In</a></p>
           </form>
-        </form>
       </div>      
     );
   }
