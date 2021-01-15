@@ -24,15 +24,22 @@ class ProfilePage extends React.Component {
       window.location = "/"
     }
       
+
+
+
+
+
+
+
+    
     return (    
         
       <div> 
         <div className="pill-nav">
-          <img src={logo} alt="avatar2" className="avatar2" />
-            <a  href="/Home">Home</a>
-            <a className="active">My Profile</a>
-          <a href="#contact">Contact</a>
-          <a href="#about">About</a>
+        <img src={logo} alt="avatar2" className="avatar2" />
+            <a href="/Home">Home</a>
+            <a href="/Me">My Profile</a>
+            <a href="/MyProjects">My Projects</a>
           </div>
         <h2>Im a profile!</h2>
         <input type ="submit" className="submit" onClick={this.handleSubmit} value = "Sign Out"/>

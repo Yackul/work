@@ -27,10 +27,9 @@ class Homepage extends React.Component {
             <div> 
                 <div className="pill-nav">
                     <img src={logo} alt="avatar2" className="avatar2" />
-                    <a className="active" href="/Home">Home</a>
+                    <a href="/Home">Home</a>
                     <a href="/Me">My Profile</a>
-                    <a href="#contact">Contact</a>
-                    <a href="#about">About</a>
+                    <a href="/MyProjects">My Projects</a>
                 </div>
                 <br></br>
                 <h1>Welcome to Git Going!</h1>
