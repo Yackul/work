@@ -5,6 +5,7 @@ import LogIn from "./LogInPage";
 import RegIn from "./Registration";
 import HPage from "./Homepage";
 import Prof from "./Profile";
+import Proj from "./Project"
 
  ReactDOM.render(
    <BrowserRouter>
@@ -13,6 +14,7 @@ import Prof from "./Profile";
      <Route path="/Me" component={Prof}/>
      <Route path="/Register" component={RegIn} />
      <Route path="/Home" component={HPage} />
+     <Route proj="/MyProjects" component={Proj} />
    </Switch>
    </BrowserRouter>,
   document.getElementById("root")
