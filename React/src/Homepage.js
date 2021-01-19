@@ -19,10 +19,6 @@ class Homepage extends React.Component {
 
     render() {
 
-      if(localStorage.LoggedIn !== 'true') {
-        window.location = "/"
-      }
-
         return (    
             <div> 
                 <div className="pill-nav">

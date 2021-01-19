@@ -1,7 +1,8 @@
 import React from 'react';
-import {Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 import './index.css';
 import logo from './GitGoing.jpeg';
+import {Auth} from 'aws-amplify';
 
 <title>Git Going!</title>
 class LoginPage extends React.Component {
@@ -12,12 +13,10 @@ class LoginPage extends React.Component {
         password: '',
         error: '',
         checked: false,
-        LoggedIn: 'false'
       };
   
       this.handlePassChange = this.handlePassChange.bind(this);
       this.handleUserChange = this.handleUserChange.bind(this);
-      this.handleSubmit = this.handleSubmit.bind(this);
       this.handleCheck = this.handleCheck.bind(this);
     }
 
@@ -31,40 +30,6 @@ class LoginPage extends React.Component {
       }
     }  
   
-    handleSubmit(evt) {
-      evt.preventDefault();
-      if (!this.state.username) {
-        return this.setState({ error: 'Username is required' });
-      }  
-      if (!this.state.password) {
-        return this.setState({ error: 'Password is required' });
-      }
-      if(this.state.username !== 'admin') {
-        return this.setState({ error: 'Incorrect Username!'})
-      }
-      if(this.state.password !== 'admin') {
-        return this.setState({ error: 'Incorrect Password!'})
-      }
-      this.setState({
-        LoggedIn: 'true'  
-      }, () => console.log(this.state.LoggedIn));
-
-      const { username, password, checked} = this.state
-      
-      if(checked && username !== "") {
-        localStorage.username = username
-        localStorage.password = password
-        localStorage.checked = checked
-      }
-
-      localStorage.LoggedIn = 'true'
-
-      if(localStorage.LoggedIn === 'true') {
-        return window.location = "/Home"
-      }
-      return this.setState({ error: '' });
-    }
-
     handleCheck(evt) {
       this.setState({
         checked: evt.target.checked
@@ -83,39 +48,37 @@ class LoginPage extends React.Component {
       });
     };    
 
+    signIn = async () => {
+      const {username, password} = this.state
+      try {
+        await Auth.signIn({ username, password})
+        console.log('Succesful Sign In!')
+        return window.location = "/Home" 
+      } catch (err) {console.log("error - you suck", err)}
+    }
+
     render() {
-      if(localStorage.LoggedIn === 'true') {
-        return window.location = "/Home"
-      }
   
       return (
         
         <div className="container">
-          <form onSubmit={this.handleSubmit}>
-            {
-              this.state.error &&
-              <h3 data-test="error">
-                {this.state.error}
-              </h3>
-            }
             <div className ="imgcontainer">
               <img src = {logo} alt = "avatar" className="avatar"/>
             </div>
             <h2>Log In and Git Going!</h2>
             <label><b>User Name</b></label>
             <br></br>
-            <input type="text" placeholder="Enter Username" data-test="username" value={this.state.username} onChange={this.handleUserChange} />
+            <input type="text" placeholder="Enter Username" value={this.state.username} onChange={this.handleUserChange} />
             <br></br>
             <label><b>Password</b></label>
             <br></br>
-            <input type="password" placeholder="Enter Password" data-test="password" value={this.state.password} onChange={this.handlePassChange} />
+            <input type="password" placeholder="Enter Password" value={this.state.password} onChange={this.handlePassChange} />
             <br></br>
-            <input type ="submit" className="submit" onClick={this.handleSubmit} value = "Log In"/>
+            <input type ="submit" className="submit" onClick={this.signIn} value = "Log In"/>
             
             <Link to='/Register'><input type="submit" className="submit" value="Register"/></Link><br></br>
             <input type="checkbox" checked={this.state.checked} onChange={this.handleCheck}/>
-            <label>Remember Me?</label>
-          </form>           
+            <label>Remember Me?</label>         
           <span className="psw">Forgot <a href="/#">password?</a></span>
           </div>        
       );
