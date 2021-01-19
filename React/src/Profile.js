@@ -20,17 +20,6 @@ class ProfilePage extends React.Component {
   }  
   
   render() {
-    if(localStorage.LoggedIn !== 'true') {
-      window.location = "/"
-    }
-      
-
-
-
-
-
-
-
     
     return (    
         

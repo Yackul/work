@@ -19,19 +19,8 @@ class ProjectPage extends React.Component {
     window.location = "/"
   }  
   
-  render() {
-    if(localStorage.LoggedIn !== 'true') {
-      window.location = "/"
-    }
-      
-
-
-
-
-
-
-
-    
+  render() {   
+   
     return (    
         
       <div> 
