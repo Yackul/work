@@ -34,8 +34,22 @@ class ReviewCreator extends React.Component {
         })
     }
 
-    handleClick() {
-        axios.post('http://localhost:5000/diff', {
+    handleClick1() {
+        axios.post('http://localhost:5000/min_diff', {
+            repoPath: this.state.packageFile,
+            fileName: this.state.fileName
+        })
+            .then((response) => {
+                console.log(response)
+                alert(response['data'])
+            }, (error) => {
+                console.log(error)
+                alert(error)
+            });
+    }
+	
+	handleClick2() {
+        axios.post('http://localhost:5000/full_diff', {
             repoPath: this.state.packageFile,
             fileName: this.state.fileName
         })
@@ -93,8 +107,11 @@ class ReviewCreator extends React.Component {
                     <input type="file" onChange={(e) => this.setFile(e)}/>
                     <br></br>
                     <br></br>
-                    <button onClick={(e) => this.handleClick()}>
-                        Create Code Review
+                    <button onClick={(e) => this.handleClick1()}>
+                        View minimal diff
+                    </button>
+					<button onClick={(e) => this.handleClick2()}>
+                        View full diff
                     </button>
                     <br></br>
                     <button onClick={this.props.onClose}>
