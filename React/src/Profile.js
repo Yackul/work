@@ -7,7 +7,6 @@ class ProfilePage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      LoggedIn: localStorage.LoggedIn
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -15,7 +14,6 @@ class ProfilePage extends React.Component {
 
   handleSubmit(evt) {
     evt.preventDefault();
-    localStorage.LoggedIn = 'false'
     window.location = "/"
   }  
   

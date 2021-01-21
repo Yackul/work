@@ -7,18 +7,16 @@ class ProjectPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      LoggedIn: localStorage.LoggedIn
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
   }
-
   handleSubmit(evt) {
     evt.preventDefault();
-    localStorage.LoggedIn = 'false'
     window.location = "/"
   }  
-  
+
+
   render() {   
    
     return (    

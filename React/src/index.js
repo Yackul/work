@@ -6,7 +6,7 @@ import RegIn from "./Registration";
 import HPage from "./Homepage";
 import Prof from "./Profile";
 import Proj from "./Project";
-import Amplify, { Auth } from 'aws-amplify';
+import Amplify from 'aws-amplify';
 import awsconfig from './aws-exports';
 Amplify.configure(awsconfig);
 
@@ -26,7 +26,7 @@ function App() {
 }
 
 
- ReactDOM.render(
+ ReactDOM.render( 
    App(),
   document.getElementById("root")
  );
