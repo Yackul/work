@@ -43,7 +43,6 @@ class Homepage extends React.Component {
 }
 
 Homepage.propTypes = {
-    onClose: PropTypes.func.isRequired,
     show: PropTypes.bool,
     children: PropTypes.node
 };
