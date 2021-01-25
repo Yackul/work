@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ReviewCreator from "./ReviewCreator";
 
 class DiffDisplay extends React.Component {
 

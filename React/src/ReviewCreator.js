@@ -73,7 +73,7 @@ class ReviewCreator extends React.Component {
         const reader = new FileReader();
         reader.onload = function () {
             const text = reader.result
-            alert(reader.result)
+            alert(text)
         };
         reader.readAsText(this.state.packageFile)
     }
