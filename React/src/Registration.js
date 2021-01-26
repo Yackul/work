@@ -12,6 +12,10 @@ class RegisterPage extends React.Component {
         password2: '',
         code: "",
         step: 0,
+        error: '',
+        pwerror: '',
+        pw2error: '',
+        emerror: ''
       };
   
       this.handlePassChange = this.handlePassChange.bind(this);
@@ -22,25 +26,103 @@ class RegisterPage extends React.Component {
     }
 
     signUp = async () => {
-      const {username, password, email } = this.state
-      try {
-        await Auth.signUp({ username, password, attributes: {email}})
-        console.log('Succesful Sign Up!')
-        this.setState({step: 1})
-      } catch (err) {console.log("error - you suck", err)}
+      if(!this.state.username){
+        this.setState({
+          error:1
+        })
+      }
+      else{
+        this.setState({
+          error:-1
+        })
+      }
+      if(!this.state.password){
+        this.setState({
+          pwerror:1
+        })
+      }
+      else if(this.state.password.length < 8) {
+        this.setState({
+          pwerror: 3
+        })
+      }
+      else{
+        this.setState({
+          pwerror:-1
+        })
+      }
+      if(!this.state.password2){
+        this.setState({
+          pw2error:1
+        })
+      }
+      else{
+        this.setState({
+          pw2error:-1
+        })
+      }
+      if(!this.state.email){
+        this.setState({
+          emerror:1
+        })
+      }
+      else{
+        var pattern = new RegExp(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/);
+        var res = pattern.test(this.state.email);
+        if(res){
+          this.setState({
+            emerror:-1
+          })
+        }
+        else{
+          this.setState({
+            emerror: 0
+          })
+        }
+      }
+      if(this.state.password !== this.state.password2){
+        this.setState({
+          pwerror:0,
+          pw2error:0
+        })
+      }
+    
+      if(this.state.error === -1 && this.state.pwerror === -1 && this.state.pw2error === -1 && this.state.emerror === -1){
+        const {username, password, email } = this.state
+        try {
+          await Auth.signUp({ username, password, attributes: {email}})
+          this.setState({
+            step: 1,
+            error: -1,
+            pwerror: -1,
+            pw2error: -1,
+            emerror: -1
+          });
+        } catch (err) {
+          if(this.state.emerorr === -1){
+            this.setState({
+              error: 0
+            })
+          }
+          else{
+            //todo: unexpected error handling. Some bad emails slip through
+          }
+        }
+      }
     }
 
     confirmSignUp = async () => {
       const {username, code} = this.state
       try {
         await Auth.confirmSignUp(username, code)
-        console.log('It worked!')
         this.setState({step: 2})
-      } catch (err) {console.log("haha, you suck", err)}
+      } catch (err) {
+
+      }
     }
 
     redirect(){
-      return window.location = "/Home"      
+      return window.location = "/"      
     }
 
     handleUserChange(evt) {
@@ -85,17 +167,36 @@ class RegisterPage extends React.Component {
               <label><b>Account Details</b></label>
               <br></br>
               <input type="text" name="UEmail" id="UEmail" placeholder="Enter Email" data-test="email" value={this.state.email} onChange={this.handleEmailChange} />
+              {this.state.emerror === 1 && 
+              <div className="smll">Email cannot be empty.</div>}
+              {this.state.emerror === 0 && 
+              <div className="smll">Please enter a valid e-mail.</div>}
               <br></br>
               <input type="text" name="UName" id="UName" placeholder="Enter Username" data-test="username" value={this.state.username} onChange={this.handleUserChange} />
+              {this.state.error === 1 && 
+              <div className="smll">Username cannot be empty.</div>}
+              {this.state.error === 0 && 
+              <div className="smll">Username already in use.</div>}
+              {this.state.error === 3 && 
+              <div className="smll">Username too short.</div>}
               <br></br>
               <label><b>Password</b></label>
               <br></br>
               <input type="password" name="UPW" id="UPW" placeholder="Enter Password" data-test="password" value={this.state.password} onChange={this.handlePassChange} />
+              {this.state.pwerror === 1 && 
+              <div className="smll">Passwords cannot be empty.</div>}
+              {this.state.pwerror === 0 && 
+              <div className="smll">Passwords must match.</div>}
+              {this.state.pwerror === 3 && 
+              <div className="smll">Passwords must contain at least 8 characters.</div>}
               <br></br>
               <input type="password" placeholder="Re-enter Password" data-test="password" value={this.state.password2} onChange={this.handlePassChange2} />
+              {this.state.pw2error === 1 && 
+              <div className="smll">Passwords cannot be empty.</div>}
+              {this.state.pw2error === 0 && 
+              <div className="smll">Passwords must match.</div>}
               <br></br>
-              <input type="submit" className="submit" value="Create Account" data-test="submit" onClick={this.signUp}/>
-              <p><a href = '/Home'>Signed Up?</a></p>          
+              <input type="submit" className="submit" value="Create Account" data-test="submit" onClick={this.signUp}/>          
               <p>Already have an account? <a href='/'>Sign In</a></p>
           </div>
           )
@@ -103,6 +204,7 @@ class RegisterPage extends React.Component {
           {
             this.state.step === 1 &&(
               <div>
+                <h1>Please don't leave or refresh this page; registration may not be completed!</h1>
                 <input type="text" name="UName" id="UName" placeholder="Enter Username" value={this.state.username} onChange={this.handleUserChange}/>
                 <br></br>
                 <input type="text" name="AuthCode" id="AuthCode" placeholder="Enter Authentication Code" value={this.state.code} onChange={this.handleCodeChange}/>
@@ -114,8 +216,8 @@ class RegisterPage extends React.Component {
           {
             this.state.step === 2 &&(
               <div>
-                <h2>Account Succesfully Created!</h2>
-                <input type="submit" className="submit" value="Continue to Site" data-test="submit" onClick={this.redirect}/>
+                <h2>Account succesfully created! Please log in to continue!</h2>
+                <input type="submit" className="submit" value="Continue to Log In" data-test="submit" onClick={this.redirect}/>
               </div>
             )
           }
