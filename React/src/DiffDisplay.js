@@ -31,8 +31,10 @@ class DiffDisplay extends React.Component {
         const modalStyle = {
             backgroundColor: '#fff',
             borderRadius: 5,
-            maxWidth: 500,
             minHeight: 100,
+            maxHeight: 500,
+            maxWidth: 800,
+            overflowY: 'scroll',
             margin: '0 auto',
             padding: 30,
             flex: 1,
@@ -42,19 +44,13 @@ class DiffDisplay extends React.Component {
             <div className="backdrop" style={backdropStyle}>
                 <div className="DiffDisplay" style={modalStyle}>
                     {this.props.children}
-                    <p>Test text test text text test text text test text text test text text test text</p>
-                    <p>Test text test text text test text text test text text test text text test text</p>
-                    <p>Test text test text text test text text test text text test text text test text</p>
-                    <p>Test text test text text test text text test text text test text text test text</p>
-                    <p>Test text test text text test text text test text text test text text test text</p>
-                    <p>Test text test text text test text text test text text test text text test text</p>
-                    <p>Test text test text text test text text test text text test text text test text</p>
-                    <p>Test text test text text test text text test text text test text text test text</p>
+                    <div style={{whiteSpace: 'pre-wrap'}}>
+                        {this.props.diffText}
+                    </div>
                     <br></br>
                     <button onClick={this.props.onClose}>
                         Close
                     </button>
-                    <p>{this.state.diffText}</p>
                 </div>
             </div>
         );
@@ -64,7 +60,8 @@ class DiffDisplay extends React.Component {
 DiffDisplay.propTypes = {
     onClose: PropTypes.func.isRequired,
     show: PropTypes.bool,
-    children: PropTypes.node
+    children: PropTypes.node,
+    diffText: PropTypes.string
 };
 
 export default DiffDisplay;

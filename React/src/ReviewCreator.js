@@ -10,7 +10,7 @@ class ReviewCreator extends React.Component {
         this.state = {
             isOpen: false,
             packageFile: "",
-            diffFile: ""
+            diffText: ""
         };
     }
 
@@ -47,21 +47,22 @@ class ReviewCreator extends React.Component {
         })
             .then((response) => {
                 console.log(response)
-                alert(response['data'])
+                this.state.diffText = response['data']
             }, (error) => {
                 console.log(error)
                 alert(error)
             });
     }
-	
-	handleClick2() {
+
+    handleClick2() {
         axios.post('http://localhost:5000/full_diff', {
             repoPath: this.state.packageFile,
             fileName: this.state.fileName
         })
             .then((response) => {
                 console.log(response)
-                alert(response['data'])
+                this.state.diffText = response['data']
+                alert(this.state.diffText)
             }, (error) => {
                 console.log(error)
                 alert(error)
@@ -114,17 +115,18 @@ class ReviewCreator extends React.Component {
                     <br></br>
                     <br></br>
                     <button onClick={(e) => this.handleClick1()}>
-                        View minimal diff
+                        Set minimal diff
                     </button>
-					<button onClick={(e) => this.handleClick2()}>
-                        View full diff
+                    <button onClick={(e) => this.handleClick2()}>
+                        Set full diff
                     </button>
                     <br></br>
                     <button onClick={this.toggleModal}>
                         Display Diff
                     </button>
                     <DiffDisplay show={this.state.isOpen}
-                                   onClose={this.toggleModal}>
+                                 onClose={this.toggleModal}
+                                 diffText={this.state.diffText}>
                     </DiffDisplay>
                     <br></br>
                     <button onClick={this.props.onClose}>
@@ -140,7 +142,8 @@ class ReviewCreator extends React.Component {
 ReviewCreator.propTypes = {
     onClose: PropTypes.func.isRequired,
     show: PropTypes.bool,
-    children: PropTypes.node
+    children: PropTypes.node,
+    diffFile: PropTypes.string
 };
 
 export default ReviewCreator;
