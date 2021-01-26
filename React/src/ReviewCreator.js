@@ -1,15 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import axios from "axios";
+import DiffDisplay from './DiffDisplay'
 
 class ReviewCreator extends React.Component {
 
     constructor(props) {
         super(props)
         this.state = {
+            isOpen: false,
             packageFile: "",
             diffFile: ""
         };
+    }
+
+    toggleModal = () => {
+        this.setState({isOpen: !this.state.isOpen});
     }
 
     setFile = async (e) => {
@@ -67,7 +73,7 @@ class ReviewCreator extends React.Component {
         const reader = new FileReader();
         reader.onload = function () {
             const text = reader.result
-            alert(reader.result)
+            alert(text)
         };
         reader.readAsText(this.state.packageFile)
     }
@@ -113,6 +119,13 @@ class ReviewCreator extends React.Component {
 					<button onClick={(e) => this.handleClick2()}>
                         View full diff
                     </button>
+                    <br></br>
+                    <button onClick={this.toggleModal}>
+                        Display Diff
+                    </button>
+                    <DiffDisplay show={this.state.isOpen}
+                                   onClose={this.toggleModal}>
+                    </DiffDisplay>
                     <br></br>
                     <button onClick={this.props.onClose}>
                         Close

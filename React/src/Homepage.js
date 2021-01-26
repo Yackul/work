@@ -30,7 +30,7 @@ class Homepage extends React.Component {
                 <br></br>
                 <h1>Welcome to Git Going!</h1>
                 <p> Provide us a repo path and file name through a JSON file with the create button below, and we'll give you a diff!</p>
-                 <button onClick={this.toggleModal}>
+                <button onClick={this.toggleModal}>
                     Create Code Review
                 </button>
                 <br></br>
