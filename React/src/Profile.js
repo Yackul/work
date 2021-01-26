@@ -57,11 +57,11 @@ class ProfilePage extends React.Component {
           return window.location = "/"
       default: 
           return null  
-  }
-
-
-
     }
-  }
 
-  export default ProfilePage
+
+
+  }
+}
+
+export default ProfilePage
