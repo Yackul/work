@@ -55,28 +55,12 @@ class Homepage extends React.Component {
                            onClose={this.toggleModal}>
                     </ReviewCreator>
                 </div>
-<<<<<<< HEAD
               );
             case('unauthorized'):
                 return window.location = "/"
             default: 
                 return null  
         }
-
-=======
-                <br></br>
-                <h1>Welcome to Git Going!</h1>
-                <p> Provide us a repo path and file name through a JSON file with the create button below, and we'll give you a diff!</p>
-                <button onClick={this.toggleModal}>
-                    Create Code Review
-                </button>
-                <br></br>
-                <ReviewCreator show={this.state.isOpen}
-                       onClose={this.toggleModal}>
-                </ReviewCreator>
-            </div>
-          );
->>>>>>> 621cdaf262f4856b76a18988f021cc80cf221ae0
     }
 }
 
