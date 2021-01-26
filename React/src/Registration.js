@@ -12,10 +12,10 @@ class RegisterPage extends React.Component {
         password2: '',
         code: "",
         step: 0,
-        error: '',
-        pwerror: '',
-        pw2error: '',
-        emerror: ''
+        error: -1,
+        pwerror: -1,
+        pw2error: -1,
+        emerror:-1
       };
   
       this.handlePassChange = this.handlePassChange.bind(this);
@@ -24,8 +24,10 @@ class RegisterPage extends React.Component {
       this.handleUserChange = this.handleUserChange.bind(this);
       this.handleCodeChange = this.handleCodeChange.bind(this);
     }
-
+    
     signUp = async () => {
+      var pwpattern = new RegExp(/[A-Z]+/)
+      var pwpattern2 = new RegExp(/[!@#$%^&*()]+/)
       if(!this.state.username){
         this.setState({
           error:1
@@ -44,6 +46,16 @@ class RegisterPage extends React.Component {
       else if(this.state.password.length < 8) {
         this.setState({
           pwerror: 3
+        })
+      }
+      else if (!pwpattern.test(this.state.password)){
+        this.setState({
+          pwerror: 2
+        })
+      }
+      else if (!pwpattern2.test(this.state.password)){
+        this.setState({
+          pwerror: 2
         })
       }
       else{
@@ -121,6 +133,15 @@ class RegisterPage extends React.Component {
       }
     }
 
+    resendSignUp = async () => {
+      const{username} = this.state
+      try{
+        await Auth.resendSignUp(username)
+      }catch(err){
+        console.log(err);
+      }
+    }
+
     redirect(){
       return window.location = "/"      
     }
@@ -182,9 +203,13 @@ class RegisterPage extends React.Component {
               <br></br>
               <label><b>Password</b></label>
               <br></br>
+              <div className = "requi"><b>Password Rules:</b><br></br><i> 1+ capital letter<br></br>1+ special character<br></br>(!@#$%^&*())</i><br></br></div>
+              <br></br>
               <input type="password" name="UPW" id="UPW" placeholder="Enter Password" data-test="password" value={this.state.password} onChange={this.handlePassChange} />
               {this.state.pwerror === 1 && 
               <div className="smll">Passwords cannot be empty.</div>}
+              {this.state.pwerror === 2 && 
+              <div className="smll">Passwords must contain a capital letter and one special character.</div>}
               {this.state.pwerror === 0 && 
               <div className="smll">Passwords must match.</div>}
               {this.state.pwerror === 3 && 
@@ -209,7 +234,10 @@ class RegisterPage extends React.Component {
                 <br></br>
                 <input type="text" name="AuthCode" id="AuthCode" placeholder="Enter Authentication Code" value={this.state.code} onChange={this.handleCodeChange}/>
                 <br></br>
-                <input type="submit" className="submit" value="Validate Account" data-test="submit" onClick={this.confirmSignUp}/>
+                <input type="submit" className="submit" value="Validate Account" data-test="submit" onClick={this.confirmSignUp}/><br>
+                </br>
+                <div>Resend Verification E-mail</div>
+                <input type="submit" className="submit" value="Resend"  onClick={this.resendSignUp}/>
               </div>
             )
           }
