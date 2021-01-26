@@ -20,6 +20,11 @@ input[type=text], input[type=password] {
   width: 10%;
 }
 
+.smll {
+  font-size: 12px;
+  color: red;
+}
+
 .submit2 {
   background-color: #4ab3b3e1;
   color: black;
