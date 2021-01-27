@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { Component } from 'react';
+import './App.css';
+import './index2.css';
 import './index.css';
 import logo from './GitGoing.jpeg';
+import LandingPage from './LandingPage';
+import ProjectUpload from './ProjectUpload'
 import { Auth } from 'aws-amplify'
 
-class ProjectPage extends React.Component {
-    
+class Project extends React.Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -12,9 +16,11 @@ class ProjectPage extends React.Component {
 
     this.handleSubmit = this.handleSubmit.bind(this);
   }
+
   handleSubmit(evt) {
     evt.preventDefault();
-  }  
+  }
+
   componentDidMount = async () => {
     console.log('componentDidMount called')
     try {
@@ -24,37 +30,50 @@ class ProjectPage extends React.Component {
       this.setState({ authState: 'unauthorized' })
     }
     console.log(this.state.authState)
-}
+  }
+
+  toggleModal = () => {
+    this.setState({ isOpen: !this.state.isOpen });
+  }
+
+  render() {
+    switch (this.state.authState) {
+      case ('loading'):
+        return <h1>Loading</h1>
+      case (1):
+        return (
+          <div>
+            <div className="pill-nav">
+              <img src={logo} alt="avatar2" className="avatar2" />
+              <a href="/Home">Home</a>
+              <a href="/Me">My Profile</a>
+              <a href="/Projects">My Projects</a>
+            </div>
+            <br></br>
+
+            <button onClick={this.toggleModal}>
+              Create a new project
+            </button>
+
+            <br></br>
 
 
+            <ProjectUpload show={this.state.isOpen}
+              onClose={this.toggleModal}>
+            </ProjectUpload>
 
-    render() {
+            <div className="Project">
+              <LandingPage />
+            </div>
 
-      switch(this.state.authState) {
-          case('loading'):
-              return <h1>Loading</h1>
-          case(1):
-              return (    
-                <div> 
-                <div className="pill-nav">
-                  <img src={logo} alt="avatar2" className="avatar2" />
-                    <a href="/Home">Home</a>
-                    <a href="/Me">My Profile</a>
-                    <a href="/MyProjects">My Projects</a>
-                  </div>
-                <h2>Im a project page!</h2>
-                </div>
-            );
-          case('unauthorized'):
-              return window.location = "/"
-          default: 
-              return null  
-      }
+          </div>
+        );
+      case ('unauthorized'):
+        return window.location = "/"
+      default:
+        return null
     }
+  }
 }
 
-  
-   
-  
-
-  export default ProjectPage
+export default Project;
