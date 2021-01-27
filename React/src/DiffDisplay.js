@@ -61,7 +61,6 @@ DiffDisplay.propTypes = {
     onClose: PropTypes.func.isRequired,
     show: PropTypes.bool,
     children: PropTypes.node,
-    diffText: PropTypes.string
 };
 
 export default DiffDisplay;
