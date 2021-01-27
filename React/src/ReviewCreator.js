@@ -10,7 +10,8 @@ class ReviewCreator extends React.Component {
         this.state = {
             isOpen: false,
             packageFile: "",
-            diffText: ""
+            diffText: '',
+            result: ''
         };
     }
 
@@ -47,7 +48,8 @@ class ReviewCreator extends React.Component {
         })
             .then((response) => {
                 console.log(response)
-                this.state.diffText = response['data']
+                this.state.result = response['data']
+                this.state.diffText = this.state.result
             }, (error) => {
                 console.log(error)
                 alert(error)
@@ -62,7 +64,6 @@ class ReviewCreator extends React.Component {
             .then((response) => {
                 console.log(response)
                 this.state.diffText = response['data']
-                alert(this.state.diffText)
             }, (error) => {
                 console.log(error)
                 alert(error)
@@ -93,7 +94,7 @@ class ReviewCreator extends React.Component {
             left: 0,
             right: 0,
             backgroundColor: 'rgba(0,0,0,0.3)',
-            padding: 50
+            padding: 50,
         };
 
         // The modal "window"
@@ -143,7 +144,6 @@ ReviewCreator.propTypes = {
     onClose: PropTypes.func.isRequired,
     show: PropTypes.bool,
     children: PropTypes.node,
-    diffFile: PropTypes.string
 };
 
 export default ReviewCreator;
