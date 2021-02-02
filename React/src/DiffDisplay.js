@@ -3,11 +3,31 @@ import PropTypes from 'prop-types';
 
 class DiffDisplay extends React.Component {
 
+
     constructor(props) {
         super(props)
         this.state = {
-            diffText: ""
+            lineArray: [],
+            diffChunks: []
         };
+    }
+
+    componentDidMount = async() => {
+        try {
+            this.setState({lineArray: this.props.diffText.split(/\r?\n/)})
+        } catch (err) {
+            alert(err)
+        }
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (prevProps.diffText !== this.props.diffText) {
+            try {
+                this.setState({lineArray: this.props.diffText.split(/\r?\n/)})
+            } catch (err) {
+                alert(err)
+            }
+        }
     }
 
     render() {
@@ -46,6 +66,7 @@ class DiffDisplay extends React.Component {
                     {this.props.children}
                     <div style={{whiteSpace: 'pre-wrap'}}>
                         {this.props.diffText}
+                        {this.state.lineArray.length}
                     </div>
                     <br></br>
                     <button onClick={this.props.onClose}>

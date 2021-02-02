@@ -48,8 +48,8 @@ class ReviewCreator extends React.Component {
         })
             .then((response) => {
                 console.log(response)
-                this.state.result = response['data']
-                this.state.diffText = this.state.result
+                this.setState({result:response['data']})
+                this.setState({diffText: this.state.result})
             }, (error) => {
                 console.log(error)
                 alert(error)
@@ -63,7 +63,8 @@ class ReviewCreator extends React.Component {
         })
             .then((response) => {
                 console.log(response)
-                this.state.diffText = response['data']
+                this.setState({result:response['data']})
+                this.setState({diffText: this.state.result})
             }, (error) => {
                 console.log(error)
                 alert(error)
