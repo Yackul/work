@@ -31,6 +31,7 @@ class DiffDisplay extends React.Component {
     }
 
     render() {
+
         // Render nothing if the "show" prop is false
         if (!this.props.show) {
             return null
@@ -57,7 +58,7 @@ class DiffDisplay extends React.Component {
             overflowY: 'scroll',
             margin: '0 auto',
             padding: 30,
-            flex: 1,
+            flex: 1
         };
 
         return (
@@ -65,15 +66,24 @@ class DiffDisplay extends React.Component {
                 <div className="DiffDisplay" style={modalStyle}>
                     {this.props.children}
                     <div style={{whiteSpace: 'pre-wrap'}}>
-                        <p> Number of lines in diff: {this.state.lineArray.length} </p>
+                        <p style={{margin: 2}}> Number of lines in diff: {this.state.lineArray.length} </p>
                         <div>
-                            {this.state.lineArray.map(txt => {
-                                if (txt.charAt(0) == '+') {
-                                    return <p style={{color: 'green'}}>{txt}</p>
-                                } else if (txt.charAt(0) == '-') {
-                                    return <p style={{color: 'red'}}>{txt}</p>
+                            {this.state.lineArray.map((line, index) => {
+                                if (line.charAt(0) == '+') {
+                                    return <div style={{display: 'flex', columnGap: 20, margin: 2}}>
+                                        <p style={{margin: 2}}>{index}</p>
+                                        <p style={{margin: 2, color: 'green'}}>{line}</p>
+                                    </div>
+                                } else if (line.charAt(0) == '-') {
+                                    return <div style={{display: 'flex', columnGap: 20, margin: 2}}>
+                                        <p style={{margin: 2}}>{index}</p>
+                                        <p style={{margin: 2, color: 'red'}}>{line}</p>
+                                    </div>
                                 } else {
-                                    return <p>{txt}</p>
+                                    return <div style={{display: 'flex', columnGap: 20, margin: 2}}>
+                                        <p style={{margin: 2}}>{index}</p>
+                                        <p style={{margin: 2}}>{line}</p>
+                                    </div>
                                 }
                             })}
                         </div>
