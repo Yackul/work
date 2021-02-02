@@ -114,8 +114,8 @@ class LoginPage extends React.Component {
             <br></br>
             <input type ="submit" className="submit" onClick={this.signIn} value = "Log In"/>
             <Link to='/Register'><input type="submit" className="submit" value="Register"/></Link><br></br>
-            <input type="checkbox" checked={this.state.checked} onChange={this.handleCheck}/>
-            <label>Remember Me?</label>
+            {/*<input type="checkbox" checked={this.state.checked} onChange={this.handleCheck}/>
+            <label>Remember Me?</label>*/}
           <span className="psw">Forgot <a href="/RecoverAccount">password?</a></span>
           </div>        
       );
