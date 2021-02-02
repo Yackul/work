@@ -65,8 +65,18 @@ class DiffDisplay extends React.Component {
                 <div className="DiffDisplay" style={modalStyle}>
                     {this.props.children}
                     <div style={{whiteSpace: 'pre-wrap'}}>
-                        {this.props.diffText}
-                        {this.state.lineArray.length}
+                        <p> Number of lines in diff: {this.state.lineArray.length} </p>
+                        <div>
+                            {this.state.lineArray.map(txt => {
+                                if (txt.charAt(0) == '+') {
+                                    return <p style={{color: 'green'}}>{txt}</p>
+                                } else if (txt.charAt(0) == '-') {
+                                    return <p style={{color: 'red'}}>{txt}</p>
+                                } else {
+                                    return <p>{txt}</p>
+                                }
+                            })}
+                        </div>
                     </div>
                     <br></br>
                     <button onClick={this.props.onClose}>
