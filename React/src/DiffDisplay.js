@@ -8,22 +8,27 @@ class DiffDisplay extends React.Component {
         super(props)
         this.state = {
             lineArray: [],
-            diffChunks: []
+            lineArrayLength: 0,
+            indexPad: ''
         };
     }
 
     componentDidMount = async() => {
         try {
             this.setState({lineArray: this.props.diffText.split(/\r?\n/)})
+            this.setState({lineArrayLength: this.state.lineArray.length})
+
         } catch (err) {
             alert(err)
         }
     }
 
-    componentDidUpdate(prevProps, prevState) {
+    componentDidUpdate = async(prevProps, prevState) => {
         if (prevProps.diffText !== this.props.diffText) {
             try {
                 this.setState({lineArray: this.props.diffText.split(/\r?\n/)})
+                this.setState({lineArrayLength: this.state.lineArray.length})
+
             } catch (err) {
                 alert(err)
             }
@@ -66,23 +71,23 @@ class DiffDisplay extends React.Component {
                 <div className="DiffDisplay" style={modalStyle}>
                     {this.props.children}
                     <div style={{whiteSpace: 'pre-wrap'}}>
-                        <p style={{margin: 2}}> Number of lines in diff: {this.state.lineArray.length} </p>
+                        <p style={{margin: 1}}> Number of lines in diff: {this.state.lineArray.length} </p>
+                        <p>{this.state.indexPad}</p>
                         <div>
                             {this.state.lineArray.map((line, index) => {
                                 if (line.charAt(0) == '+') {
-                                    return <div style={{display: 'flex', columnGap: 20, margin: 2}}>
-                                        <p style={{margin: 2}}>{index}</p>
-                                        <p style={{margin: 2, color: 'green'}}>{line}</p>
+                                    return <div style={{display: 'flex', columnGap: 20, margin: 1}}>
+                                        <p style={{margin: 1, color: 'green'}}>{line}</p>
                                     </div>
                                 } else if (line.charAt(0) == '-') {
-                                    return <div style={{display: 'flex', columnGap: 20, margin: 2}}>
-                                        <p style={{margin: 2}}>{index}</p>
-                                        <p style={{margin: 2, color: 'red'}}>{line}</p>
+                                    return <div style={{display: 'flex', columnGap: 20, margin: 1}}>
+                                        <p style={{margin: 1}}>{index}</p>
+                                        <p style={{margin: 1, color: 'red'}}>{line}</p>
                                     </div>
                                 } else {
-                                    return <div style={{display: 'flex', columnGap: 20, margin: 2}}>
-                                        <p style={{margin: 2}}>{index}</p>
-                                        <p style={{margin: 2}}>{line}</p>
+                                    return <div style={{display: 'flex', columnGap: 20, margin: 1}}>
+                                        <p style={{margin: 1}}>{index}</p>
+                                        <p style={{margin: 1}}>{line}</p>
                                     </div>
                                 }
                             })}
