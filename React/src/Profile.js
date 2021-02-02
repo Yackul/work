@@ -1,10 +1,10 @@
 import React from 'react';
 import './index.css';
 import logo from './GitGoing.jpeg';
-import {Auth} from 'aws-amplify';
+import { Auth } from 'aws-amplify';
 
 class ProfilePage extends React.Component {
-    
+
   constructor(props) {
     super(props);
     this.state = {
@@ -21,42 +21,42 @@ class ProfilePage extends React.Component {
     } catch (err) {
       this.setState({ authState: 'unauthorized' })
     }
-}
+  }
 
   signOut = async () => {
     try {
-        await Auth.signOut();
+      await Auth.signOut();
     } catch (error) {
-        console.log('error signing out: ', error);
+      console.log('error signing out: ', error);
     }
   }
 
   handleSubmit(evt) {
     evt.preventDefault();
-  }  
-  
+  }
+
   render() {
-    
-    switch(this.state.authState) {
-      case('loading'):
-          return <h1>Loading</h1>
-      case(1):
-          return (    
-            <div> 
+
+    switch (this.state.authState) {
+      case ('loading'):
+        return <h1>Loading</h1>
+      case (1):
+        return (
+          <div>
             <div className="pill-nav">
-            <img src={logo} alt="avatar2" className="avatar2" />
-                <a href="/Home">Home</a>
-                <a href="/Me">My Profile</a>
-                <a href="/MyProjects">My Projects</a>
-              </div>
+              <img src={logo} alt="avatar2" className="avatar2" />
+              <a href="/Home">Home</a>
+              <a href="/Me">My Profile</a>
+              <a href="/Projects">My Projects</a>
+            </div>
             <h2>Im a profile!</h2>
-            <input type ="submit" className="submit" onClick={this.signOut} value = "Sign Out"/>
-               </div>
-          );
-      case('unauthorized'):
-          return window.location = "/"
-      default: 
-          return null  
+            <input type="submit" className="submit" onClick={this.signOut} value="Sign Out" />
+          </div>
+        );
+      case ('unauthorized'):
+        return window.location = "/"
+      default:
+        return null
     }
 
 
