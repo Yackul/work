@@ -9,6 +9,8 @@ class DiffDisplay extends React.Component {
         this.state = {
             lineArray: [],
             lineArrayLength: 0,
+            commentIndex: 0,
+            comment: '',
             indexPad: ''
         };
     }
@@ -72,21 +74,21 @@ class DiffDisplay extends React.Component {
                     {this.props.children}
                     <div style={{whiteSpace: 'pre-wrap'}}>
                         <p style={{margin: 1}}> Number of lines in diff: {this.state.lineArray.length} </p>
-                        <p>{this.state.indexPad}</p>
                         <div>
                             {this.state.lineArray.map((line, index) => {
                                 if (line.charAt(0) == '+') {
                                     return <div style={{display: 'flex', columnGap: 20, margin: 1}}>
+                                        <p style={{margin: 1}}>{index+1}</p>
                                         <p style={{margin: 1, color: 'green'}}>{line}</p>
                                     </div>
                                 } else if (line.charAt(0) == '-') {
                                     return <div style={{display: 'flex', columnGap: 20, margin: 1}}>
-                                        <p style={{margin: 1}}>{index}</p>
+                                        <p style={{margin: 1}}>{index+1}</p>
                                         <p style={{margin: 1, color: 'red'}}>{line}</p>
                                     </div>
                                 } else {
                                     return <div style={{display: 'flex', columnGap: 20, margin: 1}}>
-                                        <p style={{margin: 1}}>{index}</p>
+                                        <p style={{margin: 1}}>{index+1}</p>
                                         <p style={{margin: 1}}>{line}</p>
                                     </div>
                                 }
@@ -107,6 +109,7 @@ DiffDisplay.propTypes = {
     onClose: PropTypes.func.isRequired,
     show: PropTypes.bool,
     children: PropTypes.node,
+    diffText: PropTypes.string
 };
 
 export default DiffDisplay;
