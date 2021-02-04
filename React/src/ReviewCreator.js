@@ -134,7 +134,6 @@ class ReviewCreator extends React.Component {
                     <button onClick={this.props.onClose}>
                         Close
                     </button>
-                    <p>{this.state.packageFile.name}</p>
                 </div>
             </div>
         );

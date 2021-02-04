@@ -9,9 +9,9 @@ class DiffDisplay extends React.Component {
         this.state = {
             lineArray: [],
             lineArrayLength: 0,
+            indexPad: '',
             commentIndex: 0,
-            comment: '',
-            indexPad: ''
+            comment: ''
         };
     }
 
