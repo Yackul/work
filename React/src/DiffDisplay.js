@@ -76,7 +76,8 @@ class DiffDisplay extends React.Component {
         const toggleText = {
             fontWeight: 'bold',
             fontSize: 18,
-            fontFamily: 'Courier New'
+            fontFamily: 'Courier New',
+            cursor: 'default'
         };
 
         const diffTextStyle = {
