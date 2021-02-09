@@ -39,10 +39,18 @@ class DiffDisplay extends React.Component {
 
     render() {
 
+        const diffStyle = {
+            whitespace: 'pre-wrap',
+            backgroundColor: '#fff',
+            maxWidth: 500,
+            minHeight: 100,
+            padding: 10,
+            borderStyle: 'solid',
+            marginBottom: 20
+        };
+
         return (
-            <div className="DiffDisplay">
-                {this.props.children}
-                <div style={{whiteSpace: 'pre-wrap'}}>
+            <div className="DiffDisplay" style={diffStyle}>
                     <p style={{margin: 1}}> Number of lines in diff: {this.state.lineArray.length} </p>
                     <div>
                         {this.state.lineArray.map((line, index) => {
@@ -64,7 +72,6 @@ class DiffDisplay extends React.Component {
                             }
                         })}
                     </div>
-                </div>
             </div>
         );
     }

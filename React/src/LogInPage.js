@@ -99,21 +99,21 @@ class LoginPage extends React.Component {
             </div>
             <h2>Log In and Git Going!</h2>
             <label><b>User Name</b></label>
-            <br></br>
+            <br/>
             <input type="text" placeholder="Enter Username" value={this.state.username} onChange={this.handleUserChange} />
             {this.state.error === 0 && 
             <div className="smll">Username/Password credentials not found</div>}
             {this.state.error === 1 && 
             <div className="smll">Username cannot be empty.</div>}
-            <br></br>
+            <br/>
             <label><b>Password</b></label>
-            <br></br>
+            <br/>
             <input type="password" placeholder="Enter Password" value={this.state.password} onChange={this.handlePassChange} />
             {this.state.pwerror === 1 && 
             <div className="smll">Password cannot be empty.</div>}
-            <br></br>
+            <br/>
             <input type ="submit" className="submit" onClick={this.signIn} value = "Log In"/>
-            <Link to='/Register'><input type="submit" className="submit" value="Register"/></Link><br></br>
+            <Link to='/Register'><input type="submit" className="submit" value="Register"/></Link><br/>
             <input type="checkbox" checked={this.state.checked} onChange={this.handleCheck}/>
             <label>Remember Me?</label>
           <span className="psw">Forgot <a href="/RecoverAccount">password?</a></span>

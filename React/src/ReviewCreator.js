@@ -126,7 +126,7 @@ class ReviewCreator extends React.Component {
                     <button onClick={(e) => this.clearDiffs()}>
                         Clear Diffs
                     </button>
-                    <div>
+                    <div style={{padding: 10, marginBottom: 300}}>
                         {this.state.diffList}
                     </div>
                 </div>
