@@ -8,7 +8,8 @@ class ProfilePage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      authState: 'loading'
+      authState: 'loading',
+      UName: Auth.currentAuthenticatedUser
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -34,7 +35,6 @@ class ProfilePage extends React.Component {
   handleSubmit(evt) {
     evt.preventDefault();
   }
-
   render() {
 
     switch (this.state.authState) {
@@ -51,7 +51,10 @@ class ProfilePage extends React.Component {
             </div>
             <h2>Im a profile!</h2>
             <input type="submit" className="submit" onClick={this.signOut} value="Sign Out" />
+                      
+
           </div>
+          
         );
       case ('unauthorized'):
         return window.location = "/"
