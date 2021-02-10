@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './App.css';
 import './index2.css';
 import './index.css';
@@ -12,10 +12,24 @@ class Project extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
   }
+
+  
+  showFile = async (e) => {
+    e.preventDefault()
+    const reader = new FileReader()
+    reader.onload = async (e) => { 
+      const text = (e.target.result)
+      console.log(text)
+    };
+    reader.readAsText(e.target.files[0])
+    
+  }
+
 
   handleSubmit(evt) {
     evt.preventDefault();
@@ -55,9 +69,11 @@ class Project extends React.Component {
               Create a new project
             </button>
 
-            <br></br>
-
-
+            <br></br>           
+         
+            <input type="file" onChange={(e) => this.showFile(e)} />
+            
+              <br></br>   
             <ProjectUpload show={this.state.isOpen}
               onClose={this.toggleModal}>
             </ProjectUpload>
