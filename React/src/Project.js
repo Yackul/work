@@ -12,7 +12,7 @@ class Project extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-
+      fileContent: ''
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -25,9 +25,12 @@ class Project extends React.Component {
     reader.onload = async (e) => { 
       const text = (e.target.result)
       console.log(text)
+      this.setState({
+        fileContent: text
+      })
     };
     reader.readAsText(e.target.files[0])
-    
+
   }
 
 
@@ -71,10 +74,14 @@ class Project extends React.Component {
             </button>
 
             <br></br>           
-         
+            <form action = "http://localhost:3002/REVIEW" method = "post">
+            <input type = "hidden" name ="CurrRev"  value = {this.state.fileContent}/>
+            <input type = "hidden" name ="REVNAME"  value = 'test'/>
             <input type="file" onChange={(e) => this.showFile(e)} />
-            
-              <br></br>   
+            <input type="submit" className="submit" value="Create Review"/>        
+            <p style={{whiteSpace: 'pre'}}>{this.state.fileContent}</p>
+            </form>
+            <br></br>   
             <ProjectUpload show={this.state.isOpen}
               onClose={this.toggleModal}>
             </ProjectUpload>
