@@ -48,6 +48,7 @@ class Project extends React.Component {
               <a href="/Home">Home</a>
               <a href="/Me">My Profile</a>
               <a href="/Projects">My Projects</a>
+              <a href="/Review">Review (Beta)</a>
             </div>
             <br></br>
 

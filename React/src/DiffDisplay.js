@@ -3,64 +3,140 @@ import PropTypes from 'prop-types';
 
 class DiffDisplay extends React.Component {
 
+
     constructor(props) {
         super(props)
         this.state = {
-            diffText: ""
+            show: false,
+            lineArray: [],
+            lineArrayLength: 0,
+            indexPad: '',
+            commentIndex: 10,
+            comment: 'Test'
         };
     }
 
+    componentDidMount = async() => {
+        try {
+            this.setState({lineArray: this.props.diffText.split(/\r?\n/)})
+            this.setState({lineArrayLength: this.state.lineArray.length})
+
+        } catch (err) {
+            alert(err)
+        }
+    }
+
+    componentDidUpdate = async(prevProps, prevState) => {
+        if (prevProps.diffText !== this.props.diffText) {
+            try {
+                this.setState({lineArray: this.props.diffText.split(/\r?\n/)})
+                this.setState({lineArrayLength: this.state.lineArray.length})
+
+            } catch (err) {
+                alert(err)
+            }
+        }
+    }
+
+    open() {
+        this.setState({show: true})
+    }
+
+    close() {
+        this.setState({show: false})
+    }
+
     render() {
-        // Render nothing if the "show" prop is false
-        if (!this.props.show) {
-            return null
+
+        const openDiff = {
+            display: 'inline-block',
+            whitespace: 'pre-wrap',
+            backgroundColor: '#FDF5ED',
+            padding: 5,
+            paddingLeft: 10,
+            borderStyle: 'solid',
+            borderWidth: 2,
+            marginBottom: 10,
+            alignSelf: 'center'
+        };
+
+        const closedDiff = {
+            backgroundColor: '#FDF5ED',
+            width: 20,
+            height: 20,
+            textAlign: 'center',
+            borderStyle: 'solid',
+            borderWidth: 2,
+            marginBottom: 5,
+            paddingBottom: 5,
+            paddingLeft: 3,
+            paddingRight: 3
+        };
+
+        const toggleText = {
+            fontWeight: 'bold',
+            fontSize: 18,
+            fontFamily: 'Courier New',
+            cursor: 'default'
+        };
+
+        const diffTextStyle = {
+            margin: 1,
+            fontSize: 14
         }
 
-        // The gray background
-        const backdropStyle = {
-            position: 'fixed',
-            top: 0,
-            bottom: 0,
-            left: 0,
-            right: 0,
-            backgroundColor: 'rgba(0,0,0,0.3)',
-            padding: 50
-        };
+        diffTextStyle.red = {
+            margin: 1,
+            fontSize: 14,
+            color: '#EB0E0E'
+        }
 
-        // The modal "window"
-        const modalStyle = {
-            backgroundColor: '#fff',
-            borderRadius: 5,
-            minHeight: 100,
-            maxHeight: 500,
-            maxWidth: 800,
-            overflowY: 'scroll',
-            margin: '0 auto',
-            padding: 30,
-            flex: 1,
-        };
+        diffTextStyle.green = {
+            margin: 1,
+            fontSize: 14,
+            color: '#038A30'
+        }
 
-        return (
-            <div className="backdrop" style={backdropStyle}>
-                <div className="DiffDisplay" style={modalStyle}>
-                    {this.props.children}
-                    <div style={{whiteSpace: 'pre-wrap'}}>
-                        {this.props.diffText}
+        if (this.state.show) {
+            return (
+                <div className="DiffDisplay" style={openDiff}>
+                    <text style={toggleText} onClick={(e) => this.close()}>-</text>
+                    <p style={diffTextStyle}> Number of lines in diff: {this.state.lineArray.length} </p>
+                    <div>
+                        {this.state.lineArray.map((line, index) => {
+                            if (line.charAt(0) === '+') {
+                                return <div style={{display: 'flex', columnGap: 20, margin: 1}}>
+                                    <p style={diffTextStyle}>{index+1}</p>
+                                    <p style={diffTextStyle.green}>{line}</p>
+                                </div>
+                            } else if (line.charAt(0) === '-') {
+                                return <div style={{display: 'flex', columnGap: 20, margin: 1}}>
+                                    <p style={diffTextStyle}>{index+1}</p>
+                                    <p style={diffTextStyle.red}>{line}</p>
+                                </div>
+                            } else {
+                                return <div style={{display: 'flex', columnGap: 20, margin: 1}}>
+                                    <p style={diffTextStyle}>{index+1}</p>
+                                    <p style={diffTextStyle}>{line}</p>
+                                </div>
+                            }
+                        })}
                     </div>
-                    <br></br>
-                    <button onClick={this.props.onClose}>
-                        Close
-                    </button>
                 </div>
-            </div>
-        );
+            );
+        } else {
+            return (
+                <div className="DiffDisplay" style={closedDiff}><text style = {toggleText} onClick={(e) => this.open()}>+</text></div>
+            )
+        }
     }
 }
 
 DiffDisplay.propTypes = {
-    onClose: PropTypes.func.isRequired,
+    onClose: PropTypes.func,
     show: PropTypes.bool,
     children: PropTypes.node,
+    diffText: PropTypes.string
 };
 
 export default DiffDisplay;

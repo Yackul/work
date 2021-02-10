@@ -5,7 +5,8 @@ import LogIn from "./LogInPage";
 import RegIn from "./Registration";
 import HPage from "./Homepage";
 import Prof from "./Profile";
-import RA from "./RecoverAccount"
+import RA from "./RecoverAccount";
+import Rev from "./ReviewCreator";
 import Amplify from 'aws-amplify';
 import awsconfig from './aws-exports';
 import InComment from './Project';
@@ -23,6 +24,7 @@ function App() {
         <Route path="/Home" component={HPage} />
         <Route path="/Projects" component={InComment} />
         <Route path="/RecoverAccount" component={RA} />
+        <Route path="/Review" component={Rev} />
       </Switch>
     </BrowserRouter>
   )

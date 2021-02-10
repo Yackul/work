@@ -42,18 +42,10 @@ class Homepage extends React.Component {
                             <a href="/Home">Home</a>
                             <a href="/Me">My Profile</a>
                             <a href="/Projects">My Projects</a>
+                            <a href="/Review">Review (Beta)</a>
                         </div>
                         <br></br>
                         <h1>Welcome to Git Going!</h1>
-                        <p> Provide us a repo path and file name through a JSON file with the create button below, and
-                            we'll give you a diff!</p>
-                        <button onClick={this.toggleModal}>
-                            Create Code Review
-                        </button>
-                        <br></br>
-                        <ReviewCreator show={this.state.isOpen}
-                            onClose={this.toggleModal}>
-                        </ReviewCreator>
                     </div>
                 );
             case ('unauthorized'):
