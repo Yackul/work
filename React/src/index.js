@@ -10,6 +10,7 @@ import Rev from "./ReviewCreator";
 import Amplify from 'aws-amplify';
 import awsconfig from './aws-exports';
 import InComment from './Project';
+import ProjTest from './Project2';
 import './index2.css';
 Amplify.configure(awsconfig);
 
@@ -23,6 +24,7 @@ function App() {
         <Route path="/Register" component={RegIn} />
         <Route path="/Home" component={HPage} />
         <Route path="/Projects" component={InComment} />
+        <Route path="/ProjectsTest" component={ProjTest} />
         <Route path="/RecoverAccount" component={RA} />
         <Route path="/Review" component={Rev} />
       </Switch>

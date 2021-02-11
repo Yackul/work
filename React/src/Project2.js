@@ -3,22 +3,27 @@ import './App.css';
 import './index2.css';
 import './index.css';
 import logo from './GitGoing.jpeg';
-import LandingPage from './LandingPage';
-import ProjectUpload from './ProjectUpload'
 import { Auth } from 'aws-amplify'
+import axios from 'axios'
 
-class Project extends React.Component {
+class Project2 extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
       fileContent: '',
       curTime : new Date().toLocaleString(),
+      gotRev: ''
     };
 
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  getReview = async (d) => {
+      await axios.get("http://localhost:3002/REVIEW/6").then(res => {
+      this.setState({gotRev: res.data})
+    })
+    
+  }
   
   showFile = async (e) => {
     e.preventDefault()
@@ -35,10 +40,6 @@ class Project extends React.Component {
   }
 
 
-  handleSubmit(evt) {
-    evt.preventDefault();
-  }
-
   componentDidMount = async () => {
     console.log('componentDidMount called')
     try {
@@ -48,10 +49,6 @@ class Project extends React.Component {
       this.setState({ authState: 'unauthorized' })
     }
     console.log(this.state.authState)
-  }
-
-  toggleModal = () => {
-    this.setState({ isOpen: !this.state.isOpen });
   }
 
   render() {
@@ -66,22 +63,24 @@ class Project extends React.Component {
               <a href="/Home">Home</a>
               <a href="/Me">My Profile</a>
               <a href="/Projects">My Projects</a>
-              <a href="/ProjectsTest">GET TEST</a>
               <a href="/Review">Review (Beta)</a>
             </div>
             <br></br>
 
-            <button onClick={this.toggleModal}>
-              Create a new project
-            </button>
+            <br></br>           
+            <form action = "http://localhost:3002/REVIEW" method = "post">
+            <input type = "hidden" name ="CurrRev"  value = {this.state.fileContent}/>
+            <input type = "hidden" name ="REVNAME"  value = 'test'/>
+            <input type = "hidden" name = "DT" value = {this.state.curTime}/>
+            <input type="file" onChange={(e) => this.showFile(e)} />
+            <input type="submit" className="submit" value="Create Review"/>        
+            <p style={{whiteSpace: 'pre'}}>{this.state.fileContent}</p>
+            </form>
+                <input type="submit" className = "submit" value="Get Review!" onClick={this.getReview}/>
+                <p style={{whiteSpace: 'pre'}}>{this.state.gotRev}</p>
+            
+            
             <br></br>   
-            <ProjectUpload show={this.state.isOpen}
-              onClose={this.toggleModal}>
-            </ProjectUpload>
-
-            <div className="Project">
-              <LandingPage />
-            </div>
 
           </div>
         );
@@ -93,4 +92,4 @@ class Project extends React.Component {
   }
 }
 
-export default Project;
+export default Project2;

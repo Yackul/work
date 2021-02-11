@@ -48,6 +48,7 @@ class ProfilePage extends React.Component {
               <a href="/Home">Home</a>
               <a href="/Me">My Profile</a>
               <a href="/Projects">My Projects</a>
+              <a href="/ProjectsTest">GET TEST</a>
             </div>
             <h2>Im a profile!</h2>
             <input type="submit" className="submit" onClick={this.signOut} value="Sign Out" />
