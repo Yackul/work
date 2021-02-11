@@ -43,6 +43,7 @@ class Homepage extends React.Component {
                             <a href="/Me">My Profile</a>
                             <a href="/Projects">My Projects</a>
                             <a href="/Review">Review (Beta)</a>
+                            <a href="/ProjectsTest">GET TEST</a>
                         </div>
                         <br></br>
                         <h1>Welcome to Git Going!</h1>
