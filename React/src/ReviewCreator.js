@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import axios from "axios";
-import DiffDisplay from './DiffDisplay'
+import DiffDisplay from './DiffDisplay';
 import logo from "./GitGoing.jpeg";
 
 class ReviewCreator extends React.Component {

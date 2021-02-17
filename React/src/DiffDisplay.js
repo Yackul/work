@@ -77,7 +77,7 @@ class DiffDisplay extends React.Component {
             fontWeight: 'bold',
             fontSize: 18,
             fontFamily: 'Courier New',
-            cursor: 'default'
+            cursor: 'pointer'
         };
 
         const diffTextStyle = {
