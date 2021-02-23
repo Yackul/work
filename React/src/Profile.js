@@ -1,6 +1,6 @@
 import React from 'react';
 import './index.css';
-import logo from './GitGoing.jpeg';
+import NavBar from './NavBar'
 import { Auth } from 'aws-amplify';
 
 class ProfilePage extends React.Component {
@@ -9,28 +9,27 @@ class ProfilePage extends React.Component {
     super(props);
     this.state = {
       authState: 'loading',
-      UName: Auth.currentAuthenticatedUser
+      Uname: ''
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentDidMount = async () => {
+    console.log('componentDidMount calledHP')
     try {
       await Auth.currentAuthenticatedUser()
-      this.setState({ authState: 1 })
+      const tokens = await Auth.currentSession();
+      const userName = tokens.getIdToken().payload['cognito:username'];
+      var userNameHold = userName.charAt(0).toUpperCase() + userName.slice(1);
+      this.setState({ authState: 1,
+        Uname: userNameHold })
     } catch (err) {
       this.setState({ authState: 'unauthorized' })
     }
+    //console.log(this.state.authState)
   }
 
-  signOut = async () => {
-    try {
-      await Auth.signOut();
-    } catch (error) {
-      console.log('error signing out: ', error);
-    }
-  }
 
   handleSubmit(evt) {
     evt.preventDefault();
@@ -43,15 +42,8 @@ class ProfilePage extends React.Component {
       case (1):
         return (
           <div>
-            <div className="pill-nav">
-              <img src={logo} alt="avatar2" className="avatar2" />
-              <a href="/Home">Home</a>
-              <a href="/Me">My Profile</a>
-              <a href="/Projects">My Projects</a>
-              <a href="/ProjectsTest">GET TEST</a>
-            </div>
-            <h2>Im a profile!</h2>
-            <input type="submit" className="submit" onClick={this.signOut} value="Sign Out" />
+            <NavBar/>
+            <h2>You are: {this.state.Uname}</h2>
                       
 
           </div>

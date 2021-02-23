@@ -1,7 +1,7 @@
 import React from 'react';
 import './index.css';
-import ReviewCreator from './ReviewCreator'
-import logo from './GitGoing.jpeg';
+//import ReviewCreator from './ReviewCreator'
+import NavBar from './NavBar'
 import PropTypes from 'prop-types';
 import { Auth } from 'aws-amplify'
 
@@ -12,18 +12,25 @@ class Homepage extends React.Component {
         super(props)
         this.state = {
             isOpen: false,
-            authState: 'loading'
+            authState: 'loading',
+            Uname: ''
         };
     }
 
     componentDidMount = async () => {
+        console.log('componentDidMount calledHP')
         try {
-            await Auth.currentAuthenticatedUser()
-            this.setState({ authState: 1 })
+          await Auth.currentAuthenticatedUser()
+          const tokens = await Auth.currentSession();
+          const userName = tokens.getIdToken().payload['cognito:username'];
+          var userNameHold = userName.charAt(0).toUpperCase() + userName.slice(1);
+          this.setState({ authState: 1,
+            Uname: userNameHold })
         } catch (err) {
-            this.setState({ authState: 'unauthorized' })
+          this.setState({ authState: 'unauthorized' })
         }
-    }
+        //console.log(this.state.authState)
+      }
 
     toggleModal = () => {
         this.setState({ isOpen: !this.state.isOpen });
@@ -37,16 +44,9 @@ class Homepage extends React.Component {
             case (1):
                 return (
                     <div>
-                        <div className="pill-nav">
-                            <img src={logo} alt="avatar2" className="avatar2" />
-                            <a href="/Home">Home</a>
-                            <a href="/Me">My Profile</a>
-                            <a href="/Projects">My Projects</a>
-                            <a href="/Review">Review (Beta)</a>
-                            <a href="/ProjectsTest">GET TEST</a>
-                        </div>
+                        <NavBar/>
                         <br></br>
-                        <h1>Welcome to Git Going!</h1>
+                        <h1>Welcome to Git Going {this.state.Uname}!</h1>
                     </div>
                 );
             case ('unauthorized'):

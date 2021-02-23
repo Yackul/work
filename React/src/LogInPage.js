@@ -1,5 +1,5 @@
 import React from 'react';
-import {Link} from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
 import './index.css';
 import logo from './GitGoing.jpeg';
 import {Auth} from 'aws-amplify';
@@ -16,7 +16,8 @@ class LoginPage extends React.Component {
         error: '',
         pwerror: '',
         checked: false,
-        authState: 'loading'
+        authState: 'loading',
+        rediHome: false
       };
   
       this.handlePassChange = this.handlePassChange.bind(this);
@@ -79,7 +80,8 @@ class LoginPage extends React.Component {
             error:-1,
             pwerror: -1
           });   
-          return window.location = "/Home" 
+          //return window.location = "/Home" 
+          this.setState({rediHome: true})
         } catch (err) {
             this.setState({
               error: 0,
@@ -97,6 +99,7 @@ class LoginPage extends React.Component {
             <div className ="imgcontainer">
               <img src = {logo} alt = "avatar" className="avatar"/>
             </div>
+            { this.state.rediHome ? (<Redirect to="/Home"/>) : null  }
             <h2>Log In and Git Going!</h2>
             <label><b>User Name</b></label>
             <br/>

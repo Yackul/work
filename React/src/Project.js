@@ -2,10 +2,11 @@ import React from 'react';
 import './App.css';
 import './index2.css';
 import './index.css';
-import logo from './GitGoing.jpeg';
+import NavBar from './NavBar'
 import LandingPage from './LandingPage';
 import ProjectUpload from './ProjectUpload'
 import { Auth } from 'aws-amplify'
+
 
 class Project extends React.Component {
 
@@ -61,14 +62,7 @@ class Project extends React.Component {
       case (1):
         return (
           <div>
-            <div className="pill-nav">
-              <img src={logo} alt="avatar2" className="avatar2" />
-              <a href="/Home">Home</a>
-              <a href="/Me">My Profile</a>
-              <a href="/Projects">My Projects</a>
-              <a href="/ProjectsTest">GET TEST</a>
-              <a href="/Review">Review (Beta)</a>
-            </div>
+            <NavBar/>
             <br></br>
 
             <button onClick={this.toggleModal}>
