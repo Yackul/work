@@ -12,12 +12,19 @@ class Project2 extends React.Component {
     super(props);
     this.state = {
       fileContent: '',
+      fileName: '',
       curTime : new Date().toLocaleString(),
       gotRev: '',
       Uname: '',
+      RevName: '',
       RevIDLST: [],
-      HOLDER: []
+      HOLDER: [],
+      newRevID: '',
+      step: -1
     };
+
+    this.handleRevName = this.handleRevName.bind(this);
+    this.updateStep = this.updateStep.bind(this);
 
   }
 
@@ -32,22 +39,45 @@ class Project2 extends React.Component {
     const reader = new FileReader()
     reader.onload = async (e) => { 
       const text = (e.target.result)
-      console.log(text)
       this.setState({
         fileContent: text
       })
     };
     reader.readAsText(e.target.files[0])
-
+    this.setState({
+      fileName: e.target.files[0].name
+    })
   }
 
-  popRev = async (d) => {
+  popDB = async () => {
+    await axios.post("http://localhost:3002/REVIEW", {
+      REVNAME: this.state.RevName,
+      CurrRev: this.state.fileContent,
+      DT: this.state.curTime
+    })
+    this.setState({
+      step: 1
+    });
+  }
+
+  popRev = async () => {
+    await axios.get("http://localhost:3002/REVIEW").then(res => {
+      console.log("here", res)
+      this.setState({newRevID: res.data})
+    })
     await axios.post("http://localhost:3002/WORKS_ON_REVIEWS", {
-      REVIDREF: d,
+      REVIDREF: this.state.newRevID,
       UNameW: this.state.Uname
     })
     .then(function (response) {
       console.log(response);
+    })
+  }
+
+  popRev2 = async () => {
+    await axios.get("http://localhost:3002/REVIEW").then(res => {
+      console.log(res.data)
+      this.setState({newRevID: res.data})
     })
   }
 
@@ -56,7 +86,7 @@ class Project2 extends React.Component {
     var hld = [];
     var tmp = this.state.RevIDLST.length;
     for(i = 0; i < tmp; i++){
-      console.log("http://localhost:3002/REVIEW/" + this.state.RevIDLST[i])
+      //console.log("http://localhost:3002/REVIEW/" + this.state.RevIDLST[i])
       await axios.get("http://localhost:3002/REVIEW/" + this.state.RevIDLST[i]).then(res => {
         //console.log(this.state.RevIDLST[i])
         console.log("Here is the " + i + " point of data: " + res.data)
@@ -87,20 +117,38 @@ class Project2 extends React.Component {
       this.setState({REVIDLST: res.data})
       var hldLST = []
       var i;
+      console.log(res.data.length)
       for(i = 0; i<res.data.length; i++){
         //console.log(res.data[i].REVIDREF)
         hldLST[i] = res.data[i].REVIDREF
-        console.log(hldLST[i])
+        //console.log(hldLST[i])
       }
       this.setState({
         RevIDLST: hldLST
       })
-      //console.log(this.state.RevIDLST)
+      console.log(this.state.RevIDLST)
       //console.log(res.data)
     })
   }
     //console.log(this.state.authState)
-  
+  handleRevName(evt){
+    this.setState({
+      RevName: evt.target.value,
+    });
+  }
+  updateStep = async (e) => {
+    e.preventDefault();
+    if(this.state.step === -1){
+      this.setState({
+        step: 0
+      });
+    }
+    else if(this.state.step === 0) {
+      this.setState({
+        step: 1
+      });
+    }
+  }
 
   render() {
     switch (this.state.authState) {
@@ -113,20 +161,35 @@ class Project2 extends React.Component {
             <NavBar/>
             <br></br>
             <h2>Welcome {this.state.Uname}</h2>
-            <br></br>           
-            <form action = "http://localhost:3002/REVIEW" method = "post">
-            <input type = "hidden" name ="CurrRev"  value = {this.state.fileContent}/>
-            <input type = "hidden" name ="REVNAME"  value = 'test'/>
-            <input type = "hidden" name = "DT" value = {this.state.curTime}/>
-            <input type="file" onChange={(e) => this.showFile(e)} />
-            <input type="submit" className="submit" value="Create Review" onClick={() => this.popRev(1)}/>        
-            <p style={{whiteSpace: 'pre'}}>{this.state.fileContent}</p>
-            <p style={{whiteSpace: 'pre'}}>{this.state.HOLDER}</p>
-            </form>
-            <input type="submit" className = "submit" value="Load Review!" onClick={this.loadRevs}/>
-            <p style={{whiteSpace: 'pre'}}>{this.state.HOLDER}</p>
+            <br></br>
+            {this.state.step === -1 &&
+              <input type="submit" className="submit" value="Create New Review" onClick={this.updateStep}/>
+            }
+
+            {this.state.step === 0 &&    
+            <div>     
+              <input type="file" onChange={(e) => this.showFile(e)} />
+              <br></br>
+              <input type = "text" name ="REVNAME" placeholder="Enter a name for your Review" value = {this.state.RevName} onChange={this.handleRevName}/>
+              <br></br>
+              <input type="submit" className="submit" value="Create New Review" onClick={this.popDB}/>        
+              {/*<p style={{whiteSpace: 'pre'}}>{this.state.fileContent}</p>
+              <p style={{whiteSpace: 'pre'}}>{this.state.HOLDER}</p>*/}
+            </div>
+            }
+            <br></br>
+            <input type="submit" className = "submit" value="Load test! (dont click this)" onClick={this.loadRevs}/>
+            <br></br>
+            {this.state.step === 1 &&
+            <div>
+            <p>{this.state.RevName}</p>
+            <p>{this.state.fileName}</p>
+            <input type="submit" className = "submit" value="Confirm New Review" onClick={this.popRev}/>
+            </div>
+            }
+            {/*<p style={{whiteSpace: 'pre'}}>{this.state.HOLDER}</p>*/}
             {/*<input type="submit" className = "submit" value="Get Review!" onClick={() => this.getReview(12)}/>*/}
-            <p style={{whiteSpace: 'pre'}}>{this.state.gotRev}</p>
+            {/*<p style={{whiteSpace: 'pre'}}>{this.state.gotRev}</p>*/}
             
             
             <br></br>   
