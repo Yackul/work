@@ -58,7 +58,7 @@ class Project2 extends React.Component {
     for(i = 0; i < tmp; i++){
       console.log("http://localhost:3002/REVIEW/" + this.state.RevIDLST[i])
       await axios.get("http://localhost:3002/REVIEW/" + this.state.RevIDLST[i]).then(res => {
-        console.log(this.state.RevIDLST[i])
+        //console.log(this.state.RevIDLST[i])
         console.log("Here is the " + i + " point of data: " + res.data)
         hld[i] = res.data;
       })      
@@ -90,7 +90,7 @@ class Project2 extends React.Component {
       for(i = 0; i<res.data.length; i++){
         //console.log(res.data[i].REVIDREF)
         hldLST[i] = res.data[i].REVIDREF
-        //console.log(hldLST[i])
+        console.log(hldLST[i])
       }
       this.setState({
         RevIDLST: hldLST
@@ -125,7 +125,7 @@ class Project2 extends React.Component {
             </form>
             <input type="submit" className = "submit" value="Load Review!" onClick={this.loadRevs}/>
             <p style={{whiteSpace: 'pre'}}>{this.state.HOLDER}</p>
-            <input type="submit" className = "submit" value="Get Review!" onClick={() => this.getReview(12)}/>
+            {/*<input type="submit" className = "submit" value="Get Review!" onClick={() => this.getReview(12)}/>*/}
             <p style={{whiteSpace: 'pre'}}>{this.state.gotRev}</p>
             
             
