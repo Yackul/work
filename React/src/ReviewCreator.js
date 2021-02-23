@@ -11,7 +11,7 @@ class ReviewCreator extends React.Component {
         this.state = {
             show: false,
             packageFile: '',
-            fileName: 'test.txt',
+            fileName: 'test.c',
             diffText: '',
             result: '',
             diffList: []
@@ -19,7 +19,7 @@ class ReviewCreator extends React.Component {
     }
 
     handleClick1() {
-        axios.post('http://ec2-35-164-105-133.us-west-2.compute.amazonaws.com/min_diff', {
+        axios.post('https://www.4424081204.com/min_diff', {
             repoPath: this.state.packageFile,
             fileName: this.state.fileName
         })
@@ -34,7 +34,7 @@ class ReviewCreator extends React.Component {
     }
 
     handleClick2() {
-        axios.post('http://ec2-35-164-105-133.us-west-2.compute.amazonaws.com/full_diff', {
+        axios.post('https://www.4424081204.com/full_diff', {
             repoPath: this.state.packageFile,
             fileName: this.state.fileName
         })
