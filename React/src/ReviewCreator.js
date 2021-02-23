@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import axios from "axios";
 import DiffDisplay from './DiffDisplay';
-import logo from "./GitGoing.jpeg";
+import NavBar from './NavBar'
 
 class ReviewCreator extends React.Component {
 
@@ -19,7 +19,7 @@ class ReviewCreator extends React.Component {
     }
 
     handleClick1() {
-        axios.post('http://localhost:5000/min_diff', {
+        axios.post('http://ec2-35-164-105-133.us-west-2.compute.amazonaws.com/min_diff', {
             repoPath: this.state.packageFile,
             fileName: this.state.fileName
         })
@@ -34,7 +34,7 @@ class ReviewCreator extends React.Component {
     }
 
     handleClick2() {
-        axios.post('http://localhost:5000/full_diff', {
+        axios.post('http://ec2-35-164-105-133.us-west-2.compute.amazonaws.com/full_diff', {
             repoPath: this.state.packageFile,
             fileName: this.state.fileName
         })
@@ -77,13 +77,7 @@ class ReviewCreator extends React.Component {
         return (
 
             <div>
-                <div className="pill-nav">
-                    <img src={logo} alt="avatar2" className="avatar2"/>
-                    <a href="/Home">Home</a>
-                    <a href="/Me">My Profile</a>
-                    <a href="/Projects">My Projects</a>
-                    <a href="/Review">Review (Beta)</a>
-                </div>
+                <NavBar/>
                 <div className="ReviewCreator">
                     {this.props.children}
                     <button onClick={(e) => this.handleClick1()}>

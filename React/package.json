@@ -1,13 +1,13 @@
 {
   "name": "logintest",
-  "homepage": ".",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@aws-amplify/ui-react": "^1.0.1",
     "@testing-library/jest-dom": "^5.11.5",
     "@testing-library/react": "^11.1.1",
     "@testing-library/user-event": "^12.2.0",
-    "aws-amplify": "^3.3.14",
+    "aws-amplify": "^3.3.19",
     "aws-amplify-react": "^4.2.18",
     "axios": "^0.21.1",
     "mysql": "^2.18.1",
