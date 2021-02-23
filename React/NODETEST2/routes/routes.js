@@ -68,9 +68,11 @@ const router = app => {
     //REVIEW FUNCTIONS
     // Display all REVIEWS - also shouldn't be used except in admin tools
     app.get('/REVIEW', (request, response) => {
-        pool.query('SELECT * FROM REVIEW', (error, result) => {
+        console.log('here')
+        pool.query('SELECT REVID FROM REVIEW ORDER BY REVID DESC LIMIT 1;', (error, result) => {
             if (error) throw error;
-            response.send(result);
+            console.log("here", result[0].REVID)
+            response.send(result[0].REVID.toString());
         });
     });
 
@@ -89,6 +91,8 @@ const router = app => {
     app.post('/REVIEW', (request, response) => {
         pool.query('INSERT INTO REVIEW SET ?', request.body, (error, result) => {
             if (error) throw error;
+            console.log(result)
+            response.send(result)
         });
     });
 
@@ -122,7 +126,7 @@ const router = app => {
         const UNameW = request.params.UNameW;
         pool.query('SELECT * FROM WORKS_ON_REVIEWS WHERE UNameW = ?', UNameW, (error, result) => {
             if (error) console.log(err);
-            console.log(result)
+            //console.log(result)
             //var tmp2 = result[0].REVIDREF
             response.send(result);
         });
