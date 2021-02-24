@@ -5,6 +5,7 @@ import './index.css';
 import { Auth } from 'aws-amplify'
 import axios from 'axios'
 import NavBar from './NavBar'
+import {Link} from "react-router-dom";
 
 class Project2 extends React.Component {
 
@@ -25,6 +26,7 @@ class Project2 extends React.Component {
 
     this.handleRevName = this.handleRevName.bind(this);
     this.updateStep = this.updateStep.bind(this);
+    this.creProjButts = this.creProjButts.bind(this);
 
   }
 
@@ -54,6 +56,8 @@ class Project2 extends React.Component {
       REVNAME: this.state.RevName,
       CurrRev: this.state.fileContent,
       DT: this.state.curTime
+    }).then(function (res) {
+      console.log("whynowork lmao")
     })
     this.setState({
       step: 1
@@ -62,15 +66,17 @@ class Project2 extends React.Component {
 
   popRev = async () => {
     await axios.get("http://localhost:3002/REVIEW").then(res => {
-      console.log("here", res)
+      //console.log("here", res)
       this.setState({newRevID: res.data})
     })
     await axios.post("http://localhost:3002/WORKS_ON_REVIEWS", {
       REVIDREF: this.state.newRevID,
       UNameW: this.state.Uname
+    }).then(function (res) {
+      console.log("here2");
     })
-    .then(function (response) {
-      console.log(response);
+    this.setState({
+      step: 2
     })
   }
 
@@ -82,10 +88,9 @@ class Project2 extends React.Component {
   }
 
   loadRevs = async() => {
-    var i;
     var hld = [];
     var tmp = this.state.RevIDLST.length;
-    for(i = 0; i < tmp; i++){
+    for(var i = 0; i < tmp; i++){
       //console.log("http://localhost:3002/REVIEW/" + this.state.RevIDLST[i])
       await axios.get("http://localhost:3002/REVIEW/" + this.state.RevIDLST[i]).then(res => {
         //console.log(this.state.RevIDLST[i])
@@ -98,7 +103,6 @@ class Project2 extends React.Component {
     })
     console.log(this.state.HOLDER)
   }
-
 
   componentDidMount = async () => {
     const tokens = await Auth.currentSession();
@@ -117,7 +121,7 @@ class Project2 extends React.Component {
       this.setState({REVIDLST: res.data})
       var hldLST = []
       var i;
-      console.log(res.data.length)
+      //console.log(res.data.length)
       for(i = 0; i<res.data.length; i++){
         //console.log(res.data[i].REVIDREF)
         hldLST[i] = res.data[i].REVIDREF
@@ -126,7 +130,7 @@ class Project2 extends React.Component {
       this.setState({
         RevIDLST: hldLST
       })
-      console.log(this.state.RevIDLST)
+      //console.log(this.state.RevIDLST)
       //console.log(res.data)
     })
   }
@@ -143,14 +147,33 @@ class Project2 extends React.Component {
         step: 0
       });
     }
-    else if(this.state.step === 0) {
+    else if(this.state.step === 2) {
       this.setState({
-        step: 1
-      });
+        step: -1
+      })
+    }
+  }
+
+  nahForReal() {
+
+  }
+
+  creProjButts() {
+    if(this.state.HOLDER) {
+      for(var i = 0; i < this.state.HOLDER.length; i++){
+        
+      }
+      return (<div>yeh</div>)
+    }
+    else{
+      return (<div>nah</div>)
     }
   }
 
   render() {
+
+    const projs = this.creProjButts()
+
     switch (this.state.authState) {
       case ('loading'):
         return <h1>Loading</h1>
@@ -160,7 +183,10 @@ class Project2 extends React.Component {
           <div>
             <NavBar/>
             <br></br>
-            <h2>Welcome {this.state.Uname}</h2>
+            <div>{projs}</div>
+            <input type="submit" className = "submit" value="Load test! (dont click this)" onClick={this.loadRevs}/>
+            <br></br>
+            {/*<p style={{whiteSpace: 'pre'}}>{this.state.HOLDER}</p>*/}
             <br></br>
             {this.state.step === -1 &&
               <input type="submit" className="submit" value="Create New Review" onClick={this.updateStep}/>
@@ -177,9 +203,6 @@ class Project2 extends React.Component {
               <p style={{whiteSpace: 'pre'}}>{this.state.HOLDER}</p>*/}
             </div>
             }
-            <br></br>
-            <input type="submit" className = "submit" value="Load test! (dont click this)" onClick={this.loadRevs}/>
-            <br></br>
             {this.state.step === 1 &&
             <div>
             <p>{this.state.RevName}</p>
@@ -187,8 +210,12 @@ class Project2 extends React.Component {
             <input type="submit" className = "submit" value="Confirm New Review" onClick={this.popRev}/>
             </div>
             }
-            {/*<p style={{whiteSpace: 'pre'}}>{this.state.HOLDER}</p>*/}
-            {/*<input type="submit" className = "submit" value="Get Review!" onClick={() => this.getReview(12)}/>*/}
+            {this.state.step === 2 &&
+            <div><p>Review Successfully Created!</p>
+            <br></br>
+            <Link to ="/ProjectsTest"><input type ="submit" className = "submit" value= "Return to your Projects?" onClick={this.updateStep}/></Link>
+            </div>
+            }
             {/*<p style={{whiteSpace: 'pre'}}>{this.state.gotRev}</p>*/}
             
             

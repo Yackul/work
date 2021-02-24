@@ -2,7 +2,7 @@
   "name": "nodetest2",
   "version": "1.0.0",
   "description": "",
-  "main": "hello-server.js",
+  "main": "app.js",
   "dependencies": {
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
