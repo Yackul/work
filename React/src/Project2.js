@@ -21,7 +21,8 @@ class Project2 extends React.Component {
       RevIDLST: [],
       HOLDER: [],
       newRevID: '',
-      step: -1
+      step: -1,
+      seleD: '',
     };
 
     this.handleRevName = this.handleRevName.bind(this);
@@ -31,8 +32,19 @@ class Project2 extends React.Component {
   }
 
   getReview = async (d) => {
+      //console.log("d = ", d)
+      const hld = d;
+      var hld2 = ""
       await axios.get("http://localhost:3002/REVIEW/" + d).then(res => {
-      this.setState({gotRev: res.data})
+      //console.log("here", res)
+      hld2 = res.data;
+      hld2 = hld2.toString().split("$#")
+      //console.log(hld2[0])
+      this.setState({
+        gotRev: hld2[1],
+        //seleD: hld,
+        RevName: hld2[0]
+      })
     })
   }
   
@@ -55,9 +67,10 @@ class Project2 extends React.Component {
     await axios.post("http://localhost:3002/REVIEW", {
       REVNAME: this.state.RevName,
       CurrRev: this.state.fileContent,
-      DT: this.state.curTime
+      DT: this.state.curTime,
+      FName: this.state.fileName
     }).then(function (res) {
-      console.log("whynowork lmao")
+      //console.log("whynowork lmao")
     })
     this.setState({
       step: 1
@@ -66,26 +79,21 @@ class Project2 extends React.Component {
 
   popRev = async () => {
     await axios.get("http://localhost:3002/REVIEW").then(res => {
-      //console.log("here", res)
+      //console.log("here is res", res)
       this.setState({newRevID: res.data})
     })
     await axios.post("http://localhost:3002/WORKS_ON_REVIEWS", {
       REVIDREF: this.state.newRevID,
       UNameW: this.state.Uname
     }).then(function (res) {
-      console.log("here2");
+      //console.log("here2");
     })
     this.setState({
       step: 2
     })
+    console.log(this.state.step)
   }
 
-  popRev2 = async () => {
-    await axios.get("http://localhost:3002/REVIEW").then(res => {
-      console.log(res.data)
-      this.setState({newRevID: res.data})
-    })
-  }
 
   loadRevs = async() => {
     var hld = [];
@@ -101,7 +109,7 @@ class Project2 extends React.Component {
     this.setState({
       HOLDER: hld
     })
-    console.log(this.state.HOLDER)
+    //console.log(this.state.HOLDER)
   }
 
   componentDidMount = async () => {
@@ -118,6 +126,7 @@ class Project2 extends React.Component {
     }
     //console.log(this.state.Uname)
     await axios.get("http://localhost:3002/WORKS_ON_REVIEWS/" + this.state.Uname).then(res => {
+      //console.log(this.state.Uname)
       this.setState({REVIDLST: res.data})
       var hldLST = []
       var i;
@@ -130,7 +139,6 @@ class Project2 extends React.Component {
       this.setState({
         RevIDLST: hldLST
       })
-      //console.log(this.state.RevIDLST)
       //console.log(res.data)
     })
   }
@@ -151,29 +159,21 @@ class Project2 extends React.Component {
       this.setState({
         step: -1
       })
+      return window.location = "/ProjectsTest"
     }
-  }
-
-  nahForReal() {
-
   }
 
   creProjButts() {
-    if(this.state.HOLDER) {
-      for(var i = 0; i < this.state.HOLDER.length; i++){
-        
-      }
-      return (<div>yeh</div>)
-    }
-    else{
-      return (<div>nah</div>)
-    }
+    const items = this.state.RevIDLST.map((item, i) => <div key = {i}><input key = {i} type="submit" className="submit" value={"Project " + item} onClick={this.getReview.bind(this, (item.valueOf(item)))}/><br></br></div>)
+    //console.log(this.state.RevIDLST)
+    return items
+  
   }
 
   render() {
 
     const projs = this.creProjButts()
-
+    
     switch (this.state.authState) {
       case ('loading'):
         return <h1>Loading</h1>
@@ -184,6 +184,7 @@ class Project2 extends React.Component {
             <NavBar/>
             <br></br>
             <div>{projs}</div>
+            <p style={{whiteSpace: 'pre'}}>Current Review: {this.state.RevName}<br></br> {this.state.gotRev}</p>
             <input type="submit" className = "submit" value="Load test! (dont click this)" onClick={this.loadRevs}/>
             <br></br>
             {/*<p style={{whiteSpace: 'pre'}}>{this.state.HOLDER}</p>*/}
