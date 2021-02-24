@@ -22,8 +22,10 @@ class ProfilePage extends React.Component {
       const tokens = await Auth.currentSession();
       const userName = tokens.getIdToken().payload['cognito:username'];
       var userNameHold = userName.charAt(0).toUpperCase() + userName.slice(1);
-      this.setState({ authState: 1,
-        Uname: userNameHold })
+      this.setState({
+        authState: 1,
+        Uname: userNameHold
+      })
     } catch (err) {
       this.setState({ authState: 'unauthorized' })
     }
@@ -42,12 +44,12 @@ class ProfilePage extends React.Component {
       case (1):
         return (
           <div>
-            <NavBar/>
+            <NavBar />
             <h2>You are: {this.state.Uname}</h2>
-                      
+
 
           </div>
-          
+
         );
       case ('unauthorized'):
         return window.location = "/"

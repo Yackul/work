@@ -1,38 +1,43 @@
-import React from 'react';
+import React, { Component } from 'react';
 import './App.css';
-import './index2.css';
-import './index.css';
-import NavBar from './NavBar'
-import LandingPage from './LandingPage';
+import PropTypes from 'prop-types';
+import logo from './GitGoing.jpeg';
 import ProjectUpload from './ProjectUpload'
 import { Auth } from 'aws-amplify'
+import Comment3 from './CommentBox'
 
 
 class Project extends React.Component {
 
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
-      fileContent: '',
-      curTime : new Date().toLocaleString(),
+      lineArray: [],
+      diffText: 'The boy kicked the ball. \n The girl hit the ball. \n The dog chased the ball.',
+      lineArrayLength: 0,
+      indexPad: '',
+      commentIndex: 0,
+      showText: false,
+      comment: 'this is a comment'
     };
-
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.indexthis = this.indexthis.bind(this)
   }
 
-  
-  showFile = async (e) => {
-    e.preventDefault()
-    const reader = new FileReader()
-    reader.onload = async (e) => { 
-      const text = (e.target.result)
-      console.log(text)
-      this.setState({
-        fileContent: text
-      })
-    };
-    reader.readAsText(e.target.files[0])
+  indexthis() {
+    try {
+      this.setState({ lineArray: this.state.diffText.split(/\r?\n/) })
+      this.setState({ lineArrayLength: this.state.lineArray.length })
 
+    } catch (err) {
+      alert(err)
+    }
+  }
+
+  handleClick = () => {
+    console.log('Click happened');
+    this.setState((state) => ({
+      showText: !state.showText  //  Toggle showText
+    }))
   }
 
 
@@ -62,20 +67,63 @@ class Project extends React.Component {
       case (1):
         return (
           <div>
-            <NavBar/>
+            <div className="pill-nav">
+              <img src={logo} alt="avatar2" className="avatar2" />
+              <a href="/Home">Home</a>
+              <a href="/Me">My Profile</a>
+              <a href="/Projects">My Projects</a>
+            </div>
             <br></br>
 
             <button onClick={this.toggleModal}>
               Create a new project
             </button>
-            <br></br>   
+
+
+
+            <br></br>
+
+
             <ProjectUpload show={this.state.isOpen}
               onClose={this.toggleModal}>
             </ProjectUpload>
 
-            <div className="Project">
-              <LandingPage />
+
+            <p>{this.state.diffText}</p>
+            <button onClick={this.indexthis}>return indexing</button>
+            <p style={{ margin: 1 }}> Number of lines: {this.state.lineArray.length} </p>
+
+
+            <div>
+              {this.state.lineArray.map((line, index) => {
+                return <div style={{ display: 'flex', columnGap: 20, margin: 1 }}>
+                  <button onClick={this.handleClick} style={{ margin: 1 }}> {index + 1}</button>
+                  {(() => {
+                    if (this.state.showText) {
+                      return <div style={{ display: 'flex', columnGap: 20, margin: 1 }}>
+
+                        <p style={{ margin: 1 }}>{line}</p>
+                        {"\n"}
+                        <Comment3 />
+                      </div>
+
+                    }
+                    else {
+                      return <div style={{ display: 'flex', columnGap: 20, margin: 1 }}>
+                        <p style={{ margin: 1 }}>{line}</p>
+                      </div>
+
+                    }
+                  })()}
+
+
+
+
+
+                </div>
+              })}
             </div>
+
 
           </div>
         );
@@ -86,5 +134,12 @@ class Project extends React.Component {
     }
   }
 }
+
+Project.propTypes = {
+  onClose: PropTypes.func,
+  show: PropTypes.bool,
+  children: PropTypes.node,
+  diffText: PropTypes.string
+};
 
 export default Project;
