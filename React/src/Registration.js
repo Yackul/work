@@ -1,6 +1,7 @@
 import React from 'react';
 import './index.css';
 import {Auth} from 'aws-amplify';
+import axios from 'axios'
 
 class RegisterPage extends React.Component {
     constructor(props) {
@@ -142,6 +143,16 @@ class RegisterPage extends React.Component {
       }
     }
 
+    submitForm = async () => {
+        await axios.post("http://localhost:3002/USERS", {
+          UName: this.state.username,
+          UEmail: this.state.email
+        }).then(function (res) {
+          console.log(res);
+        })
+      this.signUp()
+    }
+
     redirect(){
       return window.location = "/"      
     }
@@ -221,11 +232,11 @@ class RegisterPage extends React.Component {
               {this.state.pw2error === 0 && 
               <div className="smll">Passwords must match.</div>}
               <br></br>
-              <form action = "http://localhost:3002/USERS" method = "post">
+              <div>
               <input type = "hidden" name ="UName"  value = {this.state.username}/>
               <input type = "hidden" name ="UEmail"  value = {this.state.email}/>
-              <input type="submit" className="submit" value="Create Account" data-test="submit" onClick={this.signUp}/>          
-              </form>
+              <input type="submit" className="submit" value="Create Account" onClick={this.submitForm}/>          
+              </div>
               <p>Already have an account? <a href='/'>Sign In</a></p>
           </div>
           )
