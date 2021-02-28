@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import axios from "axios";
 import DiffDisplay from './DiffDisplay';
 import NavBar from './NavBar'
+import { Auth } from 'aws-amplify'
 
 class ReviewCreator extends React.Component {
 
@@ -14,8 +15,19 @@ class ReviewCreator extends React.Component {
             fileName: 'test.c',
             diffText: '',
             result: '',
-            diffList: []
+            diffList: [],
+            curTime : new Date().toLocaleString(),
+            Uname: '',
+            newCommID: '',
+            newRevID: ''
         };
+    }
+
+    componentDidMount = async () => {
+        const tokens = await Auth.currentSession();
+        const userName = tokens.getIdToken().payload['cognito:username'];
+        var userNameHold = userName.charAt(0).toUpperCase() + userName.slice(1);
+        this.setState({Uname: userNameHold})
     }
 
     handleClick1() {
@@ -24,14 +36,41 @@ class ReviewCreator extends React.Component {
             fileName: this.state.fileName
         })
             .then((response) => {
-                console.log(response)
+                //console.log(response)
                 this.setState({result: response['data']})
                 this.setState({diffText: this.state.result})
+                console.log(this.state.diffText)
             }, (error) => {
                 console.log(error)
                 alert(error)
             });
+            this.newFun()
     }
+    
+    newFun = async () => {
+        await axios.post("http://localhost:3002/COMMITS", {
+            CommMEssage: "This is a commit message",
+            CommAppro: true,
+            DT: this.state.curTime,
+            WhatRevID: 1,
+            UNameCom: this.state.Uname
+          }).then(function (res) {
+            //console.log("whynowork lmao")
+          })
+          await axios.get("http://localhost:3002/COMMITS").then(res => {
+            console.log("here is res", res)
+            this.setState({newCommID: res.data})
+          })
+        await axios.post("http://localhost:3002/COMMITS_ON_REVIEWS", {
+            CommID: this.state.newCommID,
+            REVID: 1,
+            CommDT: this.state.curTime,
+            CommDiff: this.state.diffText
+          }).then(function (res) {
+            //console.log("whynowork lmao")
+          })
+    }
+
 
     handleClick2() {
         axios.post('https://www.4424081204.com/full_diff', {

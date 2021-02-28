@@ -23,6 +23,7 @@ class Project2 extends React.Component {
       newRevID: '',
       step: -1,
       seleD: '',
+      step2: 0
     };
 
     this.handleRevName = this.handleRevName.bind(this);
@@ -38,12 +39,13 @@ class Project2 extends React.Component {
       await axios.get("http://localhost:3002/REVIEW/" + d).then(res => {
       //console.log("here", res)
       hld2 = res.data;
-      hld2 = hld2.toString().split("$#")
+      hld2 = hld2.toString().split("$#BREAKBREAK")
       //console.log(hld2[0])
       this.setState({
         gotRev: hld2[1],
         //seleD: hld,
-        RevName: hld2[0]
+        RevName: hld2[0],
+        step2: 1
       })
     })
   }
@@ -183,8 +185,11 @@ class Project2 extends React.Component {
           <div>
             <NavBar/>
             <br></br>
+            
             <div>{projs}</div>
+            {this.state.step2 === 1 &&
             <p style={{whiteSpace: 'pre'}}>Current Review: {this.state.RevName}<br></br> {this.state.gotRev}</p>
+            }
             <input type="submit" className = "submit" value="Load test! (dont click this)" onClick={this.loadRevs}/>
             <br></br>
             {/*<p style={{whiteSpace: 'pre'}}>{this.state.HOLDER}</p>*/}
