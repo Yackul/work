@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import './App.css';
 import PropTypes from 'prop-types';
-import logo from './GitGoing.jpeg';
 import ProjectUpload from './ProjectUpload'
 import { Auth } from 'aws-amplify'
 import Comment3 from './CommentBox'
+import NavBar from './NavBar'
 
 
 class Project extends React.Component {
@@ -67,12 +67,7 @@ class Project extends React.Component {
       case (1):
         return (
           <div>
-            <div className="pill-nav">
-              <img src={logo} alt="avatar2" className="avatar2" />
-              <a href="/Home">Home</a>
-              <a href="/Me">My Profile</a>
-              <a href="/Projects">My Projects</a>
-            </div>
+            <NavBar/>
             <br></br>
 
             <button onClick={this.toggleModal}>
