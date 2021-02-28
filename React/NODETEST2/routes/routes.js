@@ -25,10 +25,8 @@ const router = app => {
     // Display a single user by UName
     app.get('/USERS/:UName', (request, response) => {
         const UName = request.params.UName;
-
         pool.query('SELECT * FROM USERS WHERE UName = ?', UName, (error, result) => {
             if (error) throw error;
-
             response.send(result);
         });
     });
@@ -65,6 +63,48 @@ const router = app => {
         });
     });
     //END USER FUNCTIONS
+
+
+    //COMMIT FUNCTIONS
+    //Display 
+    app.get('/COMMITS', (request, response) => {
+        pool.query('SELECT * FROM COMMITS', (error, result) => {
+            if (error) throw error;
+            response.send(result);
+        });
+    });
+
+    // Display commits by UName
+    app.get('/COMMITS/:UName', (request, response) => {
+        const UName = request.params.UName;
+
+        pool.query('SELECT * FROM COMMITS WHERE UName = ?', UName, (error, result) => {
+            if (error) throw error;
+            response.send(result);
+        });
+    });
+    
+    //Post a diff
+    app.post('/COMMITS', (request, response) => {
+        pool.query('INSERT INTO COMMITS SET ?', request.body, (error, result) => {
+            if (error) {
+                console.log("Something went wrong")
+            }else{
+                console.log(result);
+                response.send(result);
+            }
+        });
+    });
+    
+     // Delete a diff
+    app.delete('/COMMITS/:CommID', (request, response) => {
+        const CommID = request.params.CommID;
+
+        pool.query('DELETE FROM COMMITS WHERE CommID = ?', CommID, (error, result) => {
+            if (error) throw error;
+            response.send('Commit deleted.');
+        });
+    });
 
     //REVIEW FUNCTIONS
     app.get('/REVIEW', (request, response) => {
