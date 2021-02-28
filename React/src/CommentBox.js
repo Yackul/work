@@ -1,19 +1,28 @@
 import React, { Component } from 'react';
 import './CommentBox.css';
+import { Auth } from 'aws-amplify'
 
 class CommentBox extends Component {
     constructor(props) {
         super(props);
         this.state = {
             comments: [],
-            commentId: 0
+            commentId: 0,
+            Uname: ''
         };
+    }
+
+    componentDidMount = async () => {
+        const tokens = await Auth.currentSession();
+        const userName = tokens.getIdToken().payload['cognito:username'];
+        var userNameHold = userName.charAt(0).toUpperCase() + userName.slice(1);
+        this.setState({Uname: userNameHold})
     }
     handleOnSubmit(commentText) {
         let newCommentId = this.state.commentId + 1;
         this.setState({ commentId: newCommentId });
 
-        let comment = { id: this.state.commentId, author: 'Username', text: commentText }
+        let comment = { id: this.state.commentId, author: this.state.Uname, text: commentText }
         this.setState({ comments: this.state.comments.concat(comment) });
     }
     render() {

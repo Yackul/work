@@ -27,6 +27,7 @@ class ReviewCreator extends React.Component {
                 console.log(response)
                 this.setState({result: response['data']})
                 this.setState({diffText: this.state.result})
+                console.log(this.state.diffText)
             }, (error) => {
                 console.log(error)
                 alert(error)

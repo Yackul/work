@@ -84,7 +84,7 @@ const router = app => {
             //var tmp2 = result[0].CurrRev
             const buf = new Buffer.from(result[0].CurrRev, "binary")
             //console.log(buf)
-            response.send(result[0].REVNAME + "$#" + buf);
+            response.send(result[0].REVNAME + "$#BREAKBREAK" + buf);
         });
     });
 
