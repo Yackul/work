@@ -1,9 +1,8 @@
 import React from 'react';
 import './index.css';
-//import ReviewCreator from './ReviewCreator'
 import NavBar from './NavBar'
-import PropTypes from 'prop-types';
 import { Auth } from 'aws-amplify'
+import axios from 'axios';
 
 
 class Homepage extends React.Component {
@@ -13,12 +12,28 @@ class Homepage extends React.Component {
         this.state = {
             isOpen: false,
             authState: 'loading',
-            Uname: ''
+            Uname: '',
+            invLST: [],
+            invULST: [],
+            invNum: 0
         };
+
+        this.creInvButts = this.creInvButts.bind(this);
+    }
+
+    acceptInv = async (x, y) => {
+        console.log("x= ",x, "y= ", y)
+        await axios.put("http://localhost:3002/INVITES/" + x, {
+            ACCEPTED: 1,
+        })
+        await axios.post("http://localhost:3002/WORKS_ON_REVIEWS", {
+            REVIDREF: x,
+            UNameW: this.state.Uname
+        })
+        return window.location = "/Home"
     }
 
     componentDidMount = async () => {
-        console.log('componentDidMount calledHP')
         try {
           await Auth.currentAuthenticatedUser()
           const tokens = await Auth.currentSession();
@@ -26,17 +41,48 @@ class Homepage extends React.Component {
           var userNameHold = userName.charAt(0).toUpperCase() + userName.slice(1);
           this.setState({ authState: 1,
             Uname: userNameHold })
+            await axios.get("http://localhost:3002/INVITES/" + this.state.Uname).then(res => {    
+            
+                var hldLST = []
+                var hldLST2 = []
+                var c = 0
+                for(var i = 0; i<res.data.length; i++){
+                  const x = i
+                  if(res.data[x].ACCEPTED == 0){
+                    hldLST[x] = res.data[x].IREVID
+                    hldLST2[x] = res.data[x].FUNAME
+                    c++
+                  }
+                }
+                this.setState({
+                  invLST: hldLST,
+                  invNum: c,
+                  invULST: hldLST2
+                })
+                //console.log(res.data)
+              })
         } catch (err) {
+            console.log(err)
           this.setState({ authState: 'unauthorized' })
         }
         //console.log(this.state.authState)
       }
 
-    toggleModal = () => {
-        this.setState({ isOpen: !this.state.isOpen });
+    
+    creInvButts() {
+        let list = this.state.invLST
+        let list2 = this.state.invULST
+        var dResult = {}
+        list.forEach((key, i) => dResult[key] = list2[i])
+        //console.log(dResult)
+        const items = Object.entries(dResult).map(([key, value]) => <div key = {key}><input type='submit' className='submit' value={"Invite from " + value} onClick={() => this.acceptInv(key, value)}/><br></br></div>)
+        
+        return items
     }
 
     render() {
+
+        const invites = this.creInvButts()
 
         switch (this.state.authState) {
             case ('loading'):
@@ -47,6 +93,13 @@ class Homepage extends React.Component {
                         <NavBar/>
                         <br></br>
                         <h1>Welcome to Git Going {this.state.Uname}!</h1>
+                        <br></br>
+                        {this.state.invNum > 0 &&
+                        <div>
+                        <div className='smll'>You have been invited to {this.state.invNum} project(s)! Click to accept!</div><br></br>
+                        {invites}
+                        </div>
+                        }
                     </div>
                 );
             case ('unauthorized'):
@@ -56,10 +109,5 @@ class Homepage extends React.Component {
         }
     }
 }
-
-Homepage.propTypes = {
-    show: PropTypes.bool,
-    children: PropTypes.node
-};
 
 export default Homepage

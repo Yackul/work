@@ -148,7 +148,8 @@ class RegisterPage extends React.Component {
           UName: this.state.username,
           UEmail: this.state.email
         }).then(function (res) {
-          console.log(res);
+          //console.log(res);
+          //pretty sure .then and on can be removed
         })
       this.signUp()
     }

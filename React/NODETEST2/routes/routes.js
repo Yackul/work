@@ -80,7 +80,7 @@ const router = app => {
         const UNameCom = request.params.UNameCom;
             pool.query('SELECT CommID FROM COMMITS WHERE UName = ?', UName, (error, result) => {
                 if (error) {console.log("something went wrong get/COMMITS/:UNameCom which = 1")};
-                console.log(result);
+                //console.log(result);
                 response.send(result);
             });
     });
@@ -91,7 +91,7 @@ const router = app => {
             if (error) {
                 console.log("Something went wrong POST/COMMITS")
             }
-            console.log(result);
+            //console.log(result);
             response.send(result);
         });
     });
@@ -111,7 +111,7 @@ const router = app => {
     app.get('/COMMITS_ON_REVIEWS', (request, response) => {
         pool.query('SELECT * FROM COMMITS_ON_REVIEWS', (error, result) => {
             if (error) {console.log("something went wrong GET/COMMITS_ON_REVIEWS")};
-            console.log(result);
+            //console.log(result);
             response.send(result);
         });
     });
@@ -122,7 +122,7 @@ const router = app => {
 
         pool.query('SELECT * FROM COMMITS_ON_REVIEWS WHERE CommID = ?', CommID, (error, result) => {
             if (error) {console.log("something went wrong GET/COMMITS_ON)REVIEWS/:CommID")};
-            console.log(result);
+            //console.log(result);
             response.send(result);
         });
     });
@@ -133,7 +133,7 @@ const router = app => {
             if (error) {
                 console.log(error)
             }
-            console.log(result);
+            //console.log(result);
             response.send(result);
         });
     });
@@ -207,13 +207,43 @@ const router = app => {
     });
 
     app.get('/WORKS_ON_REVIEWS/:UNameW', (request, response) => {
-        console.log("request=", request.params)
+        //console.log("request=", request.params)
         const UNameW = request.params.UNameW;
         pool.query('SELECT * FROM WORKS_ON_REVIEWS WHERE UNameW = ?', UNameW, (error, result) => {
-            if (error) console.log(err);
+            if (error) console.log(error);
             //console.log(result)
             //var tmp2 = result[0].REVIDREF
             response.send(result);
+        });
+    });
+
+    //invites
+    app.post('/INVITES', (request, response) => {
+        pool.query('INSERT INTO INVITES SET ?', request.body, (error, result) => {
+            if (error) throw error;
+            response.send(result)
+        });
+    });
+    app.get('/INVITES/:IUNAME', (request, response) => {
+        //console.log("request=", request.params)
+        const IUNAME = request.params.IUNAME;
+        pool.query('SELECT * FROM INVITES WHERE IUNAME = ?', IUNAME, (error, result) => {
+            if (error) console.log(error);
+            //console.log(result)
+            //var tmp2 = result[0].REVIDREF
+            response.send(result);
+        });
+    });
+
+    app.put('/INVITES/:IREVID', (request, response) => {
+        const IREVID = request.params.IREVID;
+        //const IUNAME = request.params.IUNAME;
+        console.log("request params= ", request.params)
+        console.log("request = ", request)
+        pool.query('UPDATE INVITES SET ? WHERE IREVID = ?', [request.body, IREVID], (error, result) => {
+            if (error) throw error;
+
+            response.send('REVIEW updated successfully.');
         });
     });
 }

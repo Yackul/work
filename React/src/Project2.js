@@ -8,6 +8,7 @@ import NavBar from './NavBar'
 import {Link} from "react-router-dom";
 
 class Project2 extends React.Component {
+  myMounted = false;
 
   constructor(props) {
     super(props);
@@ -22,7 +23,6 @@ class Project2 extends React.Component {
       HOLDER: [],
       newRevID: '',
       step: -1,
-      seleD: '',
       step2: 0
     };
 
@@ -33,20 +33,21 @@ class Project2 extends React.Component {
   }
 
   getReview = async (d) => {
-      //console.log("d = ", d)
-      const hld = d;
+
       var hld2 = ""
       await axios.get("http://localhost:3002/REVIEW/" + d).then(res => {
       //console.log("here", res)
       hld2 = res.data;
       hld2 = hld2.toString().split("$#BREAKBREAK")
       //console.log(hld2[0])
-      this.setState({
-        gotRev: hld2[1],
-        //seleD: hld,
-        RevName: hld2[0],
-        step2: 1
-      })
+      if(this.myMounted){
+        this.setState({
+          gotRev: hld2[1],
+          //seleD: hld,
+          RevName: hld2[0],
+          step2: 1
+        })
+    }
     })
   }
   
@@ -100,12 +101,14 @@ class Project2 extends React.Component {
   loadRevs = async() => {
     var hld = [];
     var tmp = this.state.RevIDLST.length;
+
     for(var i = 0; i < tmp; i++){
+      const x = i
       //console.log("http://localhost:3002/REVIEW/" + this.state.RevIDLST[i])
-      await axios.get("http://localhost:3002/REVIEW/" + this.state.RevIDLST[i]).then(res => {
+      await axios.get("http://localhost:3002/REVIEW/" + this.state.RevIDLST[x]).then(res => {
         //console.log(this.state.RevIDLST[i])
-        console.log("Here is the " + i + " point of data: " + res.data)
-        hld[i] = res.data;
+        console.log("Here is the " + x + " point of data: " + res.data)
+        hld[x] = res.data;
       })      
     }
     this.setState({
@@ -115,6 +118,7 @@ class Project2 extends React.Component {
   }
 
   componentDidMount = async () => {
+    this._myMounted = true;
     const tokens = await Auth.currentSession();
     const userName = tokens.getIdToken().payload['cognito:username'];
     var userNameHold = userName.charAt(0).toUpperCase() + userName.slice(1);
@@ -128,14 +132,12 @@ class Project2 extends React.Component {
     }
     //console.log(this.state.Uname)
     await axios.get("http://localhost:3002/WORKS_ON_REVIEWS/" + this.state.Uname).then(res => {
-      //console.log(this.state.Uname)
-      this.setState({REVIDLST: res.data})
       var hldLST = []
-      var i;
       //console.log(res.data.length)
-      for(i = 0; i<res.data.length; i++){
+      for(var i = 0; i<res.data.length; i++){
+        const x = i
         //console.log(res.data[i].REVIDREF)
-        hldLST[i] = res.data[i].REVIDREF
+        hldLST[x] = res.data[x].REVIDREF
         //console.log(hldLST[i])
       }
       this.setState({
@@ -143,6 +145,10 @@ class Project2 extends React.Component {
       })
       //console.log(res.data)
     })
+  }
+
+  componentWillUnmount() {
+    this._myMounted = false;
   }
     //console.log(this.state.authState)
   handleRevName(evt){
@@ -166,10 +172,9 @@ class Project2 extends React.Component {
   }
 
   creProjButts() {
-    const items = this.state.RevIDLST.map((item, i) => <div key = {i}><input key = {i} type="submit" className="submit" value={"Project " + item} onClick={this.getReview.bind(this, (item.valueOf(item)))}/><br></br></div>)
+    const items = this.state.RevIDLST.map((item, i) => <div key = {i}><Link to ={'ProjectsTest/' + item}><input key = {i} type="submit" className="submit" value={"Project " + item} onClick={this.getReview.bind(this, (item.valueOf(item)))}/></Link><br></br></div>)
     //console.log(this.state.RevIDLST)
     return items
-  
   }
 
   render() {
@@ -187,9 +192,6 @@ class Project2 extends React.Component {
             <br></br>
             
             <div>{projs}</div>
-            {this.state.step2 === 1 &&
-            <p style={{whiteSpace: 'pre'}}>Current Review: {this.state.RevName}<br></br> {this.state.gotRev}</p>
-            }
             <input type="submit" className = "submit" value="Load test! (dont click this)" onClick={this.loadRevs}/>
             <br></br>
             {/*<p style={{whiteSpace: 'pre'}}>{this.state.HOLDER}</p>*/}
