@@ -94,6 +94,26 @@ class ReviewCreator extends React.Component {
                 alert(error)
             });
     }
+	
+	handleClick3() {
+        axios.get('http://www.4424081204.com/node')
+            .then((response) => {
+                console.log(response)
+            }, (error) => {
+                console.log(error)
+                alert(error)
+            });
+    }
+	
+	handleClick4() {
+        axios.get('http://www.4424081204.com/node/test')
+            .then((response) => {
+                console.log(response)
+            }, (error) => {
+                console.log(error)
+                alert(error)
+            });
+    }
 
     showFile() {
 
@@ -133,6 +153,12 @@ class ReviewCreator extends React.Component {
                     <button onClick={(e) => this.handleClick2()}>
                         Set full diff
                     </button>
+					<button onClick={(e) => this.handleClick3()}>
+						node test
+					</button>
+					<button onClick={(e) => this.handleClick4()}>
+						node test 2
+					</button>
                     <br/>
                     <button onClick={(e) => this.createDiff()}>
                         Create Diff
