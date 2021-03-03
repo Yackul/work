@@ -1,17 +1,52 @@
+
 // Load the MySQL pool connection
 const pool = require('../data/config');
 var cors = require('cors')
 
+const express = require('express');
+const authenticatedRoute = express.Router();
+const CognitoExpress = require('cognito-express');
+const cognitoExpress = new CognitoExpress({
+    region: "us-west-2",
+    cognitoUserPoolId: "us-west-2_C1RUJC7Iu",
+    tokenUse: "access", //Possible Values: access | id
+    tokenExpiration: 3600000 //Up to default expiration of 1 hour (3600000 ms)
+});
+authenticatedRoute.use(cors())
+authenticatedRoute.use(function(req, res, next) {
+    //I'm passing in the access token in header under key accessToken
+    let accessTokenFromClient = req.headers.accesstoken;
+    //Fail if token not present in header. 
+    if (!accessTokenFromClient) return res.status(401).send("Access Token missing from header");
+ 
+    cognitoExpress.validate(accessTokenFromClient, function(err, response) {
+        //If API is not authenticated, Return 401 with error message. 
+        if (err) return res.status(401).send(err);
+        
+        //Else API has been authenticated. Proceed.
+        //res.locals.user = response;
+        next();
+    });
+});
 // Route the app
 const router = app => {
+    app.use(cors());
     // ROOT GET - SHOULDNT EVER BE USED ON SITE AFAIK
     //app.get('/', (request, response) => {
     //    response.send({
     //      message: 'Welcome to the Node.js Express REST API!'
     //    });
     //});
-
-    app.use(cors());
+    app.post('/USERS', (request, response) => {
+        pool.query('INSERT INTO USERS SET ?', request.body, (error, result) => {
+            if (error) {
+                console.log("something went wrong POST/USERS")
+            }
+            response.send(result)
+        });
+    });
+    
+    app.use(authenticatedRoute)
     //USER FUNCTIONS
     // Display all USERS - also shouldn't be used except in admin tools
     app.get('/USERS', (request, response) => {
@@ -32,14 +67,7 @@ const router = app => {
     });
 
     //Add a new user
-    app.post('/USERS', (request, response) => {
-        pool.query('INSERT INTO USERS SET ?', request.body, (error, result) => {
-            if (error) {
-                console.log("something went wrong POST/USERS")
-            }
-            response.send(result)
-        });
-    });
+
 
 
     // Update an existing user
@@ -166,7 +194,7 @@ const router = app => {
             //var tmp2 = result[0].CurrRev
             const buf = new Buffer.from(result[0].CurrRev, "binary")
             //console.log(buf)
-            response.send(result[0].REVNAME + "$#BREAKBREAK" + buf);
+            response.send(result[0].REVNAME + "$#BREAKBREAK" + result[0].FName + "$#BREAKBREAK" + buf);
         });
     });
 
@@ -237,9 +265,6 @@ const router = app => {
 
     app.put('/INVITES/:IREVID', (request, response) => {
         const IREVID = request.params.IREVID;
-        //const IUNAME = request.params.IUNAME;
-        console.log("request params= ", request.params)
-        console.log("request = ", request)
         pool.query('UPDATE INVITES SET ? WHERE IREVID = ?', [request.body, IREVID], (error, result) => {
             if (error) throw error;
 

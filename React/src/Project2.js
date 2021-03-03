@@ -6,6 +6,7 @@ import { Auth } from 'aws-amplify'
 import axios from 'axios'
 import NavBar from './NavBar'
 import {Link} from "react-router-dom";
+import Cookies from 'js-cookie'
 
 class Project2 extends React.Component {
   myMounted = false;
@@ -23,7 +24,9 @@ class Project2 extends React.Component {
       HOLDER: [],
       newRevID: '',
       step: -1,
-      step2: 0
+      step2: 0,
+      fname: '',
+      CookieSave: ''
     };
 
     this.handleRevName = this.handleRevName.bind(this);
@@ -35,19 +38,21 @@ class Project2 extends React.Component {
   getReview = async (d) => {
 
       var hld2 = ""
-      await axios.get("http://localhost:3002/REVIEW/" + d).then(res => {
+      await axios.get("https://www.4424081204.com:1111/REVIEW/" + d, {
+        headers: {accesstoken: this.state.CookieSave}
+      }).then(res => {
       //console.log("here", res)
       hld2 = res.data;
       hld2 = hld2.toString().split("$#BREAKBREAK")
       //console.log(hld2[0])
       if(this.myMounted){
         this.setState({
-          gotRev: hld2[1],
-          //seleD: hld,
+          gotRev: hld2[2],
+          fname: hld2[1],
           RevName: hld2[0],
           step2: 1
         })
-    }
+      }
     })
   }
   
@@ -67,12 +72,12 @@ class Project2 extends React.Component {
   }
 
   popDB = async () => {
-    await axios.post("http://localhost:3002/REVIEW", {
+    await axios.post("https://www.4424081204.com:1111/REVIEW", {      
       REVNAME: this.state.RevName,
       CurrRev: this.state.fileContent,
       DT: this.state.curTime,
       FName: this.state.fileName
-    }).then(function (res) {
+    }, {headers: {accesstoken: this.state.CookieSave}}).then(function (res) {
       //console.log("whynowork lmao")
     })
     this.setState({
@@ -81,14 +86,16 @@ class Project2 extends React.Component {
   }
 
   popRev = async () => {
-    await axios.get("http://localhost:3002/REVIEW").then(res => {
+    await axios.get("https://www.4424081204.com:1111/REVIEW", {
+    headers: {accesstoken: this.state.CookieSave}
+  }).then(res => {
       //console.log("here is res", res)
       this.setState({newRevID: res.data})
     })
-    await axios.post("http://localhost:3002/WORKS_ON_REVIEWS", {
+    await axios.post("https://www.4424081204.com:1111/WORKS_ON_REVIEWS", {  
       REVIDREF: this.state.newRevID,
       UNameW: this.state.Uname
-    }).then(function (res) {
+    }, {headers: {accesstoken: this.state.CookieSave}}).then(function (res) {
       //console.log("here2");
     })
     this.setState({
@@ -104,8 +111,10 @@ class Project2 extends React.Component {
 
     for(var i = 0; i < tmp; i++){
       const x = i
-      //console.log("http://localhost:3002/REVIEW/" + this.state.RevIDLST[i])
-      await axios.get("http://localhost:3002/REVIEW/" + this.state.RevIDLST[x]).then(res => {
+      //console.log("https://www.4424081204.com:1111/REVIEW/" + this.state.RevIDLST[i])
+      await axios.get("https://www.4424081204.com:1111/REVIEW/" + this.state.RevIDLST[x], {
+        headers: {accesstoken: this.state.CookieSave}
+      }).then(res => {
         //console.log(this.state.RevIDLST[i])
         console.log("Here is the " + x + " point of data: " + res.data)
         hld[x] = res.data;
@@ -122,7 +131,10 @@ class Project2 extends React.Component {
     const tokens = await Auth.currentSession();
     const userName = tokens.getIdToken().payload['cognito:username'];
     var userNameHold = userName.charAt(0).toUpperCase() + userName.slice(1);
-    this.setState({Uname: userNameHold})
+    document.cookie = "clientaccesstoken="+ tokens.getAccessToken().getJwtToken()+';';
+    const temp = Cookies.get('clientaccesstoken')       
+    this.setState({Uname: userNameHold,
+      CookieSave: temp})
     //console.log('componentDidMount called')
     try {
       await Auth.currentAuthenticatedUser()
@@ -131,7 +143,9 @@ class Project2 extends React.Component {
       this.setState({ authState: 'unauthorized' })
     }
     //console.log(this.state.Uname)
-    await axios.get("http://localhost:3002/WORKS_ON_REVIEWS/" + this.state.Uname).then(res => {
+    await axios.get("https://www.4424081204.com:1111/WORKS_ON_REVIEWS/" + this.state.Uname, {
+      headers: {accesstoken: this.state.CookieSave}
+    }).then(res => {
       var hldLST = []
       //console.log(res.data.length)
       for(var i = 0; i<res.data.length; i++){
@@ -172,7 +186,7 @@ class Project2 extends React.Component {
   }
 
   creProjButts() {
-    const items = this.state.RevIDLST.map((item, i) => <div key = {i}><Link to ={'ProjectsTest/' + item}><input key = {i} type="submit" className="submit" value={"Project " + item} onClick={this.getReview.bind(this, (item.valueOf(item)))}/></Link><br></br></div>)
+    const items = this.state.RevIDLST.map((item, i) =><Link key={i} to ={'ProjectsTest/' + item}><input key = {i} type="submit" className="submit" value={"Project " + item} onClick={this.getReview.bind(this, (item.valueOf(item)))}/></Link>)
     //console.log(this.state.RevIDLST)
     return items
   }
@@ -186,18 +200,17 @@ class Project2 extends React.Component {
         return <h1>Loading</h1>
       case (1):
         return (
-          
-          <div>
+
+          <div className='grad1'>
             <NavBar/>
-            <br></br>
-            
-            <div>{projs}</div>
-            <input type="submit" className = "submit" value="Load test! (dont click this)" onClick={this.loadRevs}/>
-            <br></br>
+            <div className='container'>
+            <div>{this.state.Uname}'s Projects<br></br>{projs}</div>
+            {/*<input type="submit" className = "submit" value="Load test! (dont click this)" onClick={this.loadRevs}/>*/}
             {/*<p style={{whiteSpace: 'pre'}}>{this.state.HOLDER}</p>*/}
-            <br></br>
             {this.state.step === -1 &&
+              <div>
               <input type="submit" className="submit" value="Create New Review" onClick={this.updateStep}/>
+              </div>
             }
 
             {this.state.step === 0 &&    
@@ -213,8 +226,8 @@ class Project2 extends React.Component {
             }
             {this.state.step === 1 &&
             <div>
-            <p>{this.state.RevName}</p>
-            <p>{this.state.fileName}</p>
+            <p>Review Name: {this.state.RevName}</p>
+            <p>File Name: {this.state.fileName}</p>
             <input type="submit" className = "submit" value="Confirm New Review" onClick={this.popRev}/>
             </div>
             }
@@ -228,7 +241,7 @@ class Project2 extends React.Component {
             
             
             <br></br>   
-
+            </div>
           </div>
         );
       case ('unauthorized'):

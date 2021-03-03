@@ -94,7 +94,7 @@ class LoginPage extends React.Component {
     render() {
   
       return (
-        
+        <div className='grad1'>
         <div className="container">
             <div className ="imgcontainer">
               <img src = {logo} alt = "avatar" className="avatar"/>
@@ -103,7 +103,9 @@ class LoginPage extends React.Component {
             <h2>Log In and Git Going!</h2>
             <label><b>User Name</b></label>
             <br/>
-            <input type="text" placeholder="Enter Username" value={this.state.username} onChange={this.handleUserChange} />
+            <input type="text" placeholder="Enter Username" value={this.state.username} onKeyPress={event => {
+              if (event.key === "Enter") {
+                this.signIn();}}} onChange={this.handleUserChange} />
             {this.state.error === 0 && 
             <div className="smll">Username/Password credentials not found</div>}
             {this.state.error === 1 && 
@@ -111,7 +113,9 @@ class LoginPage extends React.Component {
             <br/>
             <label><b>Password</b></label>
             <br/>
-            <input type="password" placeholder="Enter Password" value={this.state.password} onChange={this.handlePassChange} />
+            <input type="password" placeholder="Enter Password" value={this.state.password} onKeyPress={event => {
+              if (event.key === "Enter") {
+                this.signIn();}}} onChange={this.handlePassChange} />
             {this.state.pwerror === 1 && 
             <div className="smll">Password cannot be empty.</div>}
             <br/>
@@ -120,7 +124,8 @@ class LoginPage extends React.Component {
             {/*<input type="checkbox" checked={this.state.checked} onChange={this.handleCheck}/>
             <label>Remember Me?</label>*/}
           <span className="psw">Forgot <a href="/RecoverAccount">password?</a></span>
-          </div>        
+          </div>     
+          </div>   
       );
     }
   }

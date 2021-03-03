@@ -73,7 +73,7 @@ class AccountRecovery extends React.Component {
 
   render() {
     return (
-        
+        <div className='grad1'>
         <div className="container">
             <div className ="imgcontainer">
                 <img src = {logo} alt = "avatar" className="avatar"/>
@@ -92,6 +92,7 @@ class AccountRecovery extends React.Component {
             <input type="password" placeholder="Enter new password" value={this.state.pw} onChange={this.handlePassChange} /><br></br>
             <input type ="submit" className="submit" onClick={this.forgotPasswordSubmit} value = "Reset Password"/>
             </div>}
+            </div>
         </div>
     );
   }
