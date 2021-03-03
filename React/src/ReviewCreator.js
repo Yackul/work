@@ -4,6 +4,7 @@ import axios from "axios";
 import DiffDisplay from './DiffDisplay';
 import NavBar from './NavBar'
 import { Auth } from 'aws-amplify'
+import Cookies from 'js-cookie'
 
 class ReviewCreator extends React.Component {
 
@@ -19,7 +20,8 @@ class ReviewCreator extends React.Component {
             curTime : new Date().toLocaleString(),
             Uname: '',
             newCommID: '',
-            newRevID: ''
+            newRevID: '',
+            CookieSave: ''
         };
     }
 
@@ -27,7 +29,10 @@ class ReviewCreator extends React.Component {
         const tokens = await Auth.currentSession();
         const userName = tokens.getIdToken().payload['cognito:username'];
         var userNameHold = userName.charAt(0).toUpperCase() + userName.slice(1);
-        this.setState({Uname: userNameHold})
+        document.cookie = "clientaccesstoken="+ tokens.getAccessToken().getJwtToken()+';';
+        const temp = Cookies.get('clientaccesstoken')       
+        this.setState({Uname: userNameHold,
+            CookieSave: temp})
     }
 
     handleClick1() {
@@ -48,25 +53,27 @@ class ReviewCreator extends React.Component {
     }
     
     newFun = async () => {
-        await axios.post("http://localhost:3002/COMMITS", {
+        await axios.post("https://www.4424081204.com:1111/COMMITS", {
             CommMEssage: "This is a commit message",
-            CommAppro: true,
+            CommAppro: 1,
             DT: this.state.curTime,
             WhatRevID: 1,
             UNameCom: this.state.Uname
-          }).then(function (res) {
+          }, {headers: {accesstoken: this.state.CookieSave}}).then(function (res) {
             //console.log("whynowork lmao")
           })
-          await axios.get("http://localhost:3002/COMMITS").then(res => {
+          await axios.get("https://www.4424081204.com:1111/COMMITS", {
+            headers: {accesstoken: this.state.CookieSave}
+          }).then(res => {
             console.log("here is res", res)
             this.setState({newCommID: res.data})
           })
-        await axios.post("http://localhost:3002/COMMITS_ON_REVIEWS", {
+        await axios.post("https://www.4424081204.com:1111/COMMITS_ON_REVIEWS", {
             CommID: this.state.newCommID,
             REVID: 1,
             CommDT: this.state.curTime,
             CommDiff: this.state.diffText
-          }).then(function (res) {
+          }, {headers: {accesstoken: this.state.CookieSave}}).then(function (res) {
             //console.log("whynowork lmao")
           })
     }
@@ -74,6 +81,7 @@ class ReviewCreator extends React.Component {
 
     handleClick2() {
         axios.post('https://www.4424081204.com/full_diff', {
+            headers: {accesstoken: this.state.CookieSave},
             repoPath: this.state.packageFile,
             fileName: this.state.fileName
         })
@@ -115,7 +123,7 @@ class ReviewCreator extends React.Component {
 
         return (
 
-            <div>
+            <div className='grad1'>
                 <NavBar/>
                 <div className="ReviewCreator">
                     {this.props.children}

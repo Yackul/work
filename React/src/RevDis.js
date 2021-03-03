@@ -4,6 +4,7 @@ import './index.css';
 import { Auth } from 'aws-amplify'
 import axios from 'axios'
 import NavBar from './NavBar'
+import Cookies from 'js-cookie'
 
 class RevDis extends React.Component {
 
@@ -18,7 +19,9 @@ class RevDis extends React.Component {
       RevName: '',
       RevIDLST: [],
       iUserN: '',
-      step: -1
+      fname: '',
+      step: -1,
+      CookieSave: ''
     };
     this.handleiUserNChange = this.handleiUserNChange.bind(this);
   }
@@ -39,13 +42,16 @@ class RevDis extends React.Component {
         })
         const hld = this.state.routePara;
         var hld2 = ""
-        await axios.get("http://localhost:3002/REVIEW/" + hld).then(res => {
+        await axios.get("https://www.4424081204.com:1111/REVIEW/" + hld,{
+          headers: {accesstoken: this.state.CookieSave}
+        }).then(res => {
         //console.log("here", res)
             hld2 = res.data;
             hld2 = hld2.toString().split("$#BREAKBREAK")
-            //console.log(hld2[0])
+            console.log(res.data)
             this.setState({
-                gotRev: hld2[1],
+                gotRev: hld2[2],
+                fname: hld2[1],
                 RevName: hld2[0],
             })
         })
@@ -59,12 +65,12 @@ class RevDis extends React.Component {
   }
 
   inviteUser = async () => {
-    await axios.post("http://localhost:3002/INVITES/", {
+    await axios.post("https://www.4424081204.com:1111/INVITES/", {
       IREVID: this.state.revID,
       IUNAME: this.state.iUserN,
       FUNAME: this.state.Uname,
       DT: this.state.curTime
-    })
+    }, {headers: {accesstoken: this.state.CookieSave}})
     this.setState({
       step: 2
     })
@@ -79,14 +85,19 @@ class RevDis extends React.Component {
     const tokens = await Auth.currentSession();
     const userName = tokens.getIdToken().payload['cognito:username'];
     var userNameHold = userName.charAt(0).toUpperCase() + userName.slice(1);
-    this.setState({Uname: userNameHold})    
+    document.cookie = "clientaccesstoken="+ tokens.getAccessToken().getJwtToken()+';';
+    const temp = Cookies.get('clientaccesstoken')       
+    this.setState({Uname: userNameHold,
+      CookieSave: temp})    
     try {
       await Auth.currentAuthenticatedUser()
       this.setState({ authState: 1 })
     } catch (err) {
       this.setState({ authState: 'unauthorized' })
     }
-    await axios.get("http://localhost:3002/WORKS_ON_REVIEWS/" + this.state.Uname).then(res => {
+    await axios.get("https://www.4424081204.com:1111/WORKS_ON_REVIEWS/" + this.state.Uname, {
+      headers: {accesstoken: this.state.CookieSave}
+    }).then(res => {
         //console.log(this.state.Uname)
         this.setState({REVIDLST: res.data})
         var hldLST = []
@@ -114,11 +125,10 @@ class RevDis extends React.Component {
         return <h1>Loading</h1>
       case (1):
         return (
-          
-          <div>
+          <div className='grad1'>
             <NavBar/>
             <br></br>
-            <div>
+            <div className = 'container'>
             <input type="submit" className='submit' value="Invite a User to Review" onClick={this.invitingUser}/>
             {this.state.step === 1 &&
             <div>
@@ -132,16 +142,11 @@ class RevDis extends React.Component {
             <div className = 'smll'>Invitation sent to {this.state.iUserN}!</div>
             }
             </div>
-            <div>Review Page with dynamic routing!</div>
-            <p style={{whiteSpace: 'pre'}}>Current Review: {this.state.RevName}<br></br> {this.state.gotRev}</p>
-
-
-
-            {/*<p style={{whiteSpace: 'pre'}}>{this.state.gotRev}</p>*/}
-            
-            
+            <div className='colors'>Current Review: {this.state.RevName}<br></br>File Type: {this.state.fname.split('.').pop()}</div>
+            <div className='grad2'>
+              <p style={{whiteSpace: 'pre'}}>{this.state.gotRev}</p>
+            </div>
             <br></br>   
-
           </div>
         );
       case ('unauthorized'):

@@ -5,6 +5,7 @@ import ProjectUpload from './ProjectUpload'
 import { Auth } from 'aws-amplify'
 import Comment3 from './CommentBox'
 import NavBar from './NavBar'
+import Cookies from 'js-cookie'
 
 
 class Project extends React.Component {
@@ -18,7 +19,9 @@ class Project extends React.Component {
       indexPad: '',
       commentIndex: 0,
       showText: false,
-      comment: 'this is a comment'
+      comment: 'this is a comment',
+      CookieSave: '',
+      Uname: ''
     };
     this.indexthis = this.indexthis.bind(this)
   }
@@ -49,7 +52,14 @@ class Project extends React.Component {
     console.log('componentDidMount called')
     try {
       await Auth.currentAuthenticatedUser()
-      this.setState({ authState: 1 })
+      const tokens = await Auth.currentSession();          
+      const userName = tokens.getIdToken().payload['cognito:username'];
+      document.cookie = "clientaccesstoken="+ tokens.getAccessToken().getJwtToken()+';';
+      const temp = Cookies.get('clientaccesstoken')       
+      this.setState({ 
+        Uname: userName,
+        authState: 1,
+        CookieSave: temp })
     } catch (err) {
       this.setState({ authState: 'unauthorized' })
     }
@@ -66,7 +76,7 @@ class Project extends React.Component {
         return <h1>Loading</h1>
       case (1):
         return (
-          <div>
+          <div className='grad1'>
             <NavBar/>
             <br></br>
 

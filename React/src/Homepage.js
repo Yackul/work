@@ -3,6 +3,7 @@ import './index.css';
 import NavBar from './NavBar'
 import { Auth } from 'aws-amplify'
 import axios from 'axios';
+import Cookies from 'js-cookie'
 
 
 class Homepage extends React.Component {
@@ -15,7 +16,8 @@ class Homepage extends React.Component {
             Uname: '',
             invLST: [],
             invULST: [],
-            invNum: 0
+            invNum: 0,
+            CookieSave: ''
         };
 
         this.creInvButts = this.creInvButts.bind(this);
@@ -23,50 +25,57 @@ class Homepage extends React.Component {
 
     acceptInv = async (x, y) => {
         console.log("x= ",x, "y= ", y)
-        await axios.put("http://localhost:3002/INVITES/" + x, {
+        await axios.put("https://www.4424081204.com:1111/invites/" + x, {
+            headers: {accesstoken: this.state.CookieSave},
             ACCEPTED: 1,
         })
-        await axios.post("http://localhost:3002/WORKS_ON_REVIEWS", {
+        await axios.post("https://www.4424081204.com:1111/WORKS_ON_REVIEWS", {
             REVIDREF: x,
             UNameW: this.state.Uname
-        })
+        }, {headers: {accesstoken: this.state.CookieSave}})
         return window.location = "/Home"
     }
 
     componentDidMount = async () => {
         try {
           await Auth.currentAuthenticatedUser()
-          const tokens = await Auth.currentSession();
+          const tokens = await Auth.currentSession();          
           const userName = tokens.getIdToken().payload['cognito:username'];
           var userNameHold = userName.charAt(0).toUpperCase() + userName.slice(1);
+          document.cookie = "clientaccesstoken="+ tokens.getAccessToken().getJwtToken()+';';
+          const temp = Cookies.get('clientaccesstoken')          
           this.setState({ authState: 1,
-            Uname: userNameHold })
-            await axios.get("http://localhost:3002/INVITES/" + this.state.Uname).then(res => {    
-            
-                var hldLST = []
-                var hldLST2 = []
-                var c = 0
-                for(var i = 0; i<res.data.length; i++){
-                  const x = i
-                  if(res.data[x].ACCEPTED == 0){
-                    hldLST[x] = res.data[x].IREVID
-                    hldLST2[x] = res.data[x].FUNAME
-                    c++
-                  }
-                }
-                this.setState({
-                  invLST: hldLST,
-                  invNum: c,
-                  invULST: hldLST2
-                })
-                //console.log(res.data)
-              })
+            Uname: userNameHold,
+            CookieSave: temp
+         })
         } catch (err) {
-            console.log(err)
+            console.log("err", err)
           this.setState({ authState: 'unauthorized' })
         }
-        //console.log(this.state.authState)
+        await axios.get("https://www.4424081204.com:1111/invites/" + this.state.Uname, {
+            headers: {accesstoken: this.state.CookieSave}
+        }).then(res => {    
+            
+            var hldLST = []
+            var hldLST2 = []
+            var c = 0
+            for(var i = 0; i<res.data.length; i++){
+              const x = i
+              if(res.data[x].ACCEPTED == 0){
+                hldLST[x] = res.data[x].IREVID
+                hldLST2[x] = res.data[x].FUNAME
+                c++
+              }
+            }
+            this.setState({
+              invLST: hldLST,
+              invNum: c,
+              invULST: hldLST2
+            })
+          })
       }
+
+      
 
     
     creInvButts() {
@@ -89,7 +98,7 @@ class Homepage extends React.Component {
                 return <h1>Loading</h1>
             case (1):
                 return (
-                    <div>
+                    <div className='grad1'>
                         <NavBar/>
                         <br></br>
                         <h1>Welcome to Git Going {this.state.Uname}!</h1>

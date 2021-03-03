@@ -144,7 +144,7 @@ class RegisterPage extends React.Component {
     }
 
     submitForm = async () => {
-        await axios.post("http://localhost:3002/USERS", {
+        await axios.post("https://www.4424081204.com:1111/USERS", {
           UName: this.state.username,
           UEmail: this.state.email
         }).then(function (res) {
@@ -191,7 +191,7 @@ class RegisterPage extends React.Component {
     render() {
 
         return (
-        
+        <div className='grad1'>
         <div className="container">
        
           {this.state.step === 0 &&(
@@ -265,6 +265,7 @@ class RegisterPage extends React.Component {
               </div>
             )
           }
+          </div>
       </div>      
     );
   }
