@@ -26,9 +26,8 @@ class Homepage extends React.Component {
     acceptInv = async (x, y) => {
         console.log("x= ",x, "y= ", y)
         await axios.put("https://www.4424081204.com:1111/invites/" + x, {
-            headers: {accesstoken: this.state.CookieSave},
             ACCEPTED: 1,
-        })
+        }, {headers: {accesstoken: this.state.CookieSave}})
         await axios.post("https://www.4424081204.com:1111/WORKS_ON_REVIEWS", {
             REVIDREF: x,
             UNameW: this.state.Uname
