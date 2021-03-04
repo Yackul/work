@@ -93,7 +93,36 @@ class ReviewCreator extends React.Component {
                 console.log(error)
                 alert(error)
             });
+            this.newFun2()
     }
+
+    newFun2 = async () => {
+        await axios.post("https://www.4424081204.com:1111/COMMITS", {
+            CommMEssage: "This is a commit message",
+            CommAppro: 1,
+            DT: this.state.curTime,
+            WhatRevID: 1,
+            UNameCom: this.state.Uname
+          }, {headers: {accesstoken: this.state.CookieSave}}).then(function (res) {
+            //console.log("whynowork lmao")
+          })
+          await axios.get("https://www.4424081204.com:1111/COMMITS", {
+            headers: {accesstoken: this.state.CookieSave}
+          }).then(res => {
+            console.log("here is res", res)
+            this.setState({newCommID: res.data})
+          })
+        await axios.post("https://www.4424081204.com:1111/COMMITS_ON_REVIEWS", {
+            CommID: this.state.newCommID,
+            REVID: 1,
+            CommDT: this.state.curTime,
+            CommDiff: this.state.diffText
+          }, {headers: {accesstoken: this.state.CookieSave}}).then(function (res) {
+            //console.log("whynowork lmao")
+          })
+    }
+
+
 
     showFile() {
 
