@@ -245,6 +245,34 @@ const router = app => {
         });
     });
 
+    //Post comments on review
+    app.post('/COMMENTS_ON_REVIEWS/', (request, response) => {
+        pool.query('INSERT INTO COMMENTS_ON_REVIEWS SET ?', request.body, (error, result) => {
+            if (error) throw error;
+            response.send(result)
+            console.log("POST comment")
+        });
+    });
+
+    //Display COMMENTS_ON_REVIEW by uName
+    app.get('/COMMENTS_ON_REVIEWS/:UNameC', (request, response) => {
+        const UNameC = request.params.UNameC;
+        pool.query('SELECT * FROM COMMENTS_ON_REVIEWS WHERE UNameC = ?', UNameC, (error, result) => {
+            if (error) console.log(error)
+            response.send(result);
+            // console.log("comments here")
+        });
+    });
+
+    // Update an existing COMMENTS_ON_REVIEWS
+    app.put('/COMMENTS_ON_REVIEWS/:REVIDREF', (request, response) => {
+        const REVIDREF = request.params.REVIDREF;
+        pool.query('UPDATE COMMENTS_ON_REVIEWS SET ? WHERE REVIDREF = ?', [request.body, REVIDREF], (error, result) => {
+            if (error) throw error;
+            response.send('COMMENTS_ON_REVIEWS/REVIDREF updated successfully.');
+        });
+    });
+
     //invites
     app.post('/INVITES', (request, response) => {
         pool.query('INSERT INTO INVITES SET ?', request.body, (error, result) => {
