@@ -227,6 +227,15 @@ const router = app => {
         });
     });
 
+    app.delete('/WORKS_ON_REVIEWS/:REVID', (request, response) => {
+        const REVIDREF = request.params.REVID;
+
+        pool.query('DELETE FROM WORKS_ON_REVIEWS WHERE REVIDREF = ?', REVIDREF, (error, result) => {
+            if (error) throw error;
+            response.send('REVIEW deleted.');
+        });
+    });
+
     app.post('/WORKS_ON_REVIEWS', (request, response) => {
         pool.query('INSERT INTO WORKS_ON_REVIEWS SET ?', request.body, (error, result) => {
             if (error) throw error;
@@ -234,8 +243,17 @@ const router = app => {
         });
     });
 
+    app.get('/WORKS_ON_REVIEWS/', (request, response) => {
+        const test = request.headers.test;
+        pool.query('SELECT * FROM WORKS_ON_REVIEWS WHERE REVIDREF = ?', test, (error, result) => {
+            if (error) console.log(error);
+            console.log(result)
+            //var tmp2 = result[0].REVIDREF
+            response.send(result);
+        });
+    });
+
     app.get('/WORKS_ON_REVIEWS/:UNameW', (request, response) => {
-        //console.log("request=", request.params)
         const UNameW = request.params.UNameW;
         pool.query('SELECT * FROM WORKS_ON_REVIEWS WHERE UNameW = ?', UNameW, (error, result) => {
             if (error) console.log(error);
@@ -280,8 +298,16 @@ const router = app => {
             response.send(result)
         });
     });
+
+    app.delete('/INVITES/:IREVID', (request, response) => {
+        const IREVID = request.params.IREVID;
+
+        pool.query('DELETE FROM INVITES WHERE IREVID = ?', IREVID, (error, result) => {
+            if (error) throw error;
+            response.send('REVIEW deleted.');
+        });
+    });
     app.get('/INVITES/:IUNAME', (request, response) => {
-        //console.log("request=", request.params)
         const IUNAME = request.params.IUNAME;
         pool.query('SELECT * FROM INVITES WHERE IUNAME = ?', IUNAME, (error, result) => {
             if (error) console.log(error);
