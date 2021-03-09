@@ -103,40 +103,6 @@ class Project2 extends React.Component {
       step: 2
     })
     console.log(this.state.step)
-
-    await axios.post("https://www.4424081204.com:1111/COMMITS", {
-        CommMEssage: "This is a commit message",
-        CommAppro: true,
-        DT: this.state.curTime,
-        WhatRevID: this.state.newRevID,
-        UNameCom: this.state.Uname
-      }, {headers: {accesstoken: this.state.CookieSave}}).then(function (res) {
-        //console.log("whynowork lmao")
-      })
-      await axios.get("https://www.4424081204.com:1111/COMMITS", {
-        headers: {accesstoken: this.state.CookieSave}
-      }).then(res => {
-        // console.log("here is res", res)
-        this.setState({newCommID: res.data})
-      })
-
-    await axios.post("https://www.4424081204.com:1111/COMMITS_ON_REVIEWS", {
-        CommID: this.state.newCommID,
-        REVID: this.state.newRevID,
-        CommDT: this.state.curTime,
-        CommDiff: this.state.diffText
-      }, {headers: {accesstoken: this.state.CookieSave}}).then(function (res) {
-        //console.log("whynowork lmao")
-      })
-
-    await axios.post("https://www.4424081204.com:1111/COMMENTS_ON_REVIEWS/", {
-      COMM: "This is a comment here",
-      REVIDREF: this.state.newRevID,
-      UNameC: this.state.Uname,
-      CommDT: this.state.curTime
-    }, {headers: {accesstoken: this.state.CookieSave}}).then(function (res) {
-      console.log("Comments here");
-    })
   }
 
 
@@ -163,21 +129,23 @@ class Project2 extends React.Component {
 
   componentDidMount = async () => {
     this._myMounted = true;
-    const tokens = await Auth.currentSession();
-    const userName = tokens.getIdToken().payload['cognito:username'];
-    var userNameHold = userName.charAt(0).toUpperCase() + userName.slice(1);
-    document.cookie = "clientaccesstoken="+ tokens.getAccessToken().getJwtToken()+';';
-    const temp = Cookies.get('clientaccesstoken')       
-    this.setState({Uname: userNameHold,
-      CookieSave: temp})
-    //console.log('componentDidMount called')
-    try {
-      await Auth.currentAuthenticatedUser()
-      this.setState({ authState: 1 })
-    } catch (err) {
-      this.setState({ authState: 'unauthorized' })
-    }
+        try {
+          await Auth.currentAuthenticatedUser()
+          const tokens = await Auth.currentSession();          
+          const userName = tokens.getIdToken().payload['cognito:username'];
+          var userNameHold = userName.charAt(0).toUpperCase() + userName.slice(1);
+          document.cookie = "clientaccesstoken="+ tokens.getAccessToken().getJwtToken()+';';
+          const temp = Cookies.get('clientaccesstoken')          
+          this.setState({ authState: 1,
+            Uname: userNameHold,
+            CookieSave: temp
+         })
+        } catch (err) {
+            console.log("err", err)
+          this.setState({ authState: 'unauthorized' })
+        }
     //console.log(this.state.Uname)
+    console.log(this.state.CookieSave)
     await axios.get("https://www.4424081204.com:1111/WORKS_ON_REVIEWS/" + this.state.Uname, {
       headers: {accesstoken: this.state.CookieSave}
     }).then(res => {

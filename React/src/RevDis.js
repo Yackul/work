@@ -5,6 +5,7 @@ import { Auth } from 'aws-amplify'
 import axios from 'axios'
 import NavBar from './NavBar'
 import Cookies from 'js-cookie'
+import Popup from './invPopup'
 
 class RevDis extends React.Component {
 
@@ -21,9 +22,22 @@ class RevDis extends React.Component {
       iUserN: '',
       fname: '',
       step: -1,
-      CookieSave: ''
+      CookieSave: '',
+      cHld: [],
+      isOpen: false
     };
     this.handleiUserNChange = this.handleiUserNChange.bind(this);
+  }
+
+  openPopup = () => {
+    this.setState({
+        isOpen: true
+    });
+  }
+  closePopup = () => {
+    this.setState({
+        isOpen: false
+    });
   }
 
   handleiUserNChange(evt) {
@@ -45,10 +59,8 @@ class RevDis extends React.Component {
         await axios.get("https://www.4424081204.com:1111/REVIEW/" + hld,{
           headers: {accesstoken: this.state.CookieSave}
         }).then(res => {
-        //console.log("here", res)
             hld2 = res.data;
             hld2 = hld2.toString().split("$#BREAKBREAK")
-            console.log(res.data)
             this.setState({
                 gotRev: hld2[2],
                 fname: hld2[1],
@@ -56,6 +68,19 @@ class RevDis extends React.Component {
             })
         })
       }
+  }
+  loadCollab = async () => {
+    await axios.get("http://localhost:3002/WORKS_ON_REVIEWS/", {
+          headers: {accesstoken: this.state.CookieSave, test: this.state.routePara}
+        }).then(res => {
+          var tHld = []
+          for(var i = 0; i < res.data.length; i++){
+            tHld[i] = res.data[i].UNameW
+          }
+          this.setState({
+            cHld: tHld
+          })
+        })
   }
 
   invitingUser = async () => {
@@ -78,7 +103,6 @@ class RevDis extends React.Component {
 
   componentDidMount = async () => {
     const x = parseInt(this.props.match.params.id)
-    //console.log("x is an", x)
     this.setState({
         routePara: x
     })
@@ -98,27 +122,41 @@ class RevDis extends React.Component {
     await axios.get("https://www.4424081204.com:1111/WORKS_ON_REVIEWS/" + this.state.Uname, {
       headers: {accesstoken: this.state.CookieSave}
     }).then(res => {
-        //console.log(this.state.Uname)
         this.setState({REVIDLST: res.data})
         var hldLST = []
-        //console.log(res.data.length)
         for(var i = 0; i<res.data.length; i++){
           const x = i
-          //console.log(res.data[i].REVIDREF)
           hldLST[x] = res.data[x].REVIDREF
-          //console.log(hldLST[i])
         }
         this.setState({
           RevIDLST: hldLST
         })
         this.getReview()
-        //console.log(this.state.RevIDLST)
       })
+      this.loadCollab();
   }
 
+  confirmDel = async () => {
+    await axios.delete("http://localhost:3002/WORKS_ON_REVIEWS/" + this.state.routePara, {
+      headers: {accesstoken: this.state.CookieSave}
+    })
+    await axios.delete("http://localhost:3002/INVITES/" + this.state.routePara, {
+      headers: {accesstoken: this.state.CookieSave}
+    })
+    await axios.delete("http://localhost:3002/REVIEW/" + this.state.routePara, {
+      headers: {accesstoken: this.state.CookieSave}
+    })
+    return window.location = "/ProjectsTest"
+  }
 
   render() {
 
+    let popup = null;
+    if(this.state.isOpen){
+        popup = (<Popup  message={<div><p>This is permanent, and cannot be reversed</p><input type='submit' className='submit' value='Are you sure?' onClick={this.confirmDel}/></div>} closeMe={this.closePopup}/>);
+    }
+
+    const items = this.state.cHld.map((item, i) =><div key = {i}>{item}</div>)
     
     switch (this.state.authState) {
       case ('loading'):
@@ -128,6 +166,9 @@ class RevDis extends React.Component {
           <div className='grad1'>
             <NavBar/>
             <br></br>
+            <div className = 'inline'>
+            <div>Collaborators: {items}</div>
+            </div>
             <div className = 'container'>
             <input type="submit" className='submit' value="Invite a User to Review" onClick={this.invitingUser}/>
             {this.state.step === 1 &&
@@ -146,7 +187,9 @@ class RevDis extends React.Component {
             <div className='grad2'>
               <p style={{whiteSpace: 'pre'}}>{this.state.gotRev}</p>
             </div>
-            <br></br>   
+            <br></br>  
+            <input type='submit' className='submit' value="Delete Review" onClick={this.openPopup}/>
+            {popup}
           </div>
         );
       case ('unauthorized'):
