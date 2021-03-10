@@ -25,7 +25,8 @@ class RevDis extends React.Component {
             CookieSave: '',
             cHld: [],
             isOpen: false,
-            fileContent: ''
+            fileContent: '',
+            fileName: ''
         };
         this.handleiUserNChange = this.handleiUserNChange.bind(this);
     }
@@ -164,6 +165,7 @@ class RevDis extends React.Component {
     updateReview = async() => {
         await axios.put("https://www.4424081204.com:1111/REVIEW/" + this.state.revID, {
             CurrRev: this.state.fileContent,
+            FName: this.state.fileName
         }, {headers: {accesstoken: this.state.CookieSave}})
         return window.location = "/Projects/" + this.state.routePara
     }
