@@ -121,7 +121,7 @@ class Homepage extends React.Component {
                     <div className='grad1'>
                         <NavBar/>
                         <br></br>
-                        <h1>Welcome to Git Going {this.state.Uname}!</h1>
+                        <h1 style={{paddingLeft: 20}}>Welcome to Git Going, {this.state.Uname}!</h1>
                         <br></br>
                         {this.state.invNum > 0 &&
                         <div>
