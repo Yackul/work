@@ -50,7 +50,7 @@ class ProfilePage extends React.Component {
         return (
           <div className='grad1'>
             <NavBar />
-            <h2>You are: {this.state.Uname}</h2>
+            <h2 style={{paddingLeft: 20}}>You are: {this.state.Uname}</h2>
 
 
           </div>

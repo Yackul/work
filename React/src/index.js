@@ -26,11 +26,11 @@ function App() {
         <Route exact path="/Me" component={Prof} />
         <Route exact path="/Register" component={RegIn} />
         <Route exact path="/Home" component={HPage} />
-        <Route exact path="/Projects" component={InComment} />
-        <Route exact path="/ProjectsTest" component={ProjTest} />
+        <Route exact path="/Projects" component={ProjTest} />
         <Route exact path="/RecoverAccount" component={RA} />
         <Route exact path="/Review" component={Rev} />
-        <Route exact path='/ProjectsTest/:id' component={RevDis}/>
+        <Route exact path='/Projects/:id' component={RevDis}/>
+        <Route exact path="/CommentTest" component={InComment} />
         <Route exact path='/Err404' component={Err}/>
         <Redirect from='/Me/*' to='/Err404'/>
         <Redirect from='/Register/*' to='/Err404'/>
@@ -39,7 +39,8 @@ function App() {
         <Redirect from='/ProjectsTest/*' to='/Err404'/>
         <Redirect from='/RecoverAccount/*' to='/Err404'/>
         <Redirect from='/Review/*' to='/Err404'/>
-        <Redirect from='/ProjectsTest/:id*' to='/Err404'/>
+        <Redirect from='/Projects/:id*' to='/Err404'/>
+        <Redirect from='/CommentTest/*' to='/Err404'/>
         <Redirect from='/*' to='/Err404'/>
       </Switch>
     </BrowserRouter>

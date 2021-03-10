@@ -27,7 +27,7 @@ class Project2 extends React.Component {
       step: -1,
       step2: 0,
       fname: '',
-      CookieSave: ''
+      CookieSave: '',
     };
 
     this.handleRevName = this.handleRevName.bind(this);
@@ -56,8 +56,8 @@ class Project2 extends React.Component {
       }
     })
   }
-  
-  showFile = async (e) => {
+
+  setFile = async (e) => {
     e.preventDefault()
     const reader = new FileReader()
     reader.onload = async (e) => { 
@@ -184,12 +184,12 @@ class Project2 extends React.Component {
       this.setState({
         step: -1
       })
-      return window.location = "/ProjectsTest"
+      return window.location = "/Projects"
     }
   }
 
   creProjButts() {
-    const items = this.state.RevIDLST.map((item, i) =><Link key={i} to ={'ProjectsTest/' + item}><input key = {i} type="submit" className="submit" value={"Project " + item} onClick={this.getReview.bind(this, (item.valueOf(item)))}/></Link>)
+    const items = this.state.RevIDLST.map((item, i) =><Link key={i} to ={'Projects/' + item}><input key = {i} type="submit" className="submit" value={"Project " + item} onClick={this.getReview.bind(this, (item.valueOf(item)))}/></Link>)
     //console.log(this.state.RevIDLST)
     return items
   }
@@ -217,8 +217,8 @@ class Project2 extends React.Component {
             }
 
             {this.state.step === 0 &&    
-            <div>     
-              <input type="file" onChange={(e) => this.showFile(e)} />
+            <div>
+              <input type="file" onChange={(e) => this.setFile(e)} />
               <br></br>
               <input type = "text" name ="REVNAME" placeholder="Enter a name for your Review" value = {this.state.RevName} onChange={this.handleRevName}/>
               <br></br>
@@ -237,7 +237,7 @@ class Project2 extends React.Component {
             {this.state.step === 2 &&
             <div><p>Review Successfully Created!</p>
             <br></br>
-            <Link to ="/ProjectsTest"><input type ="submit" className = "submit" value= "Return to your Projects?" onClick={this.updateStep}/></Link>
+            <Link to ="/Projects"><input type ="submit" className = "submit" value= "Return to your Projects?" onClick={this.updateStep}/></Link>
             </div>
             }
             {/*<p style={{whiteSpace: 'pre'}}>{this.state.gotRev}</p>*/}
