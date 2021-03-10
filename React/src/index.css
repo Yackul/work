@@ -149,13 +149,11 @@ span.psw {
 
 /* Popup style */
 .popup-box {
-  position: fixed;
-  width: auto;
-  height: auto;
-  left:0;
-  right:0;
+  position:absolute;
   top:0;
-  bottom:0;
+  width: 25%;
+  height: 25%;
+  min-width:350px;
 }
 
 .box {

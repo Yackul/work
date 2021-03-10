@@ -42,10 +42,8 @@ class Project2 extends React.Component {
       await axios.get("https://www.4424081204.com:1111/REVIEW/" + d, {
         headers: {accesstoken: this.state.CookieSave}
       }).then(res => {
-      //console.log("here", res)
       hld2 = res.data;
       hld2 = hld2.toString().split("$#BREAKBREAK")
-      //console.log(hld2[0])
       if(this.myMounted){
         this.setState({
           gotRev: hld2[2],
@@ -79,7 +77,6 @@ class Project2 extends React.Component {
       DT: this.state.curTime,
       FName: this.state.fileName
     }, {headers: {accesstoken: this.state.CookieSave}}).then(function (res) {
-      //console.log("whynowork lmao")
     })
     this.setState({
       step: 1
@@ -90,19 +87,16 @@ class Project2 extends React.Component {
     await axios.get("https://www.4424081204.com:1111/REVIEW", {
     headers: {accesstoken: this.state.CookieSave}
   }).then(res => {
-      //console.log("here is res", res)
       this.setState({newRevID: res.data})
     })
     await axios.post("https://www.4424081204.com:1111/WORKS_ON_REVIEWS", {  
       REVIDREF: this.state.newRevID,
       UNameW: this.state.Uname
     }, {headers: {accesstoken: this.state.CookieSave}}).then(function (res) {
-      //console.log("here2");
     })
     this.setState({
       step: 2
     })
-    console.log(this.state.step)
   }
 
 
@@ -112,19 +106,15 @@ class Project2 extends React.Component {
 
     for(var i = 0; i < tmp; i++){
       const x = i
-      //console.log("https://www.4424081204.com:1111/REVIEW/" + this.state.RevIDLST[i])
       await axios.get("https://www.4424081204.com:1111/REVIEW/" + this.state.RevIDLST[x], {
         headers: {accesstoken: this.state.CookieSave}
       }).then(res => {
-        //console.log(this.state.RevIDLST[i])
-        console.log("Here is the " + x + " point of data: " + res.data)
         hld[x] = res.data;
       })      
     }
     this.setState({
       HOLDER: hld
     })
-    //console.log(this.state.HOLDER)
   }
 
   componentDidMount = async () => {
@@ -141,33 +131,25 @@ class Project2 extends React.Component {
             CookieSave: temp
          })
         } catch (err) {
-            console.log("err", err)
           this.setState({ authState: 'unauthorized' })
         }
-    //console.log(this.state.Uname)
-    console.log(this.state.CookieSave)
     await axios.get("https://www.4424081204.com:1111/WORKS_ON_REVIEWS/" + this.state.Uname, {
       headers: {accesstoken: this.state.CookieSave}
     }).then(res => {
       var hldLST = []
-      //console.log(res.data.length)
       for(var i = 0; i<res.data.length; i++){
         const x = i
-        //console.log(res.data[i].REVIDREF)
         hldLST[x] = res.data[x].REVIDREF
-        //console.log(hldLST[i])
       }
       this.setState({
         RevIDLST: hldLST
       })
-      //console.log(res.data)
     })
   }
 
   componentWillUnmount() {
     this._myMounted = false;
   }
-    //console.log(this.state.authState)
   handleRevName(evt){
     this.setState({
       RevName: evt.target.value,
@@ -190,7 +172,6 @@ class Project2 extends React.Component {
 
   creProjButts() {
     const items = this.state.RevIDLST.map((item, i) =><Link key={i} to ={'Projects/' + item}><input key = {i} type="submit" className="submit" value={"Project " + item} onClick={this.getReview.bind(this, (item.valueOf(item)))}/></Link>)
-    //console.log(this.state.RevIDLST)
     return items
   }
 
@@ -208,8 +189,7 @@ class Project2 extends React.Component {
             <NavBar/>
             <div className='container'>
             <div>{this.state.Uname}'s Projects<br></br>{projs}</div>
-            {/*<input type="submit" className = "submit" value="Load test! (dont click this)" onClick={this.loadRevs}/>*/}
-            {/*<p style={{whiteSpace: 'pre'}}>{this.state.HOLDER}</p>*/}
+            
             {this.state.step === -1 &&
               <div>
               <input type="submit" className="submit" value="Create New Review" onClick={this.updateStep}/>
@@ -223,8 +203,7 @@ class Project2 extends React.Component {
               <input type = "text" name ="REVNAME" placeholder="Enter a name for your Review" value = {this.state.RevName} onChange={this.handleRevName}/>
               <br></br>
               <input type="submit" className="submit" value="Create New Review" onClick={this.popDB}/>        
-              {/*<p style={{whiteSpace: 'pre'}}>{this.state.fileContent}</p>
-              <p style={{whiteSpace: 'pre'}}>{this.state.HOLDER}</p>*/}
+              
             </div>
             }
             {this.state.step === 1 &&
@@ -240,7 +219,7 @@ class Project2 extends React.Component {
             <Link to ="/Projects"><input type ="submit" className = "submit" value= "Return to your Projects?" onClick={this.updateStep}/></Link>
             </div>
             }
-            {/*<p style={{whiteSpace: 'pre'}}>{this.state.gotRev}</p>*/}
+            
             
             
             <br></br>   
