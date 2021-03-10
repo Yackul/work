@@ -44,7 +44,7 @@ class ReviewCreator extends React.Component {
                 //console.log(response)
                 this.setState({result: response['data']})
                 this.setState({diffText: this.state.result})
-                console.log(this.state.diffText)
+                //console.log(this.state.diffText)
             }, (error) => {
                 console.log(error)
                 alert(error)
@@ -65,7 +65,6 @@ class ReviewCreator extends React.Component {
           await axios.get("https://www.4424081204.com:1111/COMMITS", {
             headers: {accesstoken: this.state.CookieSave}
           }).then(res => {
-            console.log("here is res", res)
             this.setState({newCommID: res.data})
           })
         await axios.post("https://www.4424081204.com:1111/COMMITS_ON_REVIEWS", {
@@ -74,7 +73,6 @@ class ReviewCreator extends React.Component {
             CommDT: this.state.curTime,
             CommDiff: this.state.diffText
           }, {headers: {accesstoken: this.state.CookieSave}}).then(function (res) {
-            //console.log("whynowork lmao")
           })
     }
 
@@ -86,7 +84,7 @@ class ReviewCreator extends React.Component {
             fileName: this.state.fileName
         })
             .then((response) => {
-                console.log(response)
+                //console.log(response)
                 this.setState({result: response['data']})
                 this.setState({diffText: this.state.result})
             }, (error) => {
@@ -104,12 +102,10 @@ class ReviewCreator extends React.Component {
             WhatRevID: 1,
             UNameCom: this.state.Uname
           }, {headers: {accesstoken: this.state.CookieSave}}).then(function (res) {
-            //console.log("whynowork lmao")
           })
           await axios.get("https://www.4424081204.com:1111/COMMITS", {
             headers: {accesstoken: this.state.CookieSave}
           }).then(res => {
-            console.log("here is res", res)
             this.setState({newCommID: res.data})
           })
         await axios.post("https://www.4424081204.com:1111/COMMITS_ON_REVIEWS", {
@@ -118,7 +114,6 @@ class ReviewCreator extends React.Component {
             CommDT: this.state.curTime,
             CommDiff: this.state.diffText
           }, {headers: {accesstoken: this.state.CookieSave}}).then(function (res) {
-            //console.log("whynowork lmao")
           })
     }
 
@@ -179,7 +174,6 @@ class ReviewCreator extends React.Component {
 }
 
 ReviewCreator.propTypes = {
-    onClose: PropTypes.func.isRequired,
     children: PropTypes.node,
 };
 

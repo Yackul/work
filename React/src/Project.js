@@ -49,7 +49,6 @@ class Project extends React.Component {
   }
 
   componentDidMount = async () => {
-    console.log('componentDidMount called')
     try {
       await Auth.currentAuthenticatedUser()
       const tokens = await Auth.currentSession();          
@@ -63,7 +62,6 @@ class Project extends React.Component {
     } catch (err) {
       this.setState({ authState: 'unauthorized' })
     }
-    console.log(this.state.authState)
   }
 
   toggleModal = () => {

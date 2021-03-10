@@ -67,7 +67,6 @@ class Homepage extends React.Component {
             CookieSave: temp
          })
         } catch (err) {
-            console.log("err", err)
           this.setState({ authState: 'unauthorized' })
         }
         await axios.get("https://www.4424081204.com:1111/invites/" + this.state.Uname, {

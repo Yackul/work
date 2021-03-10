@@ -59,14 +59,12 @@ class RevDis extends React.Component {
             await axios.get("https://www.4424081204.com:1111/REVIEW/" + hld, {
                 headers: {accesstoken: this.state.CookieSave}
             }).then(res => {
-                //console.log("here", res)
                 hld2 = res.data;
                 hld2 = hld2.toString().split("$#BREAKBREAK")
-                console.log(res.data)
                 this.setState({
                     gotRev: hld2[2],
                     fname: hld2[1],
-                    RevName: hld2[0],
+                    RevName: hld2[0]
                 })
             })
         }
@@ -78,7 +76,12 @@ class RevDis extends React.Component {
         }).then(res => {
             var tHld = []
             for (var i = 0; i < res.data.length; i++) {
+              if(i == 0){
+                tHld[i] = "Creator: "+ res.data[i].UNameW
+              }
+              else{
                 tHld[i] = res.data[i].UNameW
+              }
             }
             this.setState({
                 cHld: tHld
