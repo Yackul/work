@@ -29,7 +29,7 @@ class Project extends React.Component {
 
   }
 
-  indexthis() {
+  indexthis = async () => {
     try {
       this.setState({ lineArray: this.state.diffText.split(/\r?\n/) })
       this.setState({ lineArrayLength: this.state.lineArray.length })
