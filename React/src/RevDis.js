@@ -78,7 +78,7 @@ class RevDis extends React.Component {
             var tHld = []
             for (var i = 0; i < res.data.length; i++) {
               if(i == 0){
-                tHld[i] = "Creator: "+ res.data[i].UNameW
+                tHld[i] = res.data[i].UNameW + " (Creator)"
               }
               else{
                 tHld[i] = res.data[i].UNameW
