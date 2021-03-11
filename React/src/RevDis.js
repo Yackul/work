@@ -72,7 +72,7 @@ class RevDis extends React.Component {
     }
 
     loadCollab = async () => {
-        await axios.get("http://localhost:3002/WORKS_ON_REVIEWS/", {
+        await axios.get("https://www.4424081204.com:1111/WORKS_ON_REVIEWS/", {
             headers: {accesstoken: this.state.CookieSave, test: this.state.routePara}
         }).then(res => {
             var tHld = []
@@ -146,13 +146,13 @@ class RevDis extends React.Component {
     }
 
     confirmDel = async () => {
-        await axios.delete("http://localhost:3002/WORKS_ON_REVIEWS/" + this.state.routePara, {
+        await axios.delete("https://www.4424081204.com:1111/WORKS_ON_REVIEWS/" + this.state.routePara, {
             headers: {accesstoken: this.state.CookieSave}
         })
-        await axios.delete("http://localhost:3002/INVITES/" + this.state.routePara, {
+        await axios.delete("https://www.4424081204.com:1111/INVITES/" + this.state.routePara, {
             headers: {accesstoken: this.state.CookieSave}
         })
-        await axios.delete("http://localhost:3002/REVIEW/" + this.state.routePara, {
+        await axios.delete("https://www.4424081204.com:1111/REVIEW/" + this.state.routePara, {
             headers: {accesstoken: this.state.CookieSave}
         })
         return window.location = "/Projects"
@@ -196,7 +196,7 @@ class RevDis extends React.Component {
                 closeMe={this.closePopup}/>);
         }
 
-        const items = this.state.cHld.map((item, i) => <div key={i}>{item}</div>)
+        const items = this.state.cHld.map((item, i) => <div key={i}>{item}<button type='submit'/></div>)
 
         switch (this.state.authState) {
             case ('loading'):
