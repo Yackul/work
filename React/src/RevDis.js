@@ -202,7 +202,7 @@ class RevDis extends React.Component {
                 closeMe={this.closePopup}/>);
         }
 
-        const items = this.state.cHld.map((item, i) => <div key={i}>{item}</div>)
+        const items = this.state.cHld.map((item, i) => <div key={i}>{item}<button type='submit'/></div>)
 
         switch (this.state.authState) {
             case ('loading'):
