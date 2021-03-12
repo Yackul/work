@@ -319,7 +319,8 @@ const router = app => {
 
     app.put('/INVITES/:IREVID', (request, response) => {
         const IREVID = request.params.IREVID;
-        pool.query('UPDATE INVITES SET ? WHERE IREVID = ?', [request.body, IREVID], (error, result) => {
+        const IUNAME = request.headers.iuname;
+        pool.query('UPDATE INVITES SET ? WHERE IREVID = ? AND IUNAME = ?', [request.body, IREVID, IUNAME], (error, result) => {
             if (error) throw error;
 
             response.send('REVIEW updated successfully.');
@@ -352,7 +353,8 @@ const router = app => {
 
     app.put('/INVITE_TO_REV/:RIREVID', (request, response) => {
         const RIREVID = request.params.RIREVID;
-        pool.query('UPDATE INVITE_TO_REV SET ? WHERE RIREVID = ?', [request.body, RIREVID], (error, result) => {
+        const RIUNAME = request.headers.riuname;
+        pool.query('UPDATE INVITE_TO_REV SET ? WHERE RIREVID = ? AND RIUNAME = ?', [request.body, RIREVID, RIUNAME], (error, result) => {
             if (error) throw error;
 
             response.send(result);

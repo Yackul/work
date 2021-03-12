@@ -28,7 +28,7 @@ class RevDis extends React.Component {
             isOpen: false,
             fileContent: '',
             fileName: '',
-            resu: '',
+            resu: -1,
             RevInv: 0
         };
         this.handleiUserNChange = this.handleiUserNChange.bind(this);
@@ -119,13 +119,16 @@ class RevDis extends React.Component {
     inviteRevUser = async (iuName) => {
         await axios.get("https://www.4424081204.com:1111/INVITE_TO_REV/"+iuName, {
             headers: {accesstoken: this.state.CookieSave}
-        }).then(res=> {       
-            this.setState({
-                resu:res.data[0],
-                RevInv: 2
-            })
+        }).then(res=> {    
+            if((res.data[0] === undefined) === false){   
+                console.log('here', res.data[0].ACCEPTED)
+                this.setState({
+                    resu:res.data[0].ACCEPTED,
+                    RevInv: 2
+                })
+            }
         })
-        if(!this.state.resu){
+        if(this.state.resu < 0 || this.state.RevInv !== 2){
             await axios.post("https://www.4424081204.com:1111/INVITE_TO_REV/", {
             RIREVID: this.state.revID,
             RIUNAME: iuName,

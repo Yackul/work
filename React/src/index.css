@@ -175,7 +175,7 @@ span.psw {
 
 /* Popup style */
 .popup-box {
-  position:fixed;
+  position:relative;
   bottom: 100px;
   width: 25%;
   height: 25%;
