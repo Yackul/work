@@ -16,7 +16,7 @@
 .comment-box__text-area {
   border: 1px solid darkgray;
   resize: none;
-  width: 100%;
+  width: 35%;
   height: 100px;
   position: relative;
 }
@@ -28,4 +28,5 @@
   color: white;
   border: 0 none;
   border-radius: 5px;
+  margin-bottom: 10px;
 }

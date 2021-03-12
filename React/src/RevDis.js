@@ -6,6 +6,7 @@ import axios from 'axios'
 import NavBar from './NavBar'
 import Cookies from 'js-cookie'
 import Popup from './invPopup'
+import DiffDisplay from "./DiffDisplay";
 
 class RevDis extends React.Component {
 
@@ -63,7 +64,12 @@ class RevDis extends React.Component {
                 hld2 = res.data;
                 hld2 = hld2.toString().split("$#BREAKBREAK")
                 this.setState({
-                    gotRev: hld2[2],
+                    gotRev: <div>
+                        <DiffDisplay
+                                     isOpen={true}
+                                     diffText={hld2[2]}>
+                        </DiffDisplay>
+                    </div>,
                     fname: hld2[1],
                     RevName: hld2[0]
                 })
@@ -227,17 +233,16 @@ class RevDis extends React.Component {
                             }
                             {this.state.step === 3 &&
                             <div>
+                                <input type="file" style={{}} onChange={(e) => this.setFile(e)}/>
                                 <br></br>
-                                <input type="file" onChange={(e) => this.setFile(e)}/>
-                                <br></br>
-                                <input type='submit' className='submit' value='Update Review' onClick={this.updateReview}/>
+                                <input type='submit' className='submit' value='Update Review' style={{alignSelf:"center"}} onClick={this.updateReview}/>
                             </div>
                             }
                         </div>
-                        <div className='colors'>Current Review: {this.state.RevName}<br></br>File
+                        <div className='colors' style={{textAlign:"center", marginBottom:10}}>Current Review: {this.state.RevName}<br></br>File
                             Type: {this.state.fname.split('.').pop()}</div>
                         <div className='grad2'>
-                            <p style={{whiteSpace: 'pre'}}>{this.state.gotRev}</p>
+                            <p>{this.state.gotRev}</p>
                         </div>
                         <br></br>
                         <input type='submit' className='submit' value="Delete Review" onClick={this.openPopup}/>
