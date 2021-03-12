@@ -40,7 +40,7 @@ class Homepage extends React.Component {
         await axios.put("https://www.4424081204.com:1111/invites/" + x, {
             ACCEPTED: 1,
         }, {headers: {accesstoken: this.state.CookieSave}})
-        await axios.post("https://www.4424081204.com:1111/WORKS_ON_REVIEWS", {
+        await axios.post("https://www.4424081204.com:1111/WORKS_ON_PROJECTS", {
             REVIDREF: x,
             UNameW: this.state.Uname
         }, {headers: {accesstoken: this.state.CookieSave}})

@@ -72,7 +72,7 @@ class RevDis extends React.Component {
     }
 
     loadCollab = async () => {
-        await axios.get("https://www.4424081204.com:1111/WORKS_ON_REVIEWS/", {
+        await axios.get("https://www.4424081204.com:1111/WORKS_ON_PROJECTS/", {
             headers: {accesstoken: this.state.CookieSave, test: this.state.routePara}
         }).then(res => {
             var tHld = []
@@ -128,7 +128,7 @@ class RevDis extends React.Component {
         } catch (err) {
             this.setState({authState: 'unauthorized'})
         }
-        await axios.get("https://www.4424081204.com:1111/WORKS_ON_REVIEWS/" + this.state.Uname, {
+        await axios.get("https://www.4424081204.com:1111/WORKS_ON_PROJECTS/" + this.state.Uname, {
             headers: {accesstoken: this.state.CookieSave}
         }).then(res => {
             this.setState({REVIDLST: res.data})
@@ -146,7 +146,7 @@ class RevDis extends React.Component {
     }
 
     confirmDel = async () => {
-        await axios.delete("https://www.4424081204.com:1111/WORKS_ON_REVIEWS/" + this.state.routePara, {
+        await axios.delete("https://www.4424081204.com:1111/WORKS_ON_PROJECTS/" + this.state.routePara, {
             headers: {accesstoken: this.state.CookieSave}
         })
         await axios.delete("https://www.4424081204.com:1111/INVITES/" + this.state.routePara, {

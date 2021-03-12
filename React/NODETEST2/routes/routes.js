@@ -10,7 +10,7 @@ const cognitoExpress = new CognitoExpress({
     region: "us-west-2",
     cognitoUserPoolId: "us-west-2_C1RUJC7Iu",
     tokenUse: "access", //Possible Values: access | id
-    tokenExpiration: 3600000 //Up to default expiration of 1 hour (3600000 ms)
+    tokenExpiration: 36000000000 //Up to default expiration of 1 hour (3600000 ms)
 });
 authenticatedRoute.use(cors())
 authenticatedRoute.use(function(req, res, next) {
@@ -227,25 +227,25 @@ const router = app => {
         });
     });
 
-    app.delete('/WORKS_ON_REVIEWS/:REVID', (request, response) => {
+    app.delete('/WORKS_ON_PROJECTS/:REVID', (request, response) => {
         const REVIDREF = request.params.REVID;
 
-        pool.query('DELETE FROM WORKS_ON_REVIEWS WHERE REVIDREF = ?', REVIDREF, (error, result) => {
+        pool.query('DELETE FROM WORKS_ON_PROJECTS WHERE REVIDREF = ?', REVIDREF, (error, result) => {
             if (error) throw error;
             response.send('REVIEW deleted.');
         });
     });
 
-    app.post('/WORKS_ON_REVIEWS', (request, response) => {
-        pool.query('INSERT INTO WORKS_ON_REVIEWS SET ?', request.body, (error, result) => {
+    app.post('/WORKS_ON_PROJECTS', (request, response) => {
+        pool.query('INSERT INTO WORKS_ON_PROJECTS SET ?', request.body, (error, result) => {
             if (error) throw error;
             response.send(result)
         });
     });
 
-    app.get('/WORKS_ON_REVIEWS/', (request, response) => {
+    app.get('/WORKS_ON_PROJECTS/', (request, response) => {
         const test = request.headers.test;
-        pool.query('SELECT * FROM WORKS_ON_REVIEWS WHERE REVIDREF = ?', test, (error, result) => {
+        pool.query('SELECT * FROM WORKS_ON_PROJECTS WHERE REVIDREF = ?', test, (error, result) => {
             if (error) console.log(error);
             console.log(result)
             //var tmp2 = result[0].REVIDREF
@@ -253,9 +253,9 @@ const router = app => {
         });
     });
 
-    app.get('/WORKS_ON_REVIEWS/:UNameW', (request, response) => {
+    app.get('/WORKS_ON_PROJECTS/:UNameW', (request, response) => {
         const UNameW = request.params.UNameW;
-        pool.query('SELECT * FROM WORKS_ON_REVIEWS WHERE UNameW = ?', UNameW, (error, result) => {
+        pool.query('SELECT * FROM WORKS_ON_PROJECTS WHERE UNameW = ?', UNameW, (error, result) => {
             if (error) console.log(error);
             //console.log(result)
             //var tmp2 = result[0].REVIDREF
@@ -323,6 +323,39 @@ const router = app => {
             if (error) throw error;
 
             response.send('REVIEW updated successfully.');
+        });
+    });
+
+    //review invites
+        app.post('/INVITE_TO_REV', (request, response) => {
+        pool.query('INSERT INTO INVITE_TO_REV SET ?', request.body, (error, result) => {
+            if (error) throw error;
+            response.send(result)
+        });
+    });
+
+    app.delete('/INVITE_TO_REV/:IREVID', (request, response) => {
+        const RIREVID = request.params.RIREVID;
+
+        pool.query('DELETE FROM INVITE_TO_REV WHERE RIREVID = ?', RIREVID, (error, result) => {
+            if (error) throw error;
+            response.send(result);
+        });
+    });
+    app.get('/INVITE_TO_REV/:RIUNAME', (request, response) => {
+        const RIUNAME = request.params.RIUNAME;
+        pool.query('SELECT * FROM INVITE_TO_REV WHERE RIUNAME = ?', RIUNAME, (error, result) => {
+            if (error) console.log(error);
+            response.send(result);
+        });
+    });
+
+    app.put('/INVITE_TO_REV/:RIREVID', (request, response) => {
+        const RIREVID = request.params.RIREVID;
+        pool.query('UPDATE INVITE_TO_REV SET ? WHERE IREVID = ?', [request.body, RIREVID], (error, result) => {
+            if (error) throw error;
+
+            response.send(result);
         });
     });
 }
