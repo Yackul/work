@@ -27,7 +27,9 @@ class RevDis extends React.Component {
             cHld: [],
             isOpen: false,
             fileContent: '',
-            fileName: ''
+            fileName: '',
+            resu: -1,
+            RevInv: 0
         };
         this.handleiUserNChange = this.handleiUserNChange.bind(this);
     }
@@ -78,13 +80,13 @@ class RevDis extends React.Component {
     }
 
     loadCollab = async () => {
-        await axios.get("https://www.4424081204.com:1111/WORKS_ON_REVIEWS/", {
+        await axios.get("https://www.4424081204.com:1111/WORKS_ON_PROJECTS/", {
             headers: {accesstoken: this.state.CookieSave, test: this.state.routePara}
         }).then(res => {
             var tHld = []
             for (var i = 0; i < res.data.length; i++) {
               if(i == 0){
-                tHld[i] = res.data[i].UNameW + " (Creator)"
+                tHld[i] = res.data[i].UNameW
               }
               else{
                 tHld[i] = res.data[i].UNameW
@@ -114,6 +116,33 @@ class RevDis extends React.Component {
         })
     }
 
+    inviteRevUser = async (iuName) => {
+        await axios.get("https://www.4424081204.com:1111/INVITE_TO_REV/"+iuName, {
+            headers: {accesstoken: this.state.CookieSave}
+        }).then(res=> {    
+            if((res.data[0] === undefined) === false){   
+                console.log('here', res.data[0].ACCEPTED)
+                this.setState({
+                    resu:res.data[0].ACCEPTED,
+                    RevInv: 2
+                })
+            }
+        })
+        if(this.state.resu < 0 || this.state.RevInv !== 2){
+            await axios.post("https://www.4424081204.com:1111/INVITE_TO_REV/", {
+            RIREVID: this.state.revID,
+            RIUNAME: iuName,
+            RFUNAME: this.state.Uname,
+            DT: this.state.curTime
+            }, {headers: {accesstoken: this.state.CookieSave}})
+        }
+        else{
+            this.setState({
+                RevInv: 1 
+            })
+        }
+    }
+
     componentDidMount = async () => {
         const x = parseInt(this.props.match.params.id)
         this.setState({
@@ -134,7 +163,7 @@ class RevDis extends React.Component {
         } catch (err) {
             this.setState({authState: 'unauthorized'})
         }
-        await axios.get("https://www.4424081204.com:1111/WORKS_ON_REVIEWS/" + this.state.Uname, {
+        await axios.get("https://www.4424081204.com:1111/WORKS_ON_PROJECTS/" + this.state.Uname, {
             headers: {accesstoken: this.state.CookieSave}
         }).then(res => {
             this.setState({REVIDLST: res.data})
@@ -152,7 +181,7 @@ class RevDis extends React.Component {
     }
 
     confirmDel = async () => {
-        await axios.delete("https://www.4424081204.com:1111/WORKS_ON_REVIEWS/" + this.state.routePara, {
+        await axios.delete("https://www.4424081204.com:1111/WORKS_ON_PROJECTS/" + this.state.routePara, {
             headers: {accesstoken: this.state.CookieSave}
         })
         await axios.delete("https://www.4424081204.com:1111/INVITES/" + this.state.routePara, {
@@ -202,7 +231,7 @@ class RevDis extends React.Component {
                 closeMe={this.closePopup}/>);
         }
 
-        const items = this.state.cHld.map((item, i) => <div key={i}>{item}<button type='submit'/></div>)
+        const items = this.state.cHld.map((item, i) => <div key={i}><input type='submit' className='submit2' value={item} onClick={()=>this.inviteRevUser(item)}/></div>)
 
         switch (this.state.authState) {
             case ('loading'):
@@ -213,10 +242,14 @@ class RevDis extends React.Component {
                         <NavBar/>
                         <br></br>
                         <div className='inline'>
-                            <div>Collaborators: {items}</div>
+                            <div>Collaborators:{<div className='smll2'>(Click a user to invite them to review!)</div>}{items}</div>
+                            {this.state.RevInv === 1 &&
+                            <div className='smllTEST'>Review Invite already sent!</div>}
+                            {this.state.RevInv === 2 &&
+                            <div className='smllTEST'>Invite Sent!</div>}
                         </div>
                         <div className='container'>
-                            <input type="submit" className='submit' value="Invite a User to Review"
+                            <input type="submit" className='submit' value="Invite a User to Project"
                                    onClick={this.invitingUser}/>
                             <input type="submit" className='submit' value="Update File" onClick={this.updatingReview}/>
                             {this.state.step === 1 &&

@@ -89,7 +89,7 @@ class Project2 extends React.Component {
   }).then(res => {
       this.setState({newRevID: res.data})
     })
-    await axios.post("https://www.4424081204.com:1111/WORKS_ON_REVIEWS", {  
+    await axios.post("https://www.4424081204.com:1111/WORKS_ON_PROJECTS", {  
       REVIDREF: this.state.newRevID,
       UNameW: this.state.Uname
     }, {headers: {accesstoken: this.state.CookieSave}}).then(function (res) {
@@ -133,7 +133,7 @@ class Project2 extends React.Component {
         } catch (err) {
           this.setState({ authState: 'unauthorized' })
         }
-    await axios.get("https://www.4424081204.com:1111/WORKS_ON_REVIEWS/" + this.state.Uname, {
+    await axios.get("https://www.4424081204.com:1111/WORKS_ON_PROJECTS/" + this.state.Uname, {
       headers: {accesstoken: this.state.CookieSave}
     }).then(res => {
       var hldLST = []
