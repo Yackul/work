@@ -352,7 +352,7 @@ const router = app => {
 
     app.put('/INVITE_TO_REV/:RIREVID', (request, response) => {
         const RIREVID = request.params.RIREVID;
-        pool.query('UPDATE INVITE_TO_REV SET ? WHERE IREVID = ?', [request.body, RIREVID], (error, result) => {
+        pool.query('UPDATE INVITE_TO_REV SET ? WHERE RIREVID = ?', [request.body, RIREVID], (error, result) => {
             if (error) throw error;
 
             response.send(result);

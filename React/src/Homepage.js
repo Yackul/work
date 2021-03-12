@@ -17,11 +17,16 @@ class Homepage extends React.Component {
             invLST: [],
             invULST: [],
             invNum: 0,
+            RinvLST: [],
+            RinvULST: [],
+            RinvNum: 0,
             CookieSave: '',
-            isOpen: false
+            isOpen: false,
+            isOpen2: false
         };
 
         this.creInvButts = this.creInvButts.bind(this);
+        this.creInvButts = this.creRevInvButts.bind(this);
         
     }
 
@@ -33,6 +38,16 @@ class Homepage extends React.Component {
     closePopup = () => {
         this.setState({
             isOpen: false
+        });
+    }
+    openPopup2 = () => {
+        this.setState({
+            isOpen2: true
+        });
+    }
+    closePopup2 = () => {
+        this.setState({
+            isOpen2: false
         });
     }
 
@@ -49,6 +64,20 @@ class Homepage extends React.Component {
 
     declineInv = async (x, y) => {
         await axios.put("https://www.4424081204.com:1111/invites/" + x, {
+            ACCEPTED: -1,
+        }, {headers: {accesstoken: this.state.CookieSave}})
+        return window.location = "/Home"
+    }
+
+    acceptRevInv = async (x, y) => {
+        await axios.put("https://www.4424081204.com:1111/invite_to_rev/" + x, {
+            ACCEPTED: 1,
+        }, {headers: {accesstoken: this.state.CookieSave}})
+        return window.location = "/Projects/" + x
+    }
+
+    declineRevInv = async (x, y) => {
+        await axios.put("https://www.4424081204.com:1111/invite_to_rev/" + x, {
             ACCEPTED: -1,
         }, {headers: {accesstoken: this.state.CookieSave}})
         return window.location = "/Home"
@@ -90,10 +119,36 @@ class Homepage extends React.Component {
               invULST: hldLST2
             })
           })
+          await axios.get("https://www.4424081204.com:1111/invite_to_rev/" + this.state.Uname, {
+            headers: {accesstoken: this.state.CookieSave}
+        }).then(res => {    
+            
+            var hldLST3 = []
+            var hldLST4 = []
+            var b = 0
+            for(var i = 0; i<res.data.length; i++){
+              const z = i
+              if(res.data[z].ACCEPTED == 0){
+                hldLST3[z] = res.data[z].RIREVID
+                hldLST4[z] = res.data[z].RFUNAME
+                b++
+              }
+            }
+            this.setState({
+              RinvLST: hldLST3,
+              RinvNum: b,
+              RinvULST: hldLST4
+            })
+          })
       }
-
-      
-
+    creRevInvButts() {
+        let list3 = this.state.RinvLST
+        let list4 = this.state.RinvULST
+        var dRResult = {}
+        list3.forEach((key, i) => dRResult[key] = list4[i])
+        const Ritems = Object.entries(dRResult).map(([key, value]) => <div key = {key}><p></p><input type='submit' className='submit' value={"Accept invite from " + value} onClick={() => this.acceptRevInv(key, value)}/><input type='submit' className='submit' value={"Decline invite from " + value} onClick={() => this.declineRevInv(key, value)}/><br></br></div>)
+        return Ritems
+    }
     
     creInvButts() {
         let list = this.state.invLST
@@ -108,8 +163,12 @@ class Homepage extends React.Component {
     render() {
         let popup = null;
         const invites = this.creInvButts()
+        const Rinvites = this.creRevInvButts()
         if(this.state.isOpen){
             popup = (<Popup  message={invites} closeMe={this.closePopup}/>);
+        }
+        if(this.state.isOpen2){
+            popup = (<Popup  message={Rinvites} closeMe={this.closePopup2}/>);
         }
 
         switch (this.state.authState) {
@@ -125,10 +184,14 @@ class Homepage extends React.Component {
                         {this.state.invNum > 0 &&
                         <div>
                         <div className='smll'>You have been invited to {this.state.invNum} project(s)!</div><br></br>
-                        
-                        
-                        
-                        <input type='submit' className='submit' value="View Invites" onClick={this.openPopup}
+                        <input type='submit' className='submit' value="View Project Invites" onClick={this.openPopup}
+                        />
+                        {popup}
+                        </div>}
+                        {this.state.RinvNum > 0 &&
+                        <div>
+                        <div className='smll'>You have been invited to {this.state.RinvNum} review(s)!</div><br></br>
+                        <input type='submit' className='submit' value="View Review Invites" onClick={this.openPopup2}
                         />
                         {popup}
                         </div>}
