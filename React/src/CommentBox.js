@@ -55,6 +55,7 @@ class CommentInput extends Component {
                     ref={(ref) => this.textInput = ref} type="text">
 
                 </textarea>
+                <br/>
                 <button onClick={this.handleOnSubmit.bind(this)} className="comment-box__submit-button">Submit</button>
             </div>
         );

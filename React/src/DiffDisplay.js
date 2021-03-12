@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import DiffLine from "./DiffLine";
 
 class DiffDisplay extends React.Component {
 
@@ -7,7 +8,7 @@ class DiffDisplay extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            show: false,
+            show: props.isOpen,
             lineArray: [],
             lineArrayLength: 0,
             indexPad: '',
@@ -29,8 +30,8 @@ class DiffDisplay extends React.Component {
     componentDidUpdate = async(prevProps, prevState) => {
         if (prevProps.diffText !== this.props.diffText) {
             try {
-                this.setState({lineArray: this.props.diffText.split(/\r?\n/)})
-                this.setState({lineArrayLength: this.state.lineArray.length})
+                this.setState({lineArray: this.props.diffText.split(/\r?\n/),
+                    lineArrayLength: this.state.lineArray.length})
 
             } catch (err) {
                 alert(err)
@@ -50,14 +51,13 @@ class DiffDisplay extends React.Component {
 
         const openDiff = {
             display: 'inline-block',
-            whiteSpace: 'pre-wrap',
+            whiteSpace: 'prewrap',
             backgroundColor: '#FDF5ED',
             padding: 5,
             paddingLeft: 10,
             borderStyle: 'solid',
             borderWidth: 2,
-            marginBottom: 10,
-            alignSelf: 'center'
+            margin:40,
         };
 
         const closedDiff = {
@@ -67,7 +67,7 @@ class DiffDisplay extends React.Component {
             textAlign: 'center',
             borderStyle: 'solid',
             borderWidth: 2,
-            marginBottom: 5,
+            margin: 5,
             paddingBottom: 5,
             paddingLeft: 3,
             paddingRight: 3
@@ -101,7 +101,6 @@ class DiffDisplay extends React.Component {
             return (
                 <div className="DiffDisplay" style={openDiff}>
                     <text style={toggleText} onClick={(e) => this.close()}>-</text>
-                    <p style={diffTextStyle}> Number of lines in diff: {this.state.lineArray.length} </p>
                     <div>
                         {this.state.lineArray.map((line, index) => {
                             if (line.charAt(0) === '+') {
@@ -115,9 +114,14 @@ class DiffDisplay extends React.Component {
                                     <p style={diffTextStyle.red}>{line}</p>
                                 </div>
                             } else {
-                                return <div style={{display: 'flex', columnGap: 20, margin: 1}}>
-                                    <p style={diffTextStyle}>{index+1}</p>
-                                    <p style={diffTextStyle}>{line}</p>
+                                return <div>
+                                    <DiffLine
+
+                                        lineText={line}
+                                        lineIndex={index + 1}
+                                        showComment={this.state.isOpen}>
+
+                                    </DiffLine>
                                 </div>
                             }
                         })}
@@ -134,7 +138,7 @@ class DiffDisplay extends React.Component {
 
 DiffDisplay.propTypes = {
     onClose: PropTypes.func,
-    show: PropTypes.bool,
+    isOpen: PropTypes.bool,
     children: PropTypes.node,
     diffText: PropTypes.string
 };
