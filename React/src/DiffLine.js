@@ -7,11 +7,16 @@ class DiffLine extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            showComment: false,
+            showComment: props.showComment,
             lineArray: [],
-            lineIndex: '',
-            lineText: ''
+            comments: []
         };
+        this.setDiffComment = this.setDiffComment.bind(this)
+    }
+
+    setDiffComment(comment) {
+
+        alert(comment)
     }
 
     open = () => {
@@ -30,7 +35,7 @@ class DiffLine extends React.Component {
                 <div>
                 <button className="submit3" onClick={(e) => this.close()}> {this.props.lineIndex}</button>
                 {this.props.lineText}
-                <Comment />
+                <Comment updateLine={this.props.updateLine} lineIndex={this.props.lineIndex} />
 
             </div>
             );
@@ -51,7 +56,8 @@ DiffLine.propTypes = {
     showComment: PropTypes.bool,
     children: PropTypes.node,
     diffText: PropTypes.string,
-    lineText: PropTypes.string
+    lineText: PropTypes.string,
+    lineIndex: PropTypes.number
 };
 
 export default DiffLine;
