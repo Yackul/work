@@ -28,7 +28,7 @@ class RevDis extends React.Component {
             isOpen: false,
             fileContent: '',
             fileName: '',
-            resu: -1,
+            resu: -2,
             RevInv: 0
         };
         this.handleiUserNChange = this.handleiUserNChange.bind(this);
@@ -118,23 +118,33 @@ class RevDis extends React.Component {
 
     inviteRevUser = async (iuName) => {
         await axios.get("https://www.4424081204.com:1111/INVITE_TO_REV/"+iuName, {
-            headers: {accesstoken: this.state.CookieSave}
-        }).then(res=> {    
-            if((res.data[0] === undefined) === false){   
-                console.log('here', res.data[0].ACCEPTED)
+            headers: {accesstoken: this.state.CookieSave, RID: this.state.revID}
+        }).then(res=> {
+            if((res.data[0] === undefined) === false){
                 this.setState({
                     resu:res.data[0].ACCEPTED,
                     RevInv: 2
                 })
             }
         })
-        if(this.state.resu < 0 || this.state.RevInv !== 2){
+        if(this.state.resu === -2){
             await axios.post("https://www.4424081204.com:1111/INVITE_TO_REV/", {
             RIREVID: this.state.revID,
             RIUNAME: iuName,
             RFUNAME: this.state.Uname,
             DT: this.state.curTime
             }, {headers: {accesstoken: this.state.CookieSave}})
+        }
+        else if(this.state.resu === -1 || this.state.resu === 0) {
+            await axios.put("https://www.4424081204.com:1111/INVITE_TO_REV/"+this.state.revID, {
+                DT: this.state.curTime,
+                ACCEPTED: 0
+                }, {headers: {accesstoken: this.state.CookieSave, RIUNAME: iuName}
+            }).then(res=> {
+                this.setState({
+                    RevInv: 2
+                })
+            })
         }
         else{
             this.setState({
