@@ -26,6 +26,7 @@ class ReviewCreator extends React.Component {
     }
 
     componentDidMount = async () => {
+        document.body.style.background = "#d0f0f0e1";
         const tokens = await Auth.currentSession();
         const userName = tokens.getIdToken().payload['cognito:username'];
         var userNameHold = userName.charAt(0).toUpperCase() + userName.slice(1);
@@ -164,9 +165,9 @@ class ReviewCreator extends React.Component {
                     <button onClick={(e) => this.clearDiffs()}>
                         Clear Diffs
                     </button>
-                    <div style={{padding: 10, marginBottom: 300}}>
-                        {this.state.diffList}
-                    </div>
+                </div>
+                <div style={{padding: 10}}>
+                    {this.state.diffList}
                 </div>
             </div>
         );

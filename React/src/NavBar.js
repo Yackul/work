@@ -21,7 +21,6 @@ class NavBar extends React.Component{
                 <a href="/Me">My Profile</a>
                 <a href="/Projects">My Projects</a>
                 <a href="/Review">Review (Beta)</a>
-                <a href="/CommentTest">Comments (Beta)</a>
                 <a href='/' onClick={this.signOut}>Sign Out</a>
             </div>
 
