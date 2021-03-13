@@ -154,6 +154,7 @@ class RevDis extends React.Component {
     }
 
     componentDidMount = async () => {
+        document.body.style.background = "#d0f0f0e1";
         const x = parseInt(this.props.match.params.id)
         this.setState({
             routePara: x
@@ -251,36 +252,38 @@ class RevDis extends React.Component {
                     <div className='grad1'>
                         <NavBar/>
                         <br></br>
-                        <div className='inline'>
-                            <div>Collaborators:{<div className='smll2'>(Click a user to invite them to review!)</div>}{items}</div>
-                            {this.state.RevInv === 1 &&
-                            <div className='smllTEST'>Review Invite already sent!</div>}
-                            {this.state.RevInv === 2 &&
-                            <div className='smllTEST'>Invite Sent!</div>}
-                        </div>
-                        <div className='container'>
-                            <input type="submit" className='submit' value="Invite a User to Project"
-                                   onClick={this.invitingUser}/>
-                            <input type="submit" className='submit' value="Update File" onClick={this.updatingReview}/>
-                            {this.state.step === 1 &&
-                            <div>
-                                <br></br>
-                                <input type="text" placeholder="Enter a username" value={this.state.iUserN}
-                                       onChange={this.handleiUserNChange}/>
-                                <br></br>
-                                <input type='submit' className='submit' value='Send Invite' onClick={this.inviteUser}/>
+                        <div style={{display: 'flex', marginLeft:'auto', marginRight:20}}>
+                            <div className='container'>
+                                <input type="submit" className='submit' value="Update File" onClick={this.updatingReview}/>
+                                <input type="submit" className='submit' value="Invite a User to Project"
+                                       onClick={this.invitingUser}/>
+                                {this.state.step === 1 &&
+                                <div>
+                                    <br></br>
+                                    <input type="text" placeholder="Enter a username" value={this.state.iUserN}
+                                           onChange={this.handleiUserNChange}/>
+                                    <br></br>
+                                    <input type='submit' className='submit' value='Send Invite' onClick={this.inviteUser}/>
+                                </div>
+                                }
+                                {this.state.step === 2 &&
+                                <div className='smll'>Invitation sent to {this.state.iUserN}!</div>
+                                }
+                                {this.state.step === 3 &&
+                                <div>
+                                    <input type="file" style={{}} onChange={(e) => this.setFile(e)}/>
+                                    <br></br>
+                                    <input type='submit' className='submit' value='Update Review' style={{alignSelf:"center"}} onClick={this.updateReview}/>
+                                </div>
+                                }
                             </div>
-                            }
-                            {this.state.step === 2 &&
-                            <div className='smll'>Invitation sent to {this.state.iUserN}!</div>
-                            }
-                            {this.state.step === 3 &&
-                            <div>
-                                <input type="file" style={{}} onChange={(e) => this.setFile(e)}/>
-                                <br></br>
-                                <input type='submit' className='submit' value='Update Review' style={{alignSelf:"center"}} onClick={this.updateReview}/>
+                            <div className='inline'>
+                                <div>Collaborators:{<div className='smll2'>(Click a user to invite them to review!)</div>}{items}</div>
+                                {this.state.RevInv === 1 &&
+                                <div className='smllTEST'>Review Invite already sent!</div>}
+                                {this.state.RevInv === 2 &&
+                                <div className='smllTEST'>Invite Sent!</div>}
                             </div>
-                            }
                         </div>
                         <div className='colors' style={{textAlign:"center", marginBottom:10}}>Current Review: {this.state.RevName}<br></br>File
                             Type: {this.state.fname.split('.').pop()}</div>

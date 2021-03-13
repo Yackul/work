@@ -118,6 +118,7 @@ class Project2 extends React.Component {
   }
 
   componentDidMount = async () => {
+    document.body.style.background = "#d0f0f0e1";
     this._myMounted = true;
         try {
           await Auth.currentAuthenticatedUser()
