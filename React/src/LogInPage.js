@@ -26,6 +26,7 @@ class LoginPage extends React.Component {
     }
 
     componentDidMount = async () => {
+		document.body.style.background = "#d0f0f0e1";
       try {
         await Auth.currentAuthenticatedUser()
         this.setState({ authState: 1 })

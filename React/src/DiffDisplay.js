@@ -57,7 +57,7 @@ class DiffDisplay extends React.Component {
             paddingLeft: 10,
             borderStyle: 'solid',
             borderWidth: 2,
-            margin:40,
+            margin:5,
         };
 
         const closedDiff = {
