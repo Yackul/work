@@ -266,7 +266,7 @@ class RevDis extends React.Component {
                                 {this.state.step === 1 &&
                                 <div>
                                     <br></br>
-                                    <input type="text" placeholder="Enter a username" value={this.state.iUserN}
+                                    <input style={{width: 150}}type="text" placeholder="Enter a username" value={this.state.iUserN}
                                            onChange={this.handleiUserNChange}/>
                                     <br></br>
                                     <input type='submit' className='submit' value='Send Invite' onClick={this.inviteUser}/>
