@@ -201,7 +201,7 @@ class Project2 extends React.Component {
             <div>
               <input type="file" onChange={(e) => this.setFile(e)} />
               <br></br>
-              <input type = "text" name ="REVNAME" placeholder="Enter a name for your Review" value = {this.state.RevName} onChange={this.handleRevName}/>
+              <input style={{width:220}}type = "text" name ="REVNAME" placeholder="Enter a name for your Review" value = {this.state.RevName} onChange={this.handleRevName}/>
               <br></br>
               <input type="submit" className="submit" value="Create New Review" onClick={this.popDB}/>        
               

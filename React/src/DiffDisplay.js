@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import DiffLine from "./DiffLine";
+import Comment from "./Comment";
 
 class DiffDisplay extends React.Component {
 
@@ -16,14 +17,18 @@ class DiffDisplay extends React.Component {
         this.updateLine = this.updateLine.bind(this)
     }
 
-    updateLine(comment, index) {
+    updateLine(uname, comment, index) {
         let d = this.state.commentDict
         let i = eval(index)
-        d[i] = comment
-        this.setState({commentArray: d})
+        let c = uname + ': ' + comment
+        if (!d[i]) {
+            d[i] = [];
+        }
+        d[i].push(<div><Comment isOpen={false} comment={c}/></div>)
+        this.setState({commentDict: d})
     }
 
-    componentDidMount = async() => {
+    componentDidMount = async () => {
         try {
             this.setState({lineArray: this.props.diffText.split(/\r?\n/)})
             this.setState({lineArrayLength: this.state.lineArray.length})
@@ -32,11 +37,13 @@ class DiffDisplay extends React.Component {
         }
     }
 
-    componentDidUpdate = async(prevProps, prevState) => {
+    componentDidUpdate = async (prevProps, prevState) => {
         if (prevProps.diffText !== this.props.diffText) {
             try {
-                this.setState({lineArray: this.props.diffText.split(/\r?\n/),
-                    lineArrayLength: this.state.lineArray.length})
+                this.setState({
+                    lineArray: this.props.diffText.split(/\r?\n/),
+                    lineArrayLength: this.state.lineArray.length
+                })
 
             } catch (err) {
                 alert(err)
@@ -62,7 +69,7 @@ class DiffDisplay extends React.Component {
             paddingLeft: 10,
             borderStyle: 'solid',
             borderWidth: 2,
-            margin:5,
+            margin: 5,
         };
 
         const closedDiff = {
@@ -109,14 +116,32 @@ class DiffDisplay extends React.Component {
                     <div>
                         {this.state.lineArray.map((line, index) => {
                             if (line.charAt(0) === '+') {
-                                return <div style={{display: 'flex', columnGap: 20, margin: 1}}>
-                                    <p style={diffTextStyle}>{index+1}</p>
-                                    <p style={diffTextStyle.green}>{line}</p>
+                                return <div>
+                                    <DiffLine
+
+                                        color={'#038A30'}
+                                        updateLine={this.updateLine}
+                                        lineText={line}
+                                        lineIndex={index + 1}
+                                        showComment={false}>
+
+                                    </DiffLine>
+                                    {this.state.commentDict[index] && this.state.commentDict[index].map(comment => <div
+                                        key={comment}> {comment} </div>)}
                                 </div>
                             } else if (line.charAt(0) === '-') {
-                                return <div style={{display: 'flex', columnGap: 20, margin: 1}}>
-                                    <p style={diffTextStyle}>{index+1}</p>
-                                    <p style={diffTextStyle.red}>{line}</p>
+                                return <div>
+                                    <DiffLine
+
+                                        color={'#EB0E0E'}
+                                        updateLine={this.updateLine}
+                                        lineText={line}
+                                        lineIndex={index + 1}
+                                        showComment={false}>
+
+                                    </DiffLine>
+                                    {this.state.commentDict[index] && this.state.commentDict[index].map(comment => <div
+                                        key={comment}> {comment} </div>)}
                                 </div>
                             } else {
                                 return <div>
@@ -128,7 +153,8 @@ class DiffDisplay extends React.Component {
                                         showComment={false}>
 
                                     </DiffLine>
-                                    {this.state.commentDict[index]}
+                                    {this.state.commentDict[index] && this.state.commentDict[index].map(comment => <div
+                                        key={comment}> {comment} </div>)}
                                 </div>
                             }
                         })}
@@ -137,7 +163,9 @@ class DiffDisplay extends React.Component {
             );
         } else {
             return (
-                <div className="DiffDisplay" style={closedDiff}><text style = {toggleText} onClick={(e) => this.open()}>+</text></div>
+                <div className="DiffDisplay" style={closedDiff}>
+                    <text style={toggleText} onClick={(e) => this.open()}>+</text>
+                </div>
             )
         }
     }

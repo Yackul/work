@@ -23,9 +23,9 @@ class CommentBox extends Component {
     handleOnSubmit(commentText) {
         let newCommentId = this.state.commentId + 1;
         this.setState({commentId: newCommentId});
-
         let comment = {id: this.state.commentId, author: this.state.Uname, text: commentText}
         this.setState({comments: this.state.comments.concat(comment)});
+        this.props.close()
     }
 
     render() {
@@ -33,7 +33,7 @@ class CommentBox extends Component {
             <div>
                 <CommentList comments={this.state.comments}/>
                 <CommentInput lineIndex={this.props.lineIndex} updateLine={this.props.updateLine}
-                              onCommentSubmit={this.handleOnSubmit.bind(this)}/>
+                              onCommentSubmit={this.handleOnSubmit.bind(this)} Uname={this.state.Uname}/>
             </div>
         );
     }
@@ -45,7 +45,7 @@ class CommentInput extends Component {
     handleOnSubmit(e) {
         let commentText = this.textInput.value;
         if (commentText) {
-            this.props.updateLine(commentText, this.props.lineIndex - 1)
+            this.props.updateLine(this.props.Uname, commentText, this.props.lineIndex - 1)
             this.props.onCommentSubmit(commentText);
             this.textInput.value = '';
         }
