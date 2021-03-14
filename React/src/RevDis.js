@@ -85,7 +85,7 @@ class RevDis extends React.Component {
         }).then(res => {
             var tHld = []
             for (var i = 0; i < res.data.length; i++) {
-              if(i == 0){
+              if(i === 0){
                 tHld[i] = res.data[i].UNameW
               }
               else{
@@ -109,7 +109,8 @@ class RevDis extends React.Component {
             IREVID: this.state.revID,
             IUNAME: this.state.iUserN,
             FUNAME: this.state.Uname,
-            DT: this.state.curTime
+            DT: this.state.curTime,
+            ProjName: this.state.RevName
         }, {headers: {accesstoken: this.state.CookieSave}})
         this.setState({
             step: 2
@@ -120,6 +121,7 @@ class RevDis extends React.Component {
         await axios.get("https://www.4424081204.com:1111/INVITE_TO_REV/"+iuName, {
             headers: {accesstoken: this.state.CookieSave, RID: this.state.revID}
         }).then(res=> {
+            console.log(res)
             if((res.data[0] === undefined) === false){
                 this.setState({
                     resu:res.data[0].ACCEPTED,
@@ -132,8 +134,12 @@ class RevDis extends React.Component {
             RIREVID: this.state.revID,
             RIUNAME: iuName,
             RFUNAME: this.state.Uname,
-            DT: this.state.curTime
+            DT: this.state.curTime,
+            FileName: this.state.fname
             }, {headers: {accesstoken: this.state.CookieSave}})
+            this.setState({
+                RevInv: 2
+            })
         }
         else if(this.state.resu === -1 || this.state.resu === 0) {
             await axios.put("https://www.4424081204.com:1111/INVITE_TO_REV/"+this.state.revID, {

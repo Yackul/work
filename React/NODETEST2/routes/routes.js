@@ -328,7 +328,7 @@ const router = app => {
     });
 
     //review invites
-        app.post('/INVITE_TO_REV', (request, response) => {
+    app.post('/INVITE_TO_REV', (request, response) => {
         pool.query('INSERT INTO INVITE_TO_REV SET ?', request.body, (error, result) => {
             if (error) throw error;
             response.send(result)
@@ -345,10 +345,19 @@ const router = app => {
     });
     app.get('/INVITE_TO_REV/:RIUNAME', (request, response) => {
         const RIUNAME = request.params.RIUNAME;
-        pool.query('SELECT * FROM INVITE_TO_REV WHERE RIUNAME = ?', RIUNAME, (error, result) => {
-            if (error) console.log(error);
-            response.send(result);
-        });
+        const RIREVID = request.headers.rid;
+        if(RIREVID === undefined){
+            pool.query('SELECT * FROM INVITE_TO_REV WHERE RIUNAME = ?', RIUNAME, (error, result) => {
+                if (error) console.log(error);
+                response.send(result);
+            });
+        }
+        else{
+            pool.query('SELECT * FROM INVITE_TO_REV WHERE RIUNAME = ? AND RIREVID = ?', [RIUNAME, RIREVID], (error, result) => {
+                if (error) console.log(error);
+                response.send(result);
+            });
+        }
     });
 
     app.put('/INVITE_TO_REV/:RIREVID', (request, response) => {
