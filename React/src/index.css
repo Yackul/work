@@ -180,6 +180,9 @@ span.psw {
   height: 25%;
   min-width:400px;
 }
+.hide {
+  display: none;
+}
 
 .box {
   position: relative;
