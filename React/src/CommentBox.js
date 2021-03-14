@@ -1,6 +1,7 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import './CommentBox.css';
-import { Auth } from 'aws-amplify'
+import {Auth} from 'aws-amplify'
+import {number} from "prop-types";
 
 class CommentBox extends Component {
     constructor(props) {
@@ -18,18 +19,21 @@ class CommentBox extends Component {
         var userNameHold = userName.charAt(0).toUpperCase() + userName.slice(1);
         this.setState({Uname: userNameHold})
     }
+
     handleOnSubmit(commentText) {
         let newCommentId = this.state.commentId + 1;
-        this.setState({ commentId: newCommentId });
+        this.setState({commentId: newCommentId});
 
-        let comment = { id: this.state.commentId, author: this.state.Uname, text: commentText }
-        this.setState({ comments: this.state.comments.concat(comment) });
+        let comment = {id: this.state.commentId, author: this.state.Uname, text: commentText}
+        this.setState({comments: this.state.comments.concat(comment)});
     }
+
     render() {
         return (
             <div>
-                <CommentList comments={this.state.comments} />
-                <CommentInput onCommentSubmit={this.handleOnSubmit.bind(this)} />
+                <CommentList comments={this.state.comments}/>
+                <CommentInput lineIndex={this.props.lineIndex} updateLine={this.props.updateLine}
+                              onCommentSubmit={this.handleOnSubmit.bind(this)}/>
             </div>
         );
     }
@@ -41,10 +45,12 @@ class CommentInput extends Component {
     handleOnSubmit(e) {
         let commentText = this.textInput.value;
         if (commentText) {
+            this.props.updateLine(commentText, this.props.lineIndex - 1)
             this.props.onCommentSubmit(commentText);
             this.textInput.value = '';
         }
     }
+
     render() {
         return (
             <div>
@@ -65,7 +71,7 @@ class CommentInput extends Component {
 class CommentList extends Component {
     render() {
         let liComments = this.props.comments.map(function (comment) {
-            return <Comment key={comment.id} author={comment.author} text={comment.text} />;
+            return <Comment key={comment.id} author={comment.author} text={comment.text}/>;
         })
         return (
             <ul className="CommentList">
@@ -83,6 +89,10 @@ class Comment extends Component {
             </li>
         );
     }
+}
+
+Comment.propTypes = {
+    lineIndex: number
 }
 
 export default CommentBox;

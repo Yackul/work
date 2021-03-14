@@ -10,18 +10,23 @@ class DiffDisplay extends React.Component {
         this.state = {
             show: props.isOpen,
             lineArray: [],
-            lineArrayLength: 0,
-            indexPad: '',
-            commentIndex: 10,
-            comment: 'Test'
+            commentDict: {},
+            lineArrayLength: 0
         };
+        this.updateLine = this.updateLine.bind(this)
+    }
+
+    updateLine(comment, index) {
+        let d = this.state.commentDict
+        let i = eval(index)
+        d[i] = comment
+        this.setState({commentArray: d})
     }
 
     componentDidMount = async() => {
         try {
             this.setState({lineArray: this.props.diffText.split(/\r?\n/)})
             this.setState({lineArrayLength: this.state.lineArray.length})
-
         } catch (err) {
             alert(err)
         }
@@ -117,11 +122,13 @@ class DiffDisplay extends React.Component {
                                 return <div>
                                     <DiffLine
 
+                                        updateLine={this.updateLine}
                                         lineText={line}
                                         lineIndex={index + 1}
-                                        showComment={this.state.isOpen}>
+                                        showComment={false}>
 
                                     </DiffLine>
+                                    {this.state.commentDict[index]}
                                 </div>
                             }
                         })}
