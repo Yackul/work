@@ -309,12 +309,19 @@ const router = app => {
     });
     app.get('/INVITES/:IUNAME', (request, response) => {
         const IUNAME = request.params.IUNAME;
-        pool.query('SELECT * FROM INVITES WHERE IUNAME = ?', IUNAME, (error, result) => {
-            if (error) console.log(error);
-            //console.log(result)
-            //var tmp2 = result[0].REVIDREF
-            response.send(result);
-        });
+        const IREVID = request.headers.rid;
+        if(IREVID === undefined){
+            pool.query('SELECT * FROM INVITES WHERE IUNAME = ?', IUNAME, (error, result) => {
+                if (error) console.log(error);
+                response.send(result);
+            });
+        }
+        else{
+            pool.query('SELECT * FROM INVITES WHERE IUNAME = ? AND IREVID = ?', [IUNAME, IREVID], (error, result) => {
+                if (error) console.log(error);
+                response.send(result);
+            });
+        }
     });
 
     app.put('/INVITES/:IREVID', (request, response) => {
