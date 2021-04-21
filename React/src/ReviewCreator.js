@@ -38,7 +38,6 @@ class ReviewCreator extends React.Component {
 
     handleClick1() {
         axios.post('https://www.4424081204.com/min_diff', {
-            repoPath: this.state.packageFile,
             fileName: this.state.fileName
         })
             .then((response) => {

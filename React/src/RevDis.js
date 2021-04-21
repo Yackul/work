@@ -29,7 +29,7 @@ class RevDis extends React.Component {
             fileContent: '',
             fileName: '',
             resu: -2,
-            RevInv: 0
+            RevInv: 0,
         };
         this.handleiUserNChange = this.handleiUserNChange.bind(this);
     }
@@ -225,29 +225,41 @@ class RevDis extends React.Component {
     setFile = async (e) => {
         e.preventDefault()
 		
+		var text = ''
 		await axios.get("https://www.4424081204.com:1111/REVIEW/" + this.state.revID, {
                 headers: {accesstoken: this.state.CookieSave}
             }).then(res => {
-				// Instead of alerting the result data here, we need to
-				// send a request to the flask app to return the diff between the current review and the new file
-                alert(res.data.toString().split("$#BREAKBREAK"))
+				
+				const fContent = res.data.toString().split("$#BREAKBREAK")
+				const reader = new FileReader()
+				
+				reader.onload = async (e) => {
+					text = (e.target.result)
+					this.setState({
+						fileContent: text
+					})
+				};
+				
+				reader.readAsText(e.target.files[0])
+				this.setState({
+					fileName: e.target.files[0].name
+				})
 			})
-		
-        const reader = new FileReader()
-        reader.onload = async (e) => {
-            const text = (e.target.result)
-            this.setState({
-                fileContent: text
-            })
-        };
-        reader.readAsText(e.target.files[0])
-        this.setState({
-            fileName: e.target.files[0].name
-        })
+			
+			axios.post('https://www.4424081204.com/test', {
+				fileName: this.state.fileName
+			})
+            .then((response) => {
+				// alert(response.data)
+            }, (error) => {
+                console.log(error)
+                alert(error)
+            });
     }
 
     render() {
-
+		
+		
         let popup = null;
         if (this.state.isOpen) {
             popup = (<Popup
