@@ -39,17 +39,6 @@ class ProfilePage extends React.Component {
     }
     //console.log(this.state.authState)
   }
-  
-  handleClick1() {
-        axios.post('https://www.4424081204.com/test', {
-            fileName: this.state.fileName
-        })
-            .then((response) => {
-				// alert(response.data)
-            }, (error) => {
-                console.log(error)
-            });
-    }
 
 
   handleSubmit(evt) {
@@ -65,9 +54,6 @@ class ProfilePage extends React.Component {
           <div className='grad1'>
             <NavBar />
             <h2 style={{paddingLeft: 20}}>You are: {this.state.Uname}</h2>
-			<button onClick={(e) => this.handleClick1()}>
-                Test write API
-            </button>
           </div>
         );
       case ('unauthorized'):

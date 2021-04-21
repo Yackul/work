@@ -224,37 +224,37 @@ class RevDis extends React.Component {
 
     setFile = async (e) => {
         e.preventDefault()
-		
-		var text = ''
-		await axios.get("https://www.4424081204.com:1111/REVIEW/" + this.state.revID, {
-                headers: {accesstoken: this.state.CookieSave}
-            }).then(res => {
-				
-				const fContent = res.data.toString().split("$#BREAKBREAK")
-				const reader = new FileReader()
-				
-				reader.onload = async (e) => {
-					text = (e.target.result)
-					this.setState({
-						fileContent: text
-					})
-				};
-				
-				reader.readAsText(e.target.files[0])
-				this.setState({
-					fileName: e.target.files[0].name
-				})
-			})
-			
-			axios.post('https://www.4424081204.com/test', {
-				fileName: this.state.fileName
-			})
-            .then((response) => {
-				// alert(response.data)
-            }, (error) => {
-                console.log(error)
-                alert(error)
-            });
+
+        let f1Content = ''
+        let f2Content = ''
+        await axios.get("https://www.4424081204.com:1111/REVIEW/" + this.state.revID, {
+            headers: {accesstoken: this.state.CookieSave}
+        }).then(res => {
+
+            const reader = new FileReader()
+            f1Content = res.data.toString().split("$#BREAKBREAK")
+            reader.onload = async (e) => {
+                f2Content = (e.target.result)
+                await axios.post('https://www.4424081204.com/test', {
+                    file1Content: f1Content,
+                    file2Content: f2Content
+                })
+                    .then((response) => {
+                        // alert(response.data)
+                    }, (error) => {
+                        console.log(error)
+                        alert(error)
+                    });
+                this.setState({
+                    fileContent: f2Content
+                })
+            };
+
+            reader.readAsText(e.target.files[0])
+            this.setState({
+                fileName: e.target.files[0].name
+            })
+        })
     }
 
     render() {
