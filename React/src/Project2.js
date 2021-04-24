@@ -19,10 +19,11 @@ class Project2 extends React.Component {
       curTime : new Date().toLocaleString(),
       gotRev: '',
       Uname: '',
-      RevName: '',
-      RevIDLST: [],
+      PROJNAME: '',
+      PIDLST: [],
+      PrNaLST: [],
       HOLDER: [],
-      newRevID: '',
+      newPID: '',
       newCommID: '',
       step: -1,
       step2: 0,
@@ -30,16 +31,15 @@ class Project2 extends React.Component {
       CookieSave: '',
     };
 
-    this.handleRevName = this.handleRevName.bind(this);
+    this.handlePROJNAME = this.handlePROJNAME.bind(this);
     this.updateStep = this.updateStep.bind(this);
     this.creProjButts = this.creProjButts.bind(this);
 
   }
 
-  getReview = async (d) => {
-
+  getProj = async (d) => {
       var hld2 = ""
-      await axios.get("https://www.4424081204.com:1111/REVIEW/" + d, {
+      await axios.get("https://www.4424081204.com:1111/PROJECT/" + d, {
         headers: {accesstoken: this.state.CookieSave}
       }).then(res => {
       hld2 = res.data;
@@ -47,8 +47,7 @@ class Project2 extends React.Component {
       if(this.myMounted){
         this.setState({
           gotRev: hld2[2],
-          fname: hld2[1],
-          RevName: hld2[0],
+          PROJNAME: hld2[0],
           step2: 1
         })
       }
@@ -70,12 +69,11 @@ class Project2 extends React.Component {
     })
   }
 
+  //this will just make a new entry on project page for user to click on and go to
   popDB = async () => {
-    await axios.post("https://www.4424081204.com:1111/REVIEW", {      
-      REVNAME: this.state.RevName,
-      CurrRev: this.state.fileContent,
+    await axios.post("https://www.4424081204.com:1111/PROJECT", {      
+      PROJNAME: this.state.PROJNAME,
       DT: this.state.curTime,
-      FName: this.state.fileName
     }, {headers: {accesstoken: this.state.CookieSave}}).then(function (res) {
     })
     this.setState({
@@ -83,15 +81,17 @@ class Project2 extends React.Component {
     });
   }
 
+//this needs to be redefined for multi file usage projects will redirect and include route parameter... somehow... probably projname
   popRev = async () => {
-    await axios.get("https://www.4424081204.com:1111/REVIEW", {
+    await axios.get("https://www.4424081204.com:1111/PROJECT", {
     headers: {accesstoken: this.state.CookieSave}
   }).then(res => {
-      this.setState({newRevID: res.data})
+      this.setState({newPID: res.data})
     })
     await axios.post("https://www.4424081204.com:1111/WORKS_ON_PROJECTS", {  
-      REVIDREF: this.state.newRevID,
-      UNameW: this.state.Uname
+      PIDREF: this.state.newPID,
+      UNameW: this.state.Uname,
+      PName: this.state.PROJNAME
     }, {headers: {accesstoken: this.state.CookieSave}}).then(function (res) {
     })
     this.setState({
@@ -99,14 +99,15 @@ class Project2 extends React.Component {
     })
   }
 
-
-  loadRevs = async() => {
+//i dont think this is in use
+/*
+  loadProj = async() => {
     var hld = [];
-    var tmp = this.state.RevIDLST.length;
+    var tmp = this.state.PIDLST.length;
 
     for(var i = 0; i < tmp; i++){
       const x = i
-      await axios.get("https://www.4424081204.com:1111/REVIEW/" + this.state.RevIDLST[x], {
+      await axios.get("https://www.4424081204.com:1111/PROJECT/" + this.state.PIDLST[x], {
         headers: {accesstoken: this.state.CookieSave}
       }).then(res => {
         hld[x] = res.data;
@@ -116,7 +117,7 @@ class Project2 extends React.Component {
       HOLDER: hld
     })
   }
-
+*/
   componentDidMount = async () => {
     document.body.style.background = "#d0f0f0e1";
     this._myMounted = true;
@@ -138,12 +139,15 @@ class Project2 extends React.Component {
       headers: {accesstoken: this.state.CookieSave}
     }).then(res => {
       var hldLST = []
+      var hldLST2 = []
       for(var i = 0; i<res.data.length; i++){
         const x = i
-        hldLST[x] = res.data[x].REVIDREF
+        hldLST[x] = res.data[x].PIDREF
+        hldLST2[x] = res.data[x].PName
       }
       this.setState({
-        RevIDLST: hldLST
+        PIDLST: hldLST,
+        PrNaLST: hldLST2
       })
     })
   }
@@ -151,9 +155,9 @@ class Project2 extends React.Component {
   componentWillUnmount() {
     this._myMounted = false;
   }
-  handleRevName(evt){
+  handlePROJNAME(evt){
     this.setState({
-      RevName: evt.target.value,
+      PROJNAME: evt.target.value,
     });
   }
   updateStep = async (e) => {
@@ -172,7 +176,7 @@ class Project2 extends React.Component {
   }
 
   creProjButts() {
-    const items = this.state.RevIDLST.map((item, i) =><Link key={i} to ={'Projects/' + item}><input key = {i} type="submit" className="submit" value={"Project " + item} onClick={this.getReview.bind(this, (item.valueOf(item)))}/></Link>)
+    const items = this.state.PIDLST.map((item, i) =><Link key={i} to ={'Projects/' + item}><input key = {i} type="submit" className="submit" value={"Project " + this.state.PrNaLST[item-1]} onClick={this.getProj.bind(this, (item.valueOf(item)))}/></Link>)
     return items
   }
 
@@ -193,29 +197,28 @@ class Project2 extends React.Component {
             
             {this.state.step === -1 &&
               <div>
-              <input type="submit" className="submit" value="Create New Review" onClick={this.updateStep}/>
+              <input type="submit" className="submit" value="Create New Project" onClick={this.updateStep}/>
               </div>
             }
 
             {this.state.step === 0 &&    
             <div>
-              <input type="file" onChange={(e) => this.setFile(e)} />
+              {/*<input type="file" onChange={(e) => this.setFile(e)} />*/}
               <br></br>
-              <input style={{width:220}}type = "text" name ="REVNAME" placeholder="Enter a name for your Review" value = {this.state.RevName} onChange={this.handleRevName}/>
+              <input style={{width:220}}type = "text" name ="PROJNAME" placeholder="Enter a name for your Project" value = {this.state.PROJNAME} onChange={this.handlePROJNAME}/>
               <br></br>
-              <input type="submit" className="submit" value="Create New Review" onClick={this.popDB}/>        
+              <input type="submit" className="submit" value="Create New Project" onClick={this.popDB}/>        
               
             </div>
             }
             {this.state.step === 1 &&
             <div>
-            <p>Review Name: {this.state.RevName}</p>
-            <p>File Name: {this.state.fileName}</p>
-            <input type="submit" className = "submit" value="Confirm New Review" onClick={this.popRev}/>
+            <p>Project Name: {this.state.PROJNAME}</p>
+            <input type="submit" className = "submit" value="Confirm New Project" onClick={this.popRev}/>
             </div>
             }
             {this.state.step === 2 &&
-            <div><p>Review Successfully Created!</p>
+            <div><p>Project Successfully Created!</p>
             <br></br>
             <Link to ="/Projects"><input type ="submit" className = "submit" value= "Return to your Projects?" onClick={this.updateStep}/></Link>
             </div>

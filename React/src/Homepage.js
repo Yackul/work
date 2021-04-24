@@ -62,7 +62,7 @@ class Homepage extends React.Component {
             ACCEPTED: 1,
         }, {headers: {accesstoken: this.state.CookieSave, IUNAME: this.state.Uname}})
         await axios.post("https://www.4424081204.com:1111/WORKS_ON_PROJECTS", {
-            REVIDREF: x,
+            PIDREF: x,
             UNameW: this.state.Uname
         }, {headers: {accesstoken: this.state.CookieSave}})
         return window.location = "/Home"
@@ -117,7 +117,7 @@ class Homepage extends React.Component {
               const x = i
               if(res.data[x].ACCEPTED === 0){
                 hldDT[x] = res.data[x].DT 
-                hldProjNames[x] = res.data[x].ProjName
+                hldProjNames[x] = res.data[x].PROJNAME
                 hldLST[x] = res.data[x].IREVID
                 hldLST2[x] = res.data[x].FUNAME
                 c++

@@ -176,61 +176,61 @@ const router = app => {
         });
     });
 
-    //REVIEW FUNCTIONS
-    app.get('/REVIEW', (request, response) => {
+    //PROJECT FUNCTIONS
+    app.get('/PROJECT', (request, response) => {
         //console.log('here')
-        pool.query('SELECT REVID FROM REVIEW ORDER BY REVID DESC LIMIT 1;', (error, result) => {
+        pool.query('SELECT PID FROM PROJECT ORDER BY PID DESC LIMIT 1;', (error, result) => {
             if (error) throw error;
-            //console.log("here", result[0].REVID)
-            response.send(result[0].REVID.toString());
+            //console.log("here", result[0].PID)
+            response.send(result[0].PID.toString());
         });
     });
 
-    // Display a single REVIEW FOR UNAMEW(REFERENCES UNAME)
-    app.get('/REVIEW/:REVID', (request, response) => {
-        const REVID = request.params.REVID;
-        pool.query('SELECT * FROM REVIEW WHERE REVID = ?', REVID, (error, result) => {
+    // Display a single PROJECT FOR UNAMEW(REFERENCES UNAME)
+    app.get('/PROJECT/:PID', (request, response) => {
+        const PID = request.params.PID;
+        pool.query('SELECT * FROM PROJECT WHERE PID = ?', PID, (error, result) => {
             if (error) throw error;
             //var tmp2 = result[0].CurrRev
-            const buf = new Buffer.from(result[0].CurrRev, "binary")
+            //const buf = new Buffer.from(result[0].CurrRev, "binary")
             //console.log(buf)
-            response.send(result[0].REVNAME + "$#BREAKBREAK" + result[0].FName + "$#BREAKBREAK" + buf);
+            //response.send(result[0].PROJNAME + "$#BREAKBREAK" + result[0].FName + "$#BREAKBREAK" + buf);
         });
     });
 
-    //Add a new REVIEW
-    app.post('/REVIEW', (request, response) => {
-        pool.query('INSERT INTO REVIEW SET ?', request.body, (error, result) => {
+    //Add a new PROJECT
+    app.post('/PROJECT', (request, response) => {
+        pool.query('INSERT INTO PROJECT SET ?', request.body, (error, result) => {
             if (error) throw error;
             //console.log(result)
             response.send(result)
         });
     });
 
-    // Update an existing REVIEW
-    app.put('/REVIEW/:REVID', (request, response) => {
-        const REVID = request.params.REVID;
-        pool.query('UPDATE REVIEW SET ? WHERE REVID = ?', [request.body, REVID], (error, result) => {
+    // Update an existing PROJECT
+    app.put('/PROJECT/:PID', (request, response) => {
+        const PID = request.params.PID;
+        pool.query('UPDATE PROJECT SET ? WHERE PID = ?', [request.body, PID], (error, result) => {
             if (error) throw error;
 
-            response.send('REVIEW updated successfully.');
+            response.send('PROJECT updated successfully.');
         });
     });
 
     // Delete a user
-    app.delete('/REVIEW/:REVID', (request, response) => {
-        const REVID = request.params.REVID;
+    app.delete('/PROJECT/:PID', (request, response) => {
+        const PID = request.params.PID;
 
-        pool.query('DELETE FROM REVIEW WHERE REVID = ?', REVID, (error, result) => {
+        pool.query('DELETE FROM PROJECT WHERE PID = ?', PID, (error, result) => {
             if (error) throw error;
-            response.send('REVIEW deleted.');
+            response.send('PROJECT deleted.');
         });
     });
 
-    app.delete('/WORKS_ON_PROJECTS/:REVID', (request, response) => {
-        const REVIDREF = request.params.REVID;
+    app.delete('/WORKS_ON_PROJECTS/:PIDREF', (request, response) => {
+        const PIDREF = request.params.PID;
 
-        pool.query('DELETE FROM WORKS_ON_PROJECTS WHERE REVIDREF = ?', REVIDREF, (error, result) => {
+        pool.query('DELETE FROM WORKS_ON_PROJECTS WHERE PIDREF = ?', PIDREF, (error, result) => {
             if (error) throw error;
             response.send('REVIEW deleted.');
         });
@@ -245,10 +245,10 @@ const router = app => {
 
     app.get('/WORKS_ON_PROJECTS/', (request, response) => {
         const test = request.headers.test;
-        pool.query('SELECT * FROM WORKS_ON_PROJECTS WHERE REVIDREF = ?', test, (error, result) => {
+        pool.query('SELECT * FROM WORKS_ON_PROJECTS WHERE PIDREF = ?', test, (error, result) => {
             if (error) console.log(error);
             console.log(result)
-            //var tmp2 = result[0].REVIDREF
+            //var tmp2 = result[0].PIDREF
             response.send(result);
         });
     });
@@ -258,7 +258,7 @@ const router = app => {
         pool.query('SELECT * FROM WORKS_ON_PROJECTS WHERE UNameW = ?', UNameW, (error, result) => {
             if (error) console.log(error);
             //console.log(result)
-            //var tmp2 = result[0].REVIDREF
+            //var tmp2 = result[0].PIDREF
             response.send(result);
         });
     });
@@ -283,11 +283,11 @@ const router = app => {
     });
 
     // Update an existing COMMENTS_ON_REVIEWS
-    app.put('/COMMENTS_ON_REVIEWS/:REVIDREF', (request, response) => {
-        const REVIDREF = request.params.REVIDREF;
-        pool.query('UPDATE COMMENTS_ON_REVIEWS SET ? WHERE REVIDREF = ?', [request.body, REVIDREF], (error, result) => {
+    app.put('/COMMENTS_ON_REVIEWS/:PIDREF', (request, response) => {
+        const PIDREF = request.params.PIDREF;
+        pool.query('UPDATE COMMENTS_ON_REVIEWS SET ? WHERE PIDREF = ?', [request.body, PIDREF], (error, result) => {
             if (error) throw error;
-            response.send('COMMENTS_ON_REVIEWS/REVIDREF updated successfully.');
+            response.send('COMMENTS_ON_REVIEWS/PIDREF updated successfully.');
         });
     });
 
