@@ -2,3 +2,6 @@
   display: flex;
   padding: 5% 25% 5% 15%;
 }
+/*SO APPARENTLY THIS IS A SUPER IMPORTANT FILE.... FOR SOME REASON.
+if this is removed from src folder, project can no longer compile. lmao. wat?
+*/

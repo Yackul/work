@@ -60,9 +60,10 @@ class RevDis extends React.Component {
             })
             const hld = this.state.routePara;
             var hld2 = ""
-            await axios.get("https://www.4424081204.com:1111/REVIEW/" + hld, {
+            await axios.get("https://www.4424081204.com:1111/PROJECT/" + hld, {
                 headers: {accesstoken: this.state.CookieSave}
             }).then(res => {
+                console.log(res.data)
                 hld2 = res.data;
                 hld2 = hld2.toString().split("$#BREAKBREAK")
                 this.setState({
@@ -106,7 +107,7 @@ class RevDis extends React.Component {
 
     inviteUser = async () => {
         await axios.post("https://www.4424081204.com:1111/INVITES/", {
-            IREVID: this.state.revID,
+            IREVID: this.state.routePara,
             IUNAME: this.state.iUserN,
             FUNAME: this.state.Uname,
             DT: this.state.curTime,
@@ -131,7 +132,7 @@ class RevDis extends React.Component {
         })
         if(this.state.resu === -2){
             await axios.post("https://www.4424081204.com:1111/INVITE_TO_REV/", {
-            RIREVID: this.state.revID,
+            RIREVID: this.state.routePara,
             RIUNAME: iuName,
             RFUNAME: this.state.Uname,
             DT: this.state.curTime,
@@ -187,12 +188,12 @@ class RevDis extends React.Component {
             var hldLST = []
             for (var i = 0; i < res.data.length; i++) {
                 const x = i
-                hldLST[x] = res.data[x].REVIDREF
+                hldLST[x] = res.data[x].PIDREF
             }
             this.setState({
                 RevIDLST: hldLST
             })
-            this.getReview()
+            //this.getReview()
         })
         this.loadCollab();
     }
@@ -204,7 +205,7 @@ class RevDis extends React.Component {
         await axios.delete("https://www.4424081204.com:1111/INVITES/" + this.state.routePara, {
             headers: {accesstoken: this.state.CookieSave}
         })
-        await axios.delete("https://www.4424081204.com:1111/REVIEW/" + this.state.routePara, {
+        await axios.delete("https://www.4424081204.com:1111/PROJECT/" + this.state.routePara, {
             headers: {accesstoken: this.state.CookieSave}
         })
         return window.location = "/Projects"
@@ -215,7 +216,7 @@ class RevDis extends React.Component {
     }
 
     updateReview = async() => {
-        await axios.put("https://www.4424081204.com:1111/REVIEW/" + this.state.revID, {
+        await axios.put("https://www.4424081204.com:1111/Project/" + this.state.revID, {
             CurrRev: this.state.fileContent,
             FName: this.state.fileName
         }, {headers: {accesstoken: this.state.CookieSave}})
