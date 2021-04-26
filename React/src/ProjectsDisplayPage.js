@@ -1,5 +1,4 @@
 import React from 'react';
-import './App.css';
 import './index.css';
 import {Auth} from 'aws-amplify'
 import axios from 'axios'
@@ -8,7 +7,7 @@ import Cookies from 'js-cookie'
 import Popup from './invPopup'
 import DiffDisplay from "./DiffDisplay";
 
-class RevDis extends React.Component {
+class ProjectsDisplayPage extends React.Component {
 
     constructor(props) {
         super(props);
@@ -33,7 +32,7 @@ class RevDis extends React.Component {
         };
         this.handleiUserNChange = this.handleiUserNChange.bind(this);
     }
-
+    
     openPopup = () => {
         this.setState({
             isOpen: true
@@ -51,16 +50,16 @@ class RevDis extends React.Component {
         });
     };
 
-    getReview = async () => {
+    getFiles = async () => {
         if (!this.state.RevIDLST.includes(this.state.routePara)) {
             return window.location = "/Err404"
         } else if (this.state.RevIDLST.includes(this.state.routePara)) {
             this.setState({
                 revID: this.state.routePara
             })
-            const hld = this.state.routePara;
+            const PIDREF = this.state.routePara;
             var hld2 = ""
-            await axios.get("https://www.4424081204.com:1111/PROJECT/" + hld, {
+            await axios.get("https://www.4424081204.com:1111/FILES_IN_PROJ/" + PIDREF, {
                 headers: {accesstoken: this.state.CookieSave}
             }).then(res => {
                 console.log(res.data)
@@ -79,6 +78,9 @@ class RevDis extends React.Component {
             })
         }
     }
+    /*await axios.post("https://www.4424081204.com:1111/FILES_IN_PROJ", {
+        FNAME: this.state.fileName
+      })*/
 
     loadCollab = async () => {
         await axios.get("https://www.4424081204.com:1111/WORKS_ON_PROJECTS/", {
@@ -101,7 +103,7 @@ class RevDis extends React.Component {
 
     invitingUser = async () => {
         this.setState({
-            step: 1
+            step: 3
         })
     }
 
@@ -114,50 +116,8 @@ class RevDis extends React.Component {
             ProjName: this.state.RevName
         }, {headers: {accesstoken: this.state.CookieSave}})
         this.setState({
-            step: 2
+            step: 4
         })
-    }
-    
-    inviteRevUser = async (iuName) => {
-        await axios.get("https://www.4424081204.com:1111/INVITE_TO_REV/"+iuName, {
-            headers: {accesstoken: this.state.CookieSave, RID: this.state.revID}
-        }).then(res=> {
-            console.log(res)
-            if((res.data[0] === undefined) === false){
-                this.setState({
-                    resu:res.data[0].ACCEPTED,
-                    RevInv: 2
-                })
-            }
-        })
-        if(this.state.resu === -2){
-            await axios.post("https://www.4424081204.com:1111/INVITE_TO_REV/", {
-            RIREVID: this.state.routePara,
-            RIUNAME: iuName,
-            RFUNAME: this.state.Uname,
-            DT: this.state.curTime,
-            FileName: this.state.fname
-            }, {headers: {accesstoken: this.state.CookieSave}})
-            this.setState({
-                RevInv: 2
-            })
-        }
-        else if(this.state.resu === -1 || this.state.resu === 0) {
-            await axios.put("https://www.4424081204.com:1111/INVITE_TO_REV/"+this.state.revID, {
-                DT: this.state.curTime,
-                ACCEPTED: 0
-                }, {headers: {accesstoken: this.state.CookieSave, RIUNAME: iuName}
-            }).then(res=> {
-                this.setState({
-                    RevInv: 2
-                })
-            })
-        }
-        else{
-            this.setState({
-                RevInv: 1 
-            })
-        }
     }
 
     componentDidMount = async () => {
@@ -198,7 +158,8 @@ class RevDis extends React.Component {
         this.loadCollab();
     }
 
-    confirmDel = async () => {
+    //NEEDS WORK TO DELETE A PROJECT, NOT JUST A FILE.
+    /*confirmDel = async () => {
         await axios.delete("https://www.4424081204.com:1111/WORKS_ON_PROJECTS/" + this.state.routePara, {
             headers: {accesstoken: this.state.CookieSave}
         })
@@ -210,20 +171,26 @@ class RevDis extends React.Component {
         })
         return window.location = "/Projects"
     }
+    */
 
-    updatingReview = async() => {
-        this.setState({step: 3})
-    }
-
-    updateReview = async() => {
-        await axios.put("https://www.4424081204.com:1111/Project/" + this.state.revID, {
-            CurrRev: this.state.fileContent,
-            FName: this.state.fileName
-        }, {headers: {accesstoken: this.state.CookieSave}})
-        return window.location = "/Projects/" + this.state.routePara
-    }
 
     setFile = async (e) => {
+        e.preventDefault()
+        const reader = new FileReader()
+        reader.onload = async (e) => { 
+          const text = (e.target.result)
+          this.setState({
+            fileContent: text
+          })
+        };
+        reader.readAsText(e.target.files[0])
+        this.setState({
+          fileName: e.target.files[0].name
+        })
+      }
+
+    //might want this to add files straight from project page
+    /*setFile = async (e) => {
         e.preventDefault()
 
         let f1Content = ''
@@ -232,13 +199,12 @@ class RevDis extends React.Component {
             headers: {accesstoken: this.state.CookieSave}
         }).then(res => {
 
-            f1Content = res.data.toString().split("$#BREAKBREAK")
-
             const reader = new FileReader()
+            f1Content = res.data.toString().split("$#BREAKBREAK")
             reader.onload = async (e) => {
                 f2Content = (e.target.result)
                 await axios.post('https://www.4424081204.com/test', {
-                    file1Content: f1Content[2],
+                    file1Content: f1Content,
                     file2Content: f2Content
                 })
                     .then((response) => {
@@ -258,6 +224,21 @@ class RevDis extends React.Component {
             })
         })
     }
+    */
+
+    updateStep = async (e) => {
+        e.preventDefault();
+        if(this.state.step === -1){
+          this.setState({
+            step: 0
+          });
+        }
+        else if(this.state.step === 0) {
+          this.setState({
+            step: 1
+          })
+        }
+      }
 
     render() {
 
@@ -265,9 +246,7 @@ class RevDis extends React.Component {
         let popup = null;
         if (this.state.isOpen) {
             popup = (<Popup
-                message={<div><p>This is permanent, and cannot be reversed</p><input type='submit' className='submit'
-                                                                                     value='Are you sure?'
-                                                                                     onClick={this.confirmDel}/></div>}
+                message={<div><p>This is permanent, and cannot be reversed</p><input type='submit' className='submit' value='Are you sure?' onClick={this.confirmDel}/></div>}
                 closeMe={this.closePopup}/>);
         }
 
@@ -282,11 +261,27 @@ class RevDis extends React.Component {
                         <NavBar/>
                         <br></br>
                         <div style={{display: 'flex', marginLeft:'auto', marginRight:20}}>
-                            <div className='container'>
-                                <input type="submit" className='submit' value="Update File" onClick={this.updatingReview}/>
+                            <div className='container'> 
+                            {this.state.step === -1 &&
+                                <div className = 'center'>
+                                    <input type="submit" className="submit" value="Add a file to project" onClick={this.updateStep}/>    
+                                </div>
+                            }
+                            {this.state.step === 0 &&
+                                <div className='inline'>
+                                <br></br>
+                                <input type="file" onChange={(e) => this.setFile(e)}/>
+                                <br></br>
+                                <input type="submit" className="submit" value="Add file to project" onClick={this.updateStep}/>      
+                                </div>
+                            }
+                            {this.state.step === 1 &&
+                                <input type="file" onChange={(e) => this.setFile(e)} placeholder="Add a file" />      
+                            }
+
                                 <input type="submit" className='submit' value="Invite a User to Project"
                                        onClick={this.invitingUser}/>
-                                {this.state.step === 1 &&
+                                {this.state.step === 3 &&
                                 <div>
                                     <br></br>
                                     <input style={{width: 150}}type="text" placeholder="Enter a username" value={this.state.iUserN}
@@ -295,15 +290,8 @@ class RevDis extends React.Component {
                                     <input type='submit' className='submit' value='Send Invite' onClick={this.inviteUser}/>
                                 </div>
                                 }
-                                {this.state.step === 2 &&
+                                {this.state.step === 4 &&
                                 <div className='smll'>Invitation sent to {this.state.iUserN}!</div>
-                                }
-                                {this.state.step === 3 &&
-                                <div>
-                                    <input type="file" style={{}} onChange={(e) => this.setFile(e)}/>
-                                    <br></br>
-                                    <input type='submit' className='submit' value='Update Review' style={{alignSelf:"center"}} onClick={this.updateReview}/>
-                                </div>
                                 }
                             </div>
                             <div className='inline'>
@@ -314,13 +302,9 @@ class RevDis extends React.Component {
                                 <div className='smllTEST'>Invite Sent!</div>}
                             </div>
                         </div>
-                        <div className='colors' style={{textAlign:"center", marginBottom:10}}>Current Review: {this.state.RevName}<br></br>File
-                            Type: {this.state.fname.split('.').pop()}</div>
-                        <div className='grad2'>
-                            <p>{this.state.gotRev}</p>
-                        </div>
+                        
                         <br></br>
-                        <input type='submit' className='submit' value="Delete Review" onClick={this.openPopup}/>
+                        <input type='submit' className='submit' value="Delete Project(todo--NOCLICK)" onClick={this.openPopup}/>
                         {popup}
                     </div>
                 );
@@ -332,4 +316,4 @@ class RevDis extends React.Component {
     }
 }
 
-export default RevDis;
+export default ProjectsDisplayPage;

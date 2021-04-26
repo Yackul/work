@@ -134,21 +134,21 @@ const router = app => {
         });
     });
 
-    //Commits_On_Reviews
+    //DIFFS_ON_FILES
     //extra comment cause I keep getting lost
-    app.get('/COMMITS_ON_REVIEWS', (request, response) => {
-        pool.query('SELECT * FROM COMMITS_ON_REVIEWS', (error, result) => {
-            if (error) {console.log("something went wrong GET/COMMITS_ON_REVIEWS")};
+    app.get('/DIFFS_ON_FILES', (request, response) => {
+        pool.query('SELECT * FROM DIFFS_ON_FILES', (error, result) => {
+            if (error) {console.log("something went wrong GET/DIFFS_ON_FILES")};
             //console.log(result);
             response.send(result);
         });
     });
 
     // Display commits by UName
-    app.get('/COMMITS_ON_REVIEWS/:CommID', (request, response) => {
+    app.get('/DIFFS_ON_FILES/:CommID', (request, response) => {
         const CommID = request.params.CommID;
 
-        pool.query('SELECT * FROM COMMITS_ON_REVIEWS WHERE CommID = ?', CommID, (error, result) => {
+        pool.query('SELECT * FROM DIFFS_ON_FILES WHERE CommID = ?', CommID, (error, result) => {
             if (error) {console.log("something went wrong GET/COMMITS_ON)REVIEWS/:CommID")};
             //console.log(result);
             response.send(result);
@@ -156,8 +156,8 @@ const router = app => {
     });
     
     //Post a diff
-    app.post('/COMMITS_ON_REVIEWS', (request, response) => {
-        pool.query('INSERT INTO COMMITS_ON_REVIEWS SET ?', request.body, (error, result) => {
+    app.post('/DIFFS_ON_FILES', (request, response) => {
+        pool.query('INSERT INTO DIFFS_ON_FILES SET ?', request.body, (error, result) => {
             if (error) {
                 console.log(error)
             }
@@ -167,7 +167,7 @@ const router = app => {
     });
     
      // Delete a diff
-    app.delete('/COMMITS_ON_REVIEWS/:CommID', (request, response) => {
+    app.delete('/DIFFS_ON_FILES/:CommID', (request, response) => {
         const CommID = request.params.CommID;
 
         pool.query('DELETE FROM COMMITS WHERE CommID = ?', CommID, (error, result) => {
@@ -374,6 +374,56 @@ const router = app => {
             if (error) throw error;
 
             response.send(result);
+        });
+    });
+
+    //Files_In_Proj routes -- ignore all comments except this in this section.
+    //i just copy pasted from projects. descriptions are correctish, names are wrong.
+    app.get('/FILES_IN_PROJ', (request, response) => {
+        //console.log('here')
+        pool.query('SELECT FID FROM FILES_IN_PROJ ORDER BY FID DESC LIMIT 1;', (error, result) => {
+            if (error) throw error;
+            //console.log("here", result[0].PID)
+            response.send(result[0].FID.toString());
+        });
+    });
+
+    // Display a single PROJECT FOR UNAMEW(REFERENCES UNAME)
+    app.get('/FILES_IN_PROJ/:PIDREF', (request, response) => {
+        const PIDREF = request.params.PIDREF;
+        pool.query('SELECT * FROM FILES_IN_PROJ WHERE PIDREF = ?', PIDREF, (error, result) => {
+            if (error) throw error;
+            //var tmp2 = result[0].CurrRev
+            //const buf = new Buffer.from(result[0].CurrRev, "binary")
+            //console.log(buf)
+            //response.send(result[0].PROJNAME + "$#BREAKBREAK" + result[0].FName + "$#BREAKBREAK" + buf);
+        });
+    });
+
+    //Add a new PROJECT
+    app.post('/FILES_IN_PROJ', (request, response) => {
+        pool.query('INSERT INTO FILES_IN_PROJ SET ?', request.body, (error, result) => {
+            if (error) throw error;
+            //console.log(result)
+            response.send(result)
+        });
+    });
+
+    // Update an existing PROJECT
+    app.put('/FILES_IN_PROJ/:FID', (request, response) => {
+        const PID = request.params.PID;
+        pool.query('UPDATE FILES_IN_PROJ SET ? WHERE FID = ?', [request.body, FID], (error, result) => {
+            if (error) throw error;
+
+        });
+    });
+
+    // Delete a user
+    app.delete('/FILES_IN_PROJ/:FID', (request, response) => {
+        const PID = request.params.FID;
+
+        pool.query('DELETE FROM PROJECT WHERE FID = ?', FID, (error, result) => {
+            if (error) throw error;
         });
     });
 }
