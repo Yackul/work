@@ -376,6 +376,56 @@ const router = app => {
             response.send(result);
         });
     });
+
+    //Files_In_Proj routes -- ignore all comments except this in this section.
+    //i just copy pasted from projects. descriptions are correctish, names are wrong.
+    app.get('/FILES_IN_PROJ', (request, response) => {
+        //console.log('here')
+        pool.query('SELECT FID FROM FILES_IN_PROJ ORDER BY FID DESC LIMIT 1;', (error, result) => {
+            if (error) throw error;
+            //console.log("here", result[0].PID)
+            response.send(result[0].FID.toString());
+        });
+    });
+
+    // Display a single PROJECT FOR UNAMEW(REFERENCES UNAME)
+    app.get('/FILES_IN_PROJ/:PIDREF', (request, response) => {
+        const PIDREF = request.params.PIDREF;
+        pool.query('SELECT * FROM FILES_IN_PROJ WHERE PIDREF = ?', PIDREF, (error, result) => {
+            if (error) throw error;
+            //var tmp2 = result[0].CurrRev
+            //const buf = new Buffer.from(result[0].CurrRev, "binary")
+            //console.log(buf)
+            //response.send(result[0].PROJNAME + "$#BREAKBREAK" + result[0].FName + "$#BREAKBREAK" + buf);
+        });
+    });
+
+    //Add a new PROJECT
+    app.post('/FILES_IN_PROJ', (request, response) => {
+        pool.query('INSERT INTO FILES_IN_PROJ SET ?', request.body, (error, result) => {
+            if (error) throw error;
+            //console.log(result)
+            response.send(result)
+        });
+    });
+
+    // Update an existing PROJECT
+    app.put('/FILES_IN_PROJ/:FID', (request, response) => {
+        const PID = request.params.PID;
+        pool.query('UPDATE FILES_IN_PROJ SET ? WHERE FID = ?', [request.body, FID], (error, result) => {
+            if (error) throw error;
+
+        });
+    });
+
+    // Delete a user
+    app.delete('/FILES_IN_PROJ/:FID', (request, response) => {
+        const PID = request.params.FID;
+
+        pool.query('DELETE FROM PROJECT WHERE FID = ?', FID, (error, result) => {
+            if (error) throw error;
+        });
+    });
 }
 // Export the router
 module.exports = router;

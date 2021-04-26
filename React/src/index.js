@@ -11,6 +11,7 @@ import Amplify from 'aws-amplify';
 import awsconfig from './aws-exports';
 import InComment from './Project';
 import ProjTest from './Project2';
+import PDP from './ProjectsDisplayPage';
 import RevDis from './RevDis';
 import Err from './404';
 
@@ -29,7 +30,8 @@ function App() {
         <Route exact path="/Projects" component={ProjTest} />
         <Route exact path="/RecoverAccount" component={RA} />
         <Route exact path="/Review" component={Rev} />
-        <Route exact path='/Projects/:id' component={RevDis}/>
+        <Route exact path='/Projects/:id/:id' component={RevDis}/>
+        <Route exact path='/Projects/:id' component={PDP}/>
         <Route exact path="/CommentTest" component={InComment} />
         <Route exact path='/Err404' component={Err}/>
         <Redirect from='/Me/*' to='/Err404'/>
