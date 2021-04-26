@@ -134,21 +134,21 @@ const router = app => {
         });
     });
 
-    //Commits_On_Reviews
+    //DIFFS_ON_FILES
     //extra comment cause I keep getting lost
-    app.get('/COMMITS_ON_REVIEWS', (request, response) => {
-        pool.query('SELECT * FROM COMMITS_ON_REVIEWS', (error, result) => {
-            if (error) {console.log("something went wrong GET/COMMITS_ON_REVIEWS")};
+    app.get('/DIFFS_ON_FILES', (request, response) => {
+        pool.query('SELECT * FROM DIFFS_ON_FILES', (error, result) => {
+            if (error) {console.log("something went wrong GET/DIFFS_ON_FILES")};
             //console.log(result);
             response.send(result);
         });
     });
 
     // Display commits by UName
-    app.get('/COMMITS_ON_REVIEWS/:CommID', (request, response) => {
+    app.get('/DIFFS_ON_FILES/:CommID', (request, response) => {
         const CommID = request.params.CommID;
 
-        pool.query('SELECT * FROM COMMITS_ON_REVIEWS WHERE CommID = ?', CommID, (error, result) => {
+        pool.query('SELECT * FROM DIFFS_ON_FILES WHERE CommID = ?', CommID, (error, result) => {
             if (error) {console.log("something went wrong GET/COMMITS_ON)REVIEWS/:CommID")};
             //console.log(result);
             response.send(result);
@@ -156,8 +156,8 @@ const router = app => {
     });
     
     //Post a diff
-    app.post('/COMMITS_ON_REVIEWS', (request, response) => {
-        pool.query('INSERT INTO COMMITS_ON_REVIEWS SET ?', request.body, (error, result) => {
+    app.post('/DIFFS_ON_FILES', (request, response) => {
+        pool.query('INSERT INTO DIFFS_ON_FILES SET ?', request.body, (error, result) => {
             if (error) {
                 console.log(error)
             }
@@ -167,7 +167,7 @@ const router = app => {
     });
     
      // Delete a diff
-    app.delete('/COMMITS_ON_REVIEWS/:CommID', (request, response) => {
+    app.delete('/DIFFS_ON_FILES/:CommID', (request, response) => {
         const CommID = request.params.CommID;
 
         pool.query('DELETE FROM COMMITS WHERE CommID = ?', CommID, (error, result) => {
