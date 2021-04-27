@@ -1,3 +1,6 @@
 [submodule "ggec2"]
 	path = ggec2
 	url = https://github.com/Michaelrbloomquist/ggec2
+[submodule "flaskapp"]
+	path = flaskapp
+	url = https://github.com/Michaelrbloomquist/flaskapp
