@@ -241,7 +241,7 @@ class RevDis extends React.Component {
                 f1Content = res.data
                 f2Content = (e.target.result)
                 await axios.post('https://www.4424081204.com/test', {
-                    file1Content: f1Content,
+                    file1Content: f1Content[2],
                     file2Content: f2Content
                 })
                     .then((response) => {
