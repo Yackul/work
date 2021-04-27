@@ -47,7 +47,6 @@ class ProjectsDisplayPage extends React.Component {
     };
 
     getFiles = async () => {
-        console.log(this.state.routePara)
         if (!this.state.FIDLST.includes(this.state.routePara)) {
             return window.location = "/Err404"
         } else if (this.state.FIDLST.includes(this.state.routePara)) {
@@ -98,7 +97,7 @@ class ProjectsDisplayPage extends React.Component {
             IUNAME: this.state.iUserN,
             FUNAME: this.state.Uname,
             DT: this.state.curTime,
-            ProjName: this.state.RevName
+            ProjName: this.state.routeName
         }, {headers: {accesstoken: this.state.CookieSave}})
         this.setState({
             step: 4
@@ -130,12 +129,13 @@ class ProjectsDisplayPage extends React.Component {
             headers: {accesstoken: this.state.CookieSave}
         }).then(res => {
             var hldLST = []
-            var hldNames = []
-            console.log(res.data)
             for (var i = 0; i < res.data.length; i++) {
                 const x = i
                 hldLST[x] = res.data[x].PIDREF
-                hldNames[x] = res.data[x].PName
+                if(res.data[x].PIDREF === this.state.routePara)
+                    this.setState({
+                        routeName: res.data[x].PName
+                    })
             }
             this.setState({
                 FIDLST: hldLST

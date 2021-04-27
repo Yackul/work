@@ -130,6 +130,7 @@ class Homepage extends React.Component {
               invNum: c,
               invULST: hldLST2
             })
+            console.log(this.state.invLST)
           })
           await axios.get("https://www.4424081204.com:1111/invite_to_rev/" + this.state.Uname, {
             headers: {accesstoken: this.state.CookieSave}
