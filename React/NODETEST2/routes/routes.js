@@ -413,7 +413,6 @@ const router = app => {
             console.log("suck")
             pool.query('SELECT * FROM FILES_IN_PROJ WHERE FNAME = ?', FNAME, (error, result) => {
                 if (error) throw error;
-                //var tmp2 = result[0].CurrRev
                 const buf = new Buffer.from(result[0].FCONTENT, "binary")
                 response.send(buf);
             });
