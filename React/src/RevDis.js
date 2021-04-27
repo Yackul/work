@@ -241,14 +241,22 @@ class RevDis extends React.Component {
                 f1Content = res.data
                 f2Content = (e.target.result)
                 await axios.post('https://www.4424081204.com/file_diff', {
-                    file1Content: f1Content[2],
+                    file1Content: f1Content,
                     file2Content: f2Content
+                }).then(diffRes => {
+                    alert (this.state.routePara)
+                    alert(this.state.routeID)
+                    axios.get("https://www.4424081204.com:1111/FILES_IN_PROJ/" + this.state.routePara, {
+                        headers: {accesstoken: this.state.CookieSave, PIDREF: this.state.routeID}
+                    }).then(sqlRes => {
+                        alert(sqlRes.data)
+                        // axios.post("https://www.4424081204.com:1111/DIFFS_ON_FILES/", {
+                        //     FIDREF: sqlRes.data.FIDREF,
+                        //     DT: this.state.curTime,
+                        //     CommDiff: diffRes.data
+                        // }, {headers: {accesstoken: this.state.CookieSave}})
+                    })
                 })
-                    .then((response) => {
-                        // alert(response.data)
-                    }, (error) => {
-                        alert(error)
-                    });
                 this.setState({
                     fileContent: f2Content
                 })
