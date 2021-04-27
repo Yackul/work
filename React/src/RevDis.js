@@ -55,6 +55,7 @@ class RevDis extends React.Component {
     getReview = async () => {
         if (!this.state.RevIDLST.includes(this.state.routeID)) {
             //return window.location = "/Err404"
+            console.log("here")
         } else if (this.state.RevIDLST.includes(this.state.routeID)) {
             this.setState({
                 revID: this.state.routeID
@@ -159,7 +160,6 @@ class RevDis extends React.Component {
 
     componentDidMount = async () => {
         document.body.style.background = "#d0f0f0e1";
-        console.log(this.props.match.params)
         const y = parseInt(this.props.match.params.id)
         const x = this.props.match.params.id2
         this.setState({
@@ -181,8 +181,8 @@ class RevDis extends React.Component {
         } catch (err) {
             this.setState({authState: 'unauthorized'})
         }
-        await axios.get("https://www.4424081204.com:1111/FILES_IN_PROJ/" + this.state.routeID, {
-            headers: {accesstoken: this.state.CookieSave}
+        await axios.get("http://localhost:3002/FILES_IN_PROJ/" + this.state.routeID, {
+            headers: {accesstoken: this.state.CookieSave, test: -1}
         }).then(res => {
             var hldLST = []
             for (var i = 0; i < res.data.length; i++) {

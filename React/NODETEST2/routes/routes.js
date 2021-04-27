@@ -391,13 +391,28 @@ const router = app => {
     // Display a single PROJECT FOR UNAMEW(REFERENCES UNAME)
     app.get('/FILES_IN_PROJ/:FNAME', (request, response) => {
         const FNAME = request.params.FNAME;
-        pool.query('SELECT * FROM FILES_IN_PROJ WHERE FNAME = ?', FNAME, (error, result) => {
-            if (error) throw error;
-            //var tmp2 = result[0].CurrRev
-            const buf = new Buffer.from(result[0].FCONTENT, "binary")
-            console.log(buf)
-            response.send(buf);
-        });
+        const test = request.headers.test;
+        if(test == -1) {
+            pool.query('SELECT * FROM FILES_IN_PROJ WHERE PIDREF = ?', FNAME, (error, result) => {
+                
+                if (error) throw error;
+                //var tmp2 = result[0].CurrRev
+                //const buf = new Buffer.from(result[0].FCONTENT, "binary")
+            
+                response.send(result);
+            });
+        }
+        else if (test != -1){
+            console.log(FNAME)
+            pool.query('SELECT * FROM FILES_IN_PROJ WHERE FNAME = ?', FNAME, (error, result) => {
+                console.log(result)
+                if (error) throw error;
+                //var tmp2 = result[0].CurrRev
+                const buf = new Buffer.from(result[0].FCONTENT, "binary")
+                console.log(buf)
+                response.send(buf);
+            });
+        }
     });
 
     //Add a new PROJECT
