@@ -6,6 +6,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie'
 import Popup from './invPopup'; 
 import RPopup from './RinvPopup'; 
+import { wait } from '@testing-library/dom';
 
 
 class Homepage extends React.Component {
@@ -28,7 +29,8 @@ class Homepage extends React.Component {
             RinvNum: 0,
             CookieSave: '',
             isOpen: false,
-            isOpen2: false
+            isOpen2: false,
+            tmplol: []
         };
 
         this.creInvButts = this.creInvButts.bind(this);
@@ -63,7 +65,8 @@ class Homepage extends React.Component {
         }, {headers: {accesstoken: this.state.CookieSave, IUNAME: this.state.Uname}})
         await axios.post("https://www.4424081204.com:1111/WORKS_ON_PROJECTS", {
             PIDREF: x,
-            UNameW: this.state.Uname
+            UNameW: this.state.Uname,
+            PName: y
         }, {headers: {accesstoken: this.state.CookieSave}})
         return window.location = "/Home"
     }
@@ -117,7 +120,7 @@ class Homepage extends React.Component {
               const x = i
               if(res.data[x].ACCEPTED === 0){
                 hldDT[x] = res.data[x].DT 
-                hldProjNames[x] = res.data[x].PROJNAME
+                hldProjNames[x] = res.data[x].ProjName
                 hldLST[x] = res.data[x].IREVID
                 hldLST2[x] = res.data[x].FUNAME
                 c++
@@ -130,7 +133,6 @@ class Homepage extends React.Component {
               invNum: c,
               invULST: hldLST2
             })
-            console.log(this.state.invLST)
           })
           await axios.get("https://www.4424081204.com:1111/invite_to_rev/" + this.state.Uname, {
             headers: {accesstoken: this.state.CookieSave}
@@ -187,9 +189,7 @@ class Homepage extends React.Component {
         var filtered2 = this.state.invDT.filter(function (el) {
             return el != null;
         });
-          
-        var z = 0
-        const items = Object.entries(dResult).map(([key, value]) => <div key = {key}><div>Invite to project: {filtered[z]}</div><div>On: {filtered2[z]}</div><div className='hide'>{z++}</div><input type='submit' className='submit' value={"Accept invite from " + value} onClick={() => this.acceptInv(key, value)}/><input type='submit' className='submit' value={"Decline invite from " + value} onClick={() => this.declineInv(key, value)}/><br></br></div>)
+        const items = Object.entries(dResult).map(([key, value], index) => <div key = {key}><div>Invite to project: {filtered[index]}</div><div>On: {filtered2[index]}</div><input type='submit' className='submit' value={"Accept invite from " + value} onClick={() => this.acceptInv(key, filtered[index])}/><input type='submit' className='submit' value={"Decline invite from " + value} onClick={() => this.declineInv(key, value)}/><br></br></div>)
         return items
     }
 
