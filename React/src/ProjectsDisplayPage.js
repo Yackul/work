@@ -6,7 +6,6 @@ import NavBar from './NavBar'
 import Cookies from 'js-cookie'
 import Popup from './invPopup'
 import {Link} from "react-router-dom";
-import DiffDisplay from "./DiffDisplay";
 
 class ProjectsDisplayPage extends React.Component {
 
@@ -14,6 +13,7 @@ class ProjectsDisplayPage extends React.Component {
         super(props);
         this.state = {
             routePara: 0,
+            routeName: "",
             curTime: new Date().toLocaleString(),
             Uname: '',
             FIDLST: [],
@@ -47,6 +47,7 @@ class ProjectsDisplayPage extends React.Component {
     };
 
     getFiles = async () => {
+        console.log(this.state.routePara)
         if (!this.state.FIDLST.includes(this.state.routePara)) {
             return window.location = "/Err404"
         } else if (this.state.FIDLST.includes(this.state.routePara)) {
@@ -128,11 +129,13 @@ class ProjectsDisplayPage extends React.Component {
         await axios.get("https://www.4424081204.com:1111/WORKS_ON_PROJECTS/" + this.state.Uname, {
             headers: {accesstoken: this.state.CookieSave}
         }).then(res => {
-            this.setState({FIDLST: res.data})
             var hldLST = []
+            var hldNames = []
+            console.log(res.data)
             for (var i = 0; i < res.data.length; i++) {
                 const x = i
                 hldLST[x] = res.data[x].PIDREF
+                hldNames[x] = res.data[x].PName
             }
             this.setState({
                 FIDLST: hldLST

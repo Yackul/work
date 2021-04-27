@@ -238,6 +238,7 @@ class RevDis extends React.Component {
         }).then(res => {
             const reader = new FileReader()
             reader.onload = async (e) => {
+                f1Content = res.data
                 f2Content = (e.target.result)
                 await axios.post('https://www.4424081204.com/test', {
                     file1Content: f1Content,
