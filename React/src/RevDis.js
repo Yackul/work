@@ -244,8 +244,6 @@ class RevDis extends React.Component {
                     file1Content: f1Content,
                     file2Content: f2Content
                 }).then(diffRes => {
-                    alert (this.state.routePara)
-                    alert(this.state.routeID)
                     axios.get("https://www.4424081204.com:1111/FILES_IN_PROJ/" + this.state.routePara, {
                         headers: {accesstoken: this.state.CookieSave, PIDREF: this.state.routeID}
                     }).then(sqlRes => {
