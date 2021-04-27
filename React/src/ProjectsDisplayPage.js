@@ -53,7 +53,7 @@ class ProjectsDisplayPage extends React.Component {
         
             const PIDREF = this.state.routePara;
             var temp = []
-            await axios.get("http://localhost:3002/FILES_IN_PROJ/" + PIDREF, {
+            await axios.get("https://www.4424081204.com:1111/FILES_IN_PROJ/" + PIDREF, {
                 headers: {accesstoken: this.state.CookieSave, test: -1}
             }).then(res => {
                 for (var i = 0; i < res.data.length; i++) {

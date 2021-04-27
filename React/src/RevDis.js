@@ -55,14 +55,13 @@ class RevDis extends React.Component {
     getReview = async () => {
         if (!this.state.RevIDLST.includes(this.state.routeID)) {
             //return window.location = "/Err404"
-            console.log("here")
         } else if (this.state.RevIDLST.includes(this.state.routeID)) {
             this.setState({
                 revID: this.state.routeID
             })
             const hld = this.state.routePara;
             var hld2 = ""
-            await axios.get("http://localhost:3002/FILES_IN_PROJ/" + hld, {
+            await axios.get("https://www.4424081204.com:1111/FILES_IN_PROJ/" + hld, {
                 headers: {accesstoken: this.state.CookieSave}
             }).then(res => {
                 this.setState({
@@ -181,7 +180,7 @@ class RevDis extends React.Component {
         } catch (err) {
             this.setState({authState: 'unauthorized'})
         }
-        await axios.get("http://localhost:3002/FILES_IN_PROJ/" + this.state.routeID, {
+        await axios.get("https://www.4424081204.com:1111/FILES_IN_PROJ/" + this.state.routeID, {
             headers: {accesstoken: this.state.CookieSave, test: -1}
         }).then(res => {
             var hldLST = []
@@ -215,11 +214,18 @@ class RevDis extends React.Component {
     }
 
     updateReview = async() => {
-        await axios.put("https://www.4424081204.com:1111/FILES_IN_PROJ/" + this.state.revID, {
-            CurrRev: this.state.fileContent,
-            FName: this.state.fileName
+        await axios.get("https://www.4424081204.com:1111/FILES_IN_PROJ/" + this.state.routePara, {
+            headers: {accesstoken: this.state.CookieSave}
+        })
+        await axios.put("https://www.4424081204.com:1111/FILES_IN_PROJ/" + this.state.routePara, {
+            FCONTENT: this.state.fileContent,
+            FNAME: this.state.fileName,
+            FTYPE: this.state.fileName.split(".").pop()
         }, {headers: {accesstoken: this.state.CookieSave}})
-        return window.location = "/Projects/" + this.state.routePara
+        this.setState({ step: -1
+        })
+        return window.location = "/Projects/" + this.state.routeID + "/" + this.state.fileName
+        
     }
 
     setFile = async (e) => {
@@ -227,12 +233,11 @@ class RevDis extends React.Component {
 
         let f1Content = ''
         let f2Content = ''
-        await axios.get("https://www.4424081204.com:1111/REVIEW/" + this.state.revID, {
+        await axios.get("https://www.4424081204.com:1111/FILES_IN_PROJ/" + this.state.routePara, {
             headers: {accesstoken: this.state.CookieSave}
         }).then(res => {
-
+            console.log(res.data)
             const reader = new FileReader()
-            f1Content = res.data.toString().split("$#BREAKBREAK")
             reader.onload = async (e) => {
                 f2Content = (e.target.result)
                 await axios.post('https://www.4424081204.com/test', {
