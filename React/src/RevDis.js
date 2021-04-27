@@ -236,12 +236,11 @@ class RevDis extends React.Component {
         await axios.get("https://www.4424081204.com:1111/FILES_IN_PROJ/" + this.state.routePara, {
             headers: {accesstoken: this.state.CookieSave}
         }).then(res => {
-            console.log(res.data)
             const reader = new FileReader()
             reader.onload = async (e) => {
                 f2Content = (e.target.result)
                 await axios.post('https://www.4424081204.com/test', {
-                    file1Content: f1Content,
+                    file1Content: f1Content[2],
                     file2Content: f2Content
                 })
                     .then((response) => {
