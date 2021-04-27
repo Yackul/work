@@ -249,13 +249,13 @@ class RevDis extends React.Component {
                     axios.get("https://www.4424081204.com:1111/FILES_IN_PROJ/" + this.state.routePara, {
                         headers: {accesstoken: this.state.CookieSave, PIDREF: this.state.routeID}
                     }).then(sqlRes => {
-                        alert(sqlRes.data)
-                        // axios.post("https://www.4424081204.com:1111/DIFFS_ON_FILES/", {
-                        //     FIDREF: sqlRes.data.FIDREF,
-                        //     DT: this.state.curTime,
-                        //     CommDiff: diffRes.data
-                        // }, {headers: {accesstoken: this.state.CookieSave}})
+                        axios.post("https://www.4424081204.com:1111/DIFFS_ON_FILES/", {
+                            FIDREF: sqlRes.data[0].FID,
+                            CommDT: this.state.curTime,
+                            CommDiff: diffRes.data
+                         }, {headers: {accesstoken: this.state.CookieSave}})
                     })
+                    
                 })
                 this.setState({
                     fileContent: f2Content
