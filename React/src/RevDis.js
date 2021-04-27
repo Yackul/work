@@ -14,6 +14,7 @@ class RevDis extends React.Component {
         super(props);
         this.state = {
             routePara: 0,
+            routeID: 0,
             revID: -1,
             curTime: new Date().toLocaleString(),
             gotRev: '',
@@ -52,25 +53,22 @@ class RevDis extends React.Component {
     };
 
     getReview = async () => {
-        if (!this.state.RevIDLST.includes(this.state.routePara)) {
-            return window.location = "/Err404"
-        } else if (this.state.RevIDLST.includes(this.state.routePara)) {
+        if (!this.state.RevIDLST.includes(this.state.routeID)) {
+            //return window.location = "/Err404"
+        } else if (this.state.RevIDLST.includes(this.state.routeID)) {
             this.setState({
-                revID: this.state.routePara
+                revID: this.state.routeID
             })
             const hld = this.state.routePara;
             var hld2 = ""
-            await axios.get("https://www.4424081204.com:1111/PROJECT/" + hld, {
+            await axios.get("http://localhost:3002/FILES_IN_PROJ/" + hld, {
                 headers: {accesstoken: this.state.CookieSave}
             }).then(res => {
-                console.log(res.data)
-                hld2 = res.data;
-                hld2 = hld2.toString().split("$#BREAKBREAK")
                 this.setState({
                     gotRev: <div>
                         <DiffDisplay
                                      isOpen={true}
-                                     diffText={hld2[2]}>
+                                     diffText={res.data}>
                         </DiffDisplay>
                     </div>,
                     fname: hld2[1],
@@ -82,7 +80,7 @@ class RevDis extends React.Component {
 
     loadCollab = async () => {
         await axios.get("https://www.4424081204.com:1111/WORKS_ON_PROJECTS/", {
-            headers: {accesstoken: this.state.CookieSave, test: this.state.routePara}
+            headers: {accesstoken: this.state.CookieSave, test: this.state.routeID}
         }).then(res => {
             var tHld = []
             for (var i = 0; i < res.data.length; i++) {
@@ -122,7 +120,6 @@ class RevDis extends React.Component {
         await axios.get("https://www.4424081204.com:1111/INVITE_TO_REV/"+iuName, {
             headers: {accesstoken: this.state.CookieSave, RID: this.state.revID}
         }).then(res=> {
-            console.log(res)
             if((res.data[0] === undefined) === false){
                 this.setState({
                     resu:res.data[0].ACCEPTED,
@@ -162,9 +159,12 @@ class RevDis extends React.Component {
 
     componentDidMount = async () => {
         document.body.style.background = "#d0f0f0e1";
-        const x = parseInt(this.props.match.params.id)
+        console.log(this.props.match.params)
+        const y = parseInt(this.props.match.params.id)
+        const x = this.props.match.params.id2
         this.setState({
-            routePara: x
+            routePara: x,
+            routeID: y
         })
         const tokens = await Auth.currentSession();
         const userName = tokens.getIdToken().payload['cognito:username'];
@@ -181,10 +181,9 @@ class RevDis extends React.Component {
         } catch (err) {
             this.setState({authState: 'unauthorized'})
         }
-        await axios.get("https://www.4424081204.com:1111/WORKS_ON_PROJECTS/" + this.state.Uname, {
+        await axios.get("https://www.4424081204.com:1111/FILES_IN_PROJ/" + this.state.routeID, {
             headers: {accesstoken: this.state.CookieSave}
         }).then(res => {
-            this.setState({REVIDLST: res.data})
             var hldLST = []
             for (var i = 0; i < res.data.length; i++) {
                 const x = i
@@ -193,7 +192,7 @@ class RevDis extends React.Component {
             this.setState({
                 RevIDLST: hldLST
             })
-            //this.getReview()
+            this.getReview()
         })
         this.loadCollab();
     }
@@ -216,7 +215,7 @@ class RevDis extends React.Component {
     }
 
     updateReview = async() => {
-        await axios.put("https://www.4424081204.com:1111/Project/" + this.state.revID, {
+        await axios.put("https://www.4424081204.com:1111/FILES_IN_PROJ/" + this.state.revID, {
             CurrRev: this.state.fileContent,
             FName: this.state.fileName
         }, {headers: {accesstoken: this.state.CookieSave}})
@@ -244,7 +243,6 @@ class RevDis extends React.Component {
                     .then((response) => {
                         // alert(response.data)
                     }, (error) => {
-                        console.log(error)
                         alert(error)
                     });
                 this.setState({
@@ -314,8 +312,8 @@ class RevDis extends React.Component {
                                 <div className='smllTEST'>Invite Sent!</div>}
                             </div>
                         </div>
-                        <div className='colors' style={{textAlign:"center", marginBottom:10}}>Current Review: {this.state.RevName}<br></br>File
-                            Type: {this.state.fname.split('.').pop()}</div>
+                        <div className='colors' style={{textAlign:"center", marginBottom:10}}>Current Review: {this.state.routePara}<br></br>File
+                            Type: {this.state.routePara.split('.').pop()}</div>
                         <div className='grad2'>
                             <p>{this.state.gotRev}</p>
                         </div>

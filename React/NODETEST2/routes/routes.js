@@ -389,14 +389,14 @@ const router = app => {
     });
 
     // Display a single PROJECT FOR UNAMEW(REFERENCES UNAME)
-    app.get('/FILES_IN_PROJ/:PIDREF', (request, response) => {
-        const PIDREF = request.params.PIDREF;
-        pool.query('SELECT * FROM FILES_IN_PROJ WHERE PIDREF = ?', PIDREF, (error, result) => {
+    app.get('/FILES_IN_PROJ/:FNAME', (request, response) => {
+        const FNAME = request.params.FNAME;
+        pool.query('SELECT * FROM FILES_IN_PROJ WHERE FNAME = ?', FNAME, (error, result) => {
             if (error) throw error;
             //var tmp2 = result[0].CurrRev
-            //const buf = new Buffer.from(result[0].CurrRev, "binary")
-            //console.log(buf)
-            //response.send(result[0].PROJNAME + "$#BREAKBREAK" + result[0].FName + "$#BREAKBREAK" + buf);
+            const buf = new Buffer.from(result[0].FCONTENT, "binary")
+            console.log(buf)
+            response.send(buf);
         });
     });
 

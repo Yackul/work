@@ -5,6 +5,7 @@ import axios from 'axios'
 import NavBar from './NavBar'
 import Cookies from 'js-cookie'
 import Popup from './invPopup'
+import {Link} from "react-router-dom";
 import DiffDisplay from "./DiffDisplay";
 
 class ProjectsDisplayPage extends React.Component {
@@ -13,22 +14,17 @@ class ProjectsDisplayPage extends React.Component {
         super(props);
         this.state = {
             routePara: 0,
-            revID: -1,
             curTime: new Date().toLocaleString(),
-            gotRev: '',
             Uname: '',
-            RevName: '',
-            RevIDLST: [],
+            FIDLST: [],
             iUserN: '',
-            fname: '',
             step: -1,
             CookieSave: '',
             cHld: [],
             isOpen: false,
             fileContent: '',
             fileName: '',
-            resu: -2,
-            RevInv: 0
+            fileNames: []
         };
         this.handleiUserNChange = this.handleiUserNChange.bind(this);
     }
@@ -51,36 +47,24 @@ class ProjectsDisplayPage extends React.Component {
     };
 
     getFiles = async () => {
-        if (!this.state.RevIDLST.includes(this.state.routePara)) {
+        if (!this.state.FIDLST.includes(this.state.routePara)) {
             return window.location = "/Err404"
-        } else if (this.state.RevIDLST.includes(this.state.routePara)) {
-            this.setState({
-                revID: this.state.routePara
-            })
+        } else if (this.state.FIDLST.includes(this.state.routePara)) {
+        
             const PIDREF = this.state.routePara;
-            var hld2 = ""
+            var temp = []
             await axios.get("https://www.4424081204.com:1111/FILES_IN_PROJ/" + PIDREF, {
                 headers: {accesstoken: this.state.CookieSave}
             }).then(res => {
-                console.log(res.data)
-                hld2 = res.data;
-                hld2 = hld2.toString().split("$#BREAKBREAK")
+                for (var i = 0; i < res.data.length; i++) {
+                    temp[i] = res.data[i].FNAME
+                }
                 this.setState({
-                    gotRev: <div>
-                        <DiffDisplay
-                                     isOpen={true}
-                                     diffText={hld2[2]}>
-                        </DiffDisplay>
-                    </div>,
-                    fname: hld2[1],
-                    RevName: hld2[0]
+                    fileNames: temp
                 })
             })
         }
     }
-    /*await axios.post("https://www.4424081204.com:1111/FILES_IN_PROJ", {
-        FNAME: this.state.fileName
-      })*/
 
     loadCollab = async () => {
         await axios.get("https://www.4424081204.com:1111/WORKS_ON_PROJECTS/", {
@@ -144,16 +128,16 @@ class ProjectsDisplayPage extends React.Component {
         await axios.get("https://www.4424081204.com:1111/WORKS_ON_PROJECTS/" + this.state.Uname, {
             headers: {accesstoken: this.state.CookieSave}
         }).then(res => {
-            this.setState({REVIDLST: res.data})
+            this.setState({FIDLST: res.data})
             var hldLST = []
             for (var i = 0; i < res.data.length; i++) {
                 const x = i
                 hldLST[x] = res.data[x].PIDREF
             }
             this.setState({
-                RevIDLST: hldLST
+                FIDLST: hldLST
             })
-            //this.getReview()
+            this.getFiles()
         })
         this.loadCollab();
     }
@@ -226,8 +210,23 @@ class ProjectsDisplayPage extends React.Component {
     }
     */
 
-    updateStep = async (e) => {
-        e.preventDefault();
+    popDB = async () => {
+         const fileType = this.state.fileName.toString().split('.')
+        await axios.post("https://www.4424081204.com:1111/FILES_IN_PROJ", {      
+          FNAME: this.state.fileName,
+          FTYPE: fileType[fileType.length-1],
+          FCONTENT: this.state.fileContent,
+          DT: this.state.curTime,
+          PIDREF: this.state.routePara
+        }, {headers: {accesstoken: this.state.CookieSave}}).then(function (res) {
+        })
+        this.setState({
+          step: 1
+        });
+        this.updateStep();
+      }
+
+    updateStep = async () => {
         if(this.state.step === -1){
           this.setState({
             step: 0
@@ -238,7 +237,18 @@ class ProjectsDisplayPage extends React.Component {
             step: 1
           })
         }
+        else if (this.state.step === 1){
+            this.setState({
+                step: -1
+            })
+            return window.location = "/Projects" + this.state.routePara
+        }
       }
+
+    createFileLinks() {
+        const items = this.state.fileNames.map((item, i) =><Link key={i} to ={this.state.routePara + "/" + this.state.fileNames[i]}><input key = {i} type="submit" value={item}/></Link>)
+        return items
+    }
 
     render() {
 
@@ -250,7 +260,8 @@ class ProjectsDisplayPage extends React.Component {
                 closeMe={this.closePopup}/>);
         }
 
-        const items = this.state.cHld.map((item, i) => <div key={i}><input type='submit' className='submit2' value={item} onClick={()=>this.inviteRevUser(item)}/></div>)
+        const items = this.state.cHld.map((item, i) => <div key={i}><input type='submit' className='submit2' value={"noclick nowork"+item} onClick={()=>this.inviteRevUser(item)}/></div>)
+        const fileLinks = this.createFileLinks()
 
         switch (this.state.authState) {
             case ('loading'):
@@ -272,11 +283,11 @@ class ProjectsDisplayPage extends React.Component {
                                 <br></br>
                                 <input type="file" onChange={(e) => this.setFile(e)}/>
                                 <br></br>
-                                <input type="submit" className="submit" value="Add file to project" onClick={this.updateStep}/>      
+                                <input type="submit" className="submit" value="Add file to project" onClick={this.popDB}/>      
                                 </div>
                             }
                             {this.state.step === 1 &&
-                                <input type="file" onChange={(e) => this.setFile(e)} placeholder="Add a file" />      
+                                <Link to ={"/Projects/"+ this.state.routePara}><input type ="submit" className = "submit" value= "Return to project page?" onClick={this.updateStep}/></Link>    
                             }
 
                                 <input type="submit" className='submit' value="Invite a User to Project"
@@ -293,13 +304,15 @@ class ProjectsDisplayPage extends React.Component {
                                 {this.state.step === 4 &&
                                 <div className='smll'>Invitation sent to {this.state.iUserN}!</div>
                                 }
-                            </div>
+                            
                             <div className='inline'>
-                                <div>Collaborators:{<div className='smll2'>(Click a user to invite them to review!)</div>}{items}</div>
-                                {this.state.RevInv === 1 &&
-                                <div className='smllTEST'>Review Invite already sent!</div>}
-                                {this.state.RevInv === 2 &&
-                                <div className='smllTEST'>Invite Sent!</div>}
+                                <div>Collaborators:{items}</div>
+                    
+                            <br></br>
+                            <div className="center">
+                                <div>{fileLinks}</div>
+                            </div>
+                            </div>
                             </div>
                         </div>
                         

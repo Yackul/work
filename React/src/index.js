@@ -30,8 +30,8 @@ function App() {
         <Route exact path="/Projects" component={ProjTest} />
         <Route exact path="/RecoverAccount" component={RA} />
         <Route exact path="/Review" component={Rev} />
-        <Route exact path='/Projects/:id/:id' component={RevDis}/>
         <Route exact path='/Projects/:id' component={PDP}/>
+        <Route path='/Projects/:id/:id2?' component={RevDis}/>
         <Route exact path="/CommentTest" component={InComment} />
         <Route exact path='/Err404' component={Err}/>
         <Redirect from='/Me/*' to='/Err404'/>
@@ -42,6 +42,8 @@ function App() {
         <Redirect from='/RecoverAccount/*' to='/Err404'/>
         <Redirect from='/Review/*' to='/Err404'/>
         <Redirect from='/Projects/:id*' to='/Err404'/>
+        <Redirect from='/Projects/:id/id2?*' to='/Err404'/>
+        <Redirect from='/Projects/:id/*' to='/Err404'/>
         <Redirect from='/CommentTest/*' to='/Err404'/>
         <Redirect from='/*' to='/Err404'/>
       </Switch>
