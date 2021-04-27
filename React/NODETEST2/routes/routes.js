@@ -392,6 +392,7 @@ const router = app => {
     app.get('/FILES_IN_PROJ/:FNAME', (request, response) => {
         const FNAME = request.params.FNAME;
         const test = request.headers.test;
+        const pidref = request.headers.pidref;
         if(test == -1) {
             pool.query('SELECT * FROM FILES_IN_PROJ WHERE PIDREF = ?', FNAME, (error, result) => {
                 
@@ -402,14 +403,18 @@ const router = app => {
                 response.send(result);
             });
         }
-        else if (test != -1){
-            console.log(FNAME)
+        else if (pidref != null){
+            pool.query('SELECT * FROM FILES_IN_PROJ WHERE FNAME = ? AND PIDREF = ?', [FNAME, pidref], (error, result) => {
+                if (error) throw error;
+                response.send(result)
+            });
+        }
+        else if (test == null && pidref == null){
+            console.log("suck")
             pool.query('SELECT * FROM FILES_IN_PROJ WHERE FNAME = ?', FNAME, (error, result) => {
-                console.log(result)
                 if (error) throw error;
                 //var tmp2 = result[0].CurrRev
                 const buf = new Buffer.from(result[0].FCONTENT, "binary")
-                console.log(buf)
                 response.send(buf);
             });
         }
