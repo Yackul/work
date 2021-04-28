@@ -249,7 +249,7 @@ class ProjectsDisplayPage extends React.Component {
       }
 
     createFileLinks() {
-        const items = this.state.fileNames.map((item, i) =><Link key={i} to ={this.state.routePara + "/" + this.state.fileNames[i]}><input key = {i} type="submit" value={item}/></Link>)
+        const items = this.state.fileNames.map((item, i) =><div><Link key={i} to ={this.state.routePara + "/" + this.state.fileNames[i]}><p key = {i}>{"--" + item}</p></Link></div>)
         return items
     }
 
@@ -277,16 +277,16 @@ class ProjectsDisplayPage extends React.Component {
                         <div style={{display: 'flex', marginLeft:'auto', marginRight:20}}>
                             <div className='container'> 
                             {this.state.step === -1 &&
-                                <div className = 'center'>
+                                <div className = 'inline'>
                                     <input type="submit" className="submit" value="Add a file to project" onClick={this.updateStep}/>    
                                 </div>
                             }
                             {this.state.step === 0 &&
-                                <div className='inline'>
+                                <div className='center2'>
                                 <br></br>
-                                <input type="file" onChange={(e) => this.setFile(e)}/>
+                                <input type="submit" className="submit" value="Add file to project" onClick={this.popDB}/>  
                                 <br></br>
-                                <input type="submit" className="submit" value="Add file to project" onClick={this.popDB}/>      
+                                <input type="file" onChange={(e) => this.setFile(e)}/>    
                                 </div>
                             }
                             {this.state.step === 1 &&
@@ -312,13 +312,12 @@ class ProjectsDisplayPage extends React.Component {
                                 <div>Collaborators:{items}</div>
                     
                             <br></br>
-                            <div className="center">
-                                <div>{fileLinks}</div>
-                            </div>
                             </div>
                             </div>
                         </div>
-                        
+                        <div className= "inline2">
+                                {fileLinks}
+                        </div>
                         <br></br>
                         <input type='submit' className='submit' value="Delete Project(todo--NOCLICK)" onClick={this.openPopup}/>
                         {popup}
