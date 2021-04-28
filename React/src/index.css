@@ -37,6 +37,12 @@ input[type=text], input[type=password] {
   top: 50px;
   font-weight: bold;
 }
+
+.inline2{
+  display: block;
+  width: auto;
+  margin-top: 0px;
+}
 .grad1 {
   display: flex;
   flex-direction: column;
@@ -219,4 +225,10 @@ span.psw {
   justify-content: center;
   align-items: center;
   margin: 0 auto;
+}
+
+.center2 {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
 }
