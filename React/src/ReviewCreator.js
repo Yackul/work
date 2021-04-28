@@ -21,7 +21,10 @@ class ReviewCreator extends React.Component {
             Uname: '',
             newCommID: '',
             newRevID: '',
-            CookieSave: ''
+            CookieSave: '',
+            commentId: 1,
+            comments: '',
+            Uname: '',
         };
     }
 
@@ -67,14 +70,31 @@ class ReviewCreator extends React.Component {
           }).then(res => {
             this.setState({newCommID: res.data})
           })
-        await axios.post("https://www.4424081204.com:1111/COMMITS_ON_REVIEWS", {
-            CommID: this.state.newCommID,
-            REVID: 1,
-            CommDT: this.state.curTime,
-            CommDiff: this.state.diffText
-          }, {headers: {accesstoken: this.state.CookieSave}}).then(function (res) {
-          })
+        // await axios.post("https://www.4424081204.com:1111/COMMITS_ON_REVIEWS", {
+        //     CommID: this.state.newCommID,
+        //     REVID: 1,
+        //     CommDT: this.state.curTime,
+        //     CommDiff: this.state.diffText
+        //   }, {headers: {accesstoken: this.state.CookieSave}}).then(function (res) {
+        //   })
+
+
+        //   await axios.post("https://www.4424081204.com:1111/COMMENTS_ON_REVIEWS", {
+        //     PIDREF: this.state.commentId,
+        //     DT: this.state.curTime,
+        //     COMM: this.state.comments,            
+        //     UNameC: this.state.Uname,            
+        //   }, {headers: {accesstoken: this.state.CookieSave}}).then(function (res) {
+        //         // console.log(res);
+        //   })
+        //   this.setState({
+        //   step: 1
+        //   });
     }
+    
+
+
+
 
 
     handleClick2() {

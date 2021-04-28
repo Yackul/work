@@ -2,14 +2,17 @@ import React, {Component} from 'react';
 import './CommentBox.css';
 import {Auth} from 'aws-amplify'
 import {number} from "prop-types";
+import axios from 'axios'
 
-class CommentBox extends Component {
+class CommentBox extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             comments: [],
-            commentId: 0,
-            Uname: ''
+            commentId: 1,
+            Uname: '',
+            curTime : new Date().toLocaleString(),
+            comment: '',
         };
     }
 
@@ -26,21 +29,40 @@ class CommentBox extends Component {
         let comment = {id: this.state.commentId, author: this.state.Uname, text: commentText}
         this.setState({comments: this.state.comments.concat(comment)});
         this.props.close()
+        
     }
+
+
+//Post to comment table ???
+    popComment(e) {
+        axios.post("https://www.4424081204.com:1111/COMMENTS_ON_REVIEWS", {
+            PIDREF: this.state.commentId,
+            DT: this.state.curTime,
+            COMM: this.state.comment,            
+            UNameC: this.state.Uname,            
+        }, {headers: {accesstoken: this.state.CookieSave}}).then(function (res) {
+            // console.log(res);
+    })
+    this.setState({
+      step: 1
+    });
+    }
+
 
     render() {
         return (
             <div>
                 <CommentList comments={this.state.comments}/>
                 <CommentInput lineIndex={this.props.lineIndex} updateLine={this.props.updateLine}
-                              onCommentSubmit={this.handleOnSubmit.bind(this)} Uname={this.state.Uname}/>
+                              onCommentSubmit={this.handleOnSubmit.bind(this)} 
+                              Uname={this.state.Uname}/>
             </div>
         );
     }
 }
 
 
-class CommentInput extends Component {
+class CommentInput extends React.Component {
 
     handleOnSubmit(e) {
         let commentText = this.textInput.value;
@@ -49,7 +71,31 @@ class CommentInput extends Component {
             this.props.onCommentSubmit(commentText);
             this.textInput.value = '';
         }
+        this.popComment()
     }
+
+
+    //Post to comment table ???
+    popComment(e) {
+         axios.post("https://www.4424081204.com:1111/COMMENTS_ON_REVIEWS", {
+            PIDREF: this.state.commentId,
+            DT: this.state.curTime,
+            COMM: this.state.comment,            
+            UNameC: this.state.Uname,            
+        }, {headers: {accesstoken: this.state.CookieSave}}).then(function (res) {
+            // console.log(res);
+    })
+    this.setState({
+      step: 1
+    });   
+}
+
+// handleClick(e) {
+//     this.handleOnSubmit();
+//     this.popComment();
+//   }
+
+
 
     render() {
         return (
@@ -62,8 +108,10 @@ class CommentInput extends Component {
 
                 </textarea>
                 <br/>
-                <button onClick={this.handleOnSubmit.bind(this)} className="comment-box__submit-button">Submit</button>
-            </div>
+                {/* <button onClick={this.handleOnSubmit.bind(this)} className="comment-box__submit-button">Submit</button> */}
+                {/* <input type="submit" className="comment-box__submit-button" value="Submit" onClick={() => {this.handleOnSubmit.bind(this); this.popComment();}}/> */}
+                <button onClick={()=>{this.handleOnSubmit.bind(this); }} className="comment-box__submit-button">Submit</button>
+               </div>
         );
     }
 }
