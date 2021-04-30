@@ -68,13 +68,14 @@ class CommentInput extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            commentId: 1,
+            commentId: -1,
+            PIDREF: -1,
+            FIDREF: -1,
             CookieSave: '',
             Uname: '',
             curTime : new Date().toLocaleString(),
             comment: '',
             authState: 'loading',
-            Uname: '',
             hld: '',
             routePara: -1
         };
@@ -119,9 +120,9 @@ class CommentInput extends React.Component {
     //Post to comment table ???
     popComment(e) {
          axios.post("https://www.4424081204.com:1111/COMMENTS_ON_REVIEWS", {
-            //PIDREF: //routePara did not work
-            //FIDREF: //needs this
-            //COMMINDEX: //needs
+            PIDREF: this.state.PIDREF,
+            FIDREF: this.state.FIDREF,
+            COMMINDEX: this.state.COMMINDEX,
             DT: this.state.curTime,
             COMM: e,            
             UNameC: this.state.Uname,            
