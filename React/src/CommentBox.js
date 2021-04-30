@@ -3,6 +3,7 @@ import './CommentBox.css';
 import {Auth} from 'aws-amplify'
 import {number} from "prop-types";
 import axios from 'axios'
+import Cookies from 'js-cookie'
 
 class CommentBox extends React.Component {
     constructor(props) {
@@ -64,23 +65,65 @@ class CommentBox extends React.Component {
 
 class CommentInput extends React.Component {
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            commentId: 1,
+            CookieSave: '',
+            Uname: '',
+            curTime : new Date().toLocaleString(),
+            comment: '',
+            authState: 'loading',
+            Uname: '',
+            hld: '',
+            routePara: -1
+        };
+    }
+
     handleOnSubmit(e) {
-        let commentText = this.textInput.value;
+        let commentText = this.textInput.value;      
         if (commentText) {
             this.props.updateLine(this.props.Uname, commentText, this.props.lineIndex - 1)
             this.props.onCommentSubmit(commentText);
             this.textInput.value = '';
         }
-        this.popComment()
+        
+        this.popComment(commentText)
+    }
+
+    componentDidMount = async () => {
+        document.body.style.background = "#d0f0f0e1";
+        //const x = parseInt(this.props.match.params.id)
+        //console.log("test", x)
+        //this.setState({
+        //    routePara: x
+        //})
+        try {
+          await Auth.currentAuthenticatedUser()
+          const tokens = await Auth.currentSession();          
+          const userName = tokens.getIdToken().payload['cognito:username'];
+          var userNameHold = userName.charAt(0).toUpperCase() + userName.slice(1);
+          document.cookie = "clientaccesstoken="+ tokens.getAccessToken().getJwtToken()+';';
+          const temp = Cookies.get('clientaccesstoken')          
+          this.setState({ authState: 1,
+            Uname: userNameHold,
+            CookieSave: temp
+         })
+        } catch (err) {
+          this.setState({ authState: 'unauthorized' })
+        }
     }
 
 
+    //still needs PID and FID someway/somehow
     //Post to comment table ???
     popComment(e) {
          axios.post("https://www.4424081204.com:1111/COMMENTS_ON_REVIEWS", {
-            PIDREF: this.state.commentId,
+            //PIDREF: //routePara did not work
+            //FIDREF: //needs this
+            //COMMINDEX: //needs
             DT: this.state.curTime,
-            COMM: this.state.comment,            
+            COMM: e,            
             UNameC: this.state.Uname,            
         }, {headers: {accesstoken: this.state.CookieSave}}).then(function (res) {
             // console.log(res);

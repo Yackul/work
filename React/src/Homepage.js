@@ -6,7 +6,6 @@ import axios from 'axios';
 import Cookies from 'js-cookie'
 import Popup from './invPopup'; 
 import RPopup from './RinvPopup'; 
-import { wait } from '@testing-library/dom';
 
 
 class Homepage extends React.Component {
