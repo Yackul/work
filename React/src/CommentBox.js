@@ -69,8 +69,8 @@ class CommentInput extends React.Component {
         super(props);
         this.state = {
             commentId: -1,
-            PIDREF: -1,
-            FIDREF: -1,
+            PIDREF: 1,
+            FIDREF: 1,
             CookieSave: '',
             Uname: '',
             curTime : new Date().toLocaleString(),
@@ -88,8 +88,8 @@ class CommentInput extends React.Component {
             this.props.onCommentSubmit(commentText);
             this.textInput.value = '';
         }
-        
-        this.popComment(commentText)
+        console.log(this.props.lineIndex)
+        this.popComment(commentText, this.props.lineIndex)
     }
 
     componentDidMount = async () => {
@@ -118,11 +118,12 @@ class CommentInput extends React.Component {
 
     //still needs PID and FID someway/somehow
     //Post to comment table ???
-    popComment(e) {
+    popComment(e, f) {
+        console.log("here", f)
          axios.post("https://www.4424081204.com:1111/COMMENTS_ON_REVIEWS", {
             PIDREF: this.state.PIDREF,
             FIDREF: this.state.FIDREF,
-            COMMINDEX: this.state.COMMINDEX,
+            COMMENTINDEX: f,
             DT: this.state.curTime,
             COMM: e,            
             UNameC: this.state.Uname,            
