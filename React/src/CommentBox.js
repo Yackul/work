@@ -110,7 +110,7 @@ class CommentInput extends React.Component {
                 <br/>
                 {/* <button onClick={this.handleOnSubmit.bind(this)} className="comment-box__submit-button">Submit</button> */}
                 {/* <input type="submit" className="comment-box__submit-button" value="Submit" onClick={() => {this.handleOnSubmit.bind(this); this.popComment();}}/> */}
-                <button onClick={()=>{this.handleOnSubmit.bind(this); }} className="comment-box__submit-button">Submit</button>
+                <button onClick={this.handleOnSubmit.bind(this)} className="comment-box__submit-button">Submit</button>
                </div>
         );
     }
