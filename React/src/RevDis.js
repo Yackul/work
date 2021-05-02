@@ -187,7 +187,7 @@ class RevDis extends React.Component {
         this.setState({step: 3})
     }
 
-    updateReview = async(e) => {
+    createReview = async(e) => {
 
         e.preventDefault()
 
@@ -215,12 +215,10 @@ class RevDis extends React.Component {
             axios.post("https://www.4424081204.com:1111/DIFFS_ON_FILES/", {
                 FIDREF: sqlRes.data[0].FID,
                 CommDT: this.state.curTime,
-                CommDiff: this.state.diffContent
+                CommDiff: this.state.diffContent,
+                CREATEDBY: this.state.Uname,
+                APPROVED: 0
             }, {headers: {accesstoken: this.state.CookieSave}})
-        })
-
-        await axios.get("https://www.4424081204.com:1111/FILES_IN_PROJ/" + this.state.routePara, {
-            headers: {accesstoken: this.state.CookieSave}
         })
 
         await axios.put("https://www.4424081204.com:1111/FILES_IN_PROJ/" + this.state.routePara, {
@@ -280,7 +278,7 @@ class RevDis extends React.Component {
                                 <div>
                                     <input type="file" style={{}} onChange={(e) => this.setFile(e)}/>
                                     <br></br>
-                                    <input type='submit' className='submit' value='Update Review' style={{alignSelf:"center"}} onClick={this.updateReview}/>
+                                    <input type='submit' className='submit' value='Create Review' style={{alignSelf:"center"}} onClick={this.createReview}/>
                                 </div>
                                 }
                             </div>
