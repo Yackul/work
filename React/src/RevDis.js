@@ -28,6 +28,7 @@ class RevDis extends React.Component {
             isOpen: false,
             fileContent: '',
             fileName: '',
+            diffContent: '',
             resu: -2,
             RevInv: 0
         };
@@ -192,30 +193,36 @@ class RevDis extends React.Component {
 
         let f1Content = ''
         let f2Content = this.state.fileContent
+
         await axios.get("https://www.4424081204.com:1111/FILES_IN_PROJ/" + this.state.routePara, {
             headers: {accesstoken: this.state.CookieSave}
         }).then(res => {
             f1Content = res.data
-            axios.post('https://www.4424081204.com/file_diff', {
-                file1Content: f1Content,
-                file2Content: f2Content
-            }).then(diffRes => {
-                axios.get("https://www.4424081204.com:1111/FILES_IN_PROJ/" + this.state.routePara, {
-                    headers: {accesstoken: this.state.CookieSave, PIDREF: this.state.routeID}
-                }).then(sqlRes => {
-                    axios.post("https://www.4424081204.com:1111/DIFFS_ON_FILES/", {
-                        FIDREF: sqlRes.data[0].FID,
-                        CommDT: this.state.curTime,
-                        CommDiff: diffRes.data
-                     }, {headers: {accesstoken: this.state.CookieSave}})
-                })
+        })
 
+        await axios.post('https://www.4424081204.com/file_diff', {
+            file1Content: f1Content,
+            file2Content: f2Content
+        }).then(diffRes => {
+            this.setState({
+                diffContent: diffRes.data
             })
+        })
+
+        await axios.get("https://www.4424081204.com:1111/FILES_IN_PROJ/" + this.state.routePara, {
+            headers: {accesstoken: this.state.CookieSave, PIDREF: this.state.routeID}
+        }).then(sqlRes => {
+            axios.post("https://www.4424081204.com:1111/DIFFS_ON_FILES/", {
+                FIDREF: sqlRes.data[0].FID,
+                CommDT: this.state.curTime,
+                CommDiff: this.state.diffContent
+            }, {headers: {accesstoken: this.state.CookieSave}})
         })
 
         await axios.get("https://www.4424081204.com:1111/FILES_IN_PROJ/" + this.state.routePara, {
             headers: {accesstoken: this.state.CookieSave}
         })
+
         await axios.put("https://www.4424081204.com:1111/FILES_IN_PROJ/" + this.state.routePara, {
             FCONTENT: this.state.fileContent,
             FNAME: this.state.fileName,
@@ -223,7 +230,8 @@ class RevDis extends React.Component {
         }, {headers: {accesstoken: this.state.CookieSave}})
         this.setState({ step: -1
         })
-        // return window.location = "/Projects/" + this.state.routeID + "/" + this.state.fileName
+
+        return window.location = "/Projects/" + this.state.routeID + "/" + this.state.fileName
         
     }
 
@@ -241,40 +249,6 @@ class RevDis extends React.Component {
         this.setState({
             fileName: e.target.files[0].name,
         })
-
-        /*let f2Content = ''
-        await axios.get("https://www.4424081204.com:1111/FILES_IN_PROJ/" + this.state.routePara, {
-            headers: {accesstoken: this.state.CookieSave}
-        }).then(res => {
-            const reader = new FileReader()
-            reader.onload = async (e) => {
-                f1Content = res.data
-                f2Content = (e.target.result)
-                await axios.post('https://www.4424081204.com/file_diff', {
-                    file1Content: f1Content,
-                    file2Content: f2Content
-                }).then(diffRes => {
-                    axios.get("https://www.4424081204.com:1111/FILES_IN_PROJ/" + this.state.routePara, {
-                        headers: {accesstoken: this.state.CookieSave, PIDREF: this.state.routeID}
-                    }).then(sqlRes => {
-                        axios.post("https://www.4424081204.com:1111/DIFFS_ON_FILES/", {
-                            FIDREF: sqlRes.data[0].FID,
-                            CommDT: this.state.curTime,
-                            CommDiff: diffRes.data
-                         }, {headers: {accesstoken: this.state.CookieSave}})
-                    })
-                    
-                })
-                this.setState({
-                    fileContent: f2Content
-                })
-            };
-
-            reader.readAsText(e.target.files[0])
-            this.setState({
-                fileName: e.target.files[0].name
-            })
-        })*/
     }
 
     render() {
