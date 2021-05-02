@@ -148,20 +148,16 @@ class ProjectsDisplayPage extends React.Component {
         this.loadCollab();
     }
 
-    //NEEDS WORK TO DELETE A PROJECT, NOT JUST A FILE.
-    /*confirmDel = async () => {
-        await axios.delete("https://www.4424081204.com:1111/WORKS_ON_PROJECTS/" + this.state.routePara, {
-            headers: {accesstoken: this.state.CookieSave}
-        })
-        await axios.delete("https://www.4424081204.com:1111/INVITES/" + this.state.routePara, {
-            headers: {accesstoken: this.state.CookieSave}
-        })
-        await axios.delete("https://www.4424081204.com:1111/PROJECT/" + this.state.routePara, {
-            headers: {accesstoken: this.state.CookieSave}
-        })
+ 
+    confirmDel = async () => {
+        await axios.put("http://localhost:3002/works_on_projects/" + this.state.routePara, {
+            PSTATUS: -1,
+        }, {headers: {accesstoken: this.state.CookieSave}})
+        await axios.put("http://localhost:3002/project/" + this.state.routePara, {
+            PSTATUS: -1,
+        }, {headers: {accesstoken: this.state.CookieSave}})
         return window.location = "/Projects"
     }
-    */
 
 
     setFile = async (e) => {

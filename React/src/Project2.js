@@ -74,6 +74,7 @@ class Project2 extends React.Component {
     await axios.post("https://www.4424081204.com:1111/PROJECT", {      
       PROJNAME: this.state.PROJNAME,
       DT: this.state.curTime,
+      PSTATUS: 1
     }, {headers: {accesstoken: this.state.CookieSave}}).then(function (res) {
     })
     this.setState({
@@ -91,7 +92,8 @@ class Project2 extends React.Component {
     await axios.post("https://www.4424081204.com:1111/WORKS_ON_PROJECTS", {  
       PIDREF: this.state.newPID,
       UNameW: this.state.Uname,
-      PName: this.state.PROJNAME
+      PName: this.state.PROJNAME,
+      PSTATUS: 1
     }, {headers: {accesstoken: this.state.CookieSave}}).then(function (res) {
     })
     this.setState({
@@ -142,8 +144,10 @@ class Project2 extends React.Component {
       var hldLST2 = []
       for(var i = 0; i<res.data.length; i++){
         const x = i
-        hldLST[x] = res.data[x].PIDREF
-        hldLST2[x] = res.data[x].PName
+        if(res.data[x].PSTATUS === 1){
+          hldLST[x] = res.data[x].PIDREF
+          hldLST2[x] = res.data[x].PName
+        }
       }
       this.setState({
         PIDLST: hldLST,

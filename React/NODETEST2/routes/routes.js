@@ -263,6 +263,14 @@ const router = app => {
         });
     });
 
+    app.put('/WORKS_ON_PROJECTS/:PIDREF', (request, response) => {
+        const PIDREF = request.params.PIDREF;
+        pool.query('UPDATE WORKS_ON_PROJECTS SET ? WHERE PIDREF = ?', [request.body, PIDREF], (error, result) => {
+            if (error) throw error;
+            response.send('COMMENTS_ON_REVIEWS/PIDREF updated successfully.');
+        });
+    });
+
     //Post comments on review
     app.post('/COMMENTS_ON_REVIEWS/', (request, response) => {
         pool.query('INSERT INTO COMMENTS_ON_REVIEWS SET ?', request.body, (error, result) => {
@@ -410,15 +418,26 @@ const router = app => {
                 response.send(result)
             });
         }
-        else if (pidref != null){
-            pool.query('SELECT * FROM FILES_IN_PROJ WHERE FNAME = ? AND PIDREF = ?', [FNAME, pidref], (error, result) => {
-                if (error) throw error;
+        else if (test == 1){
+            console.log("here")
+            pool.query('SELECT * FROM FILES_IN_PROJ WHERE FID = ?', FNAME, (error, result) =>{
+                if(error){
+                    console.log(error)
+                }
                 response.send(result)
-            });
+            })
         }
         else if (test == null && pidref == null){
-            console.log("suck")
+            
             pool.query('SELECT * FROM FILES_IN_PROJ WHERE FNAME = ?', FNAME, (error, result) => {
+                if (error) throw error;
+                const buf = new Buffer.from(result[0].FCONTENT, "binary")
+                response.send(buf);
+            });
+        }
+        else if (test == 2){
+            
+            pool.query('SELECT * FROM FILES_IN_PROJ WHERE FID = ?', FNAME, (error, result) => {
                 if (error) throw error;
                 const buf = new Buffer.from(result[0].FCONTENT, "binary")
                 response.send(buf);
