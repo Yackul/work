@@ -80,7 +80,7 @@ class Homepage extends React.Component {
     }
 
     acceptRevInv = async (x, y, z, a) => {
-        await axios.put("http://localhost:3002/invite_to_rev/" + a[z], {
+        await axios.put("https://www.4424081204.com:1111/invite_to_rev/" + a[z], {
             ACCEPTED: 1,
         }, {headers: {accesstoken: this.state.CookieSave, RIUNAME: this.state.Uname}})
         return window.location = "/Projects/" + x + "/" + y

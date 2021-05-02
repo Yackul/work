@@ -150,10 +150,10 @@ class ProjectsDisplayPage extends React.Component {
 
  
     confirmDel = async () => {
-        await axios.put("http://localhost:3002/works_on_projects/" + this.state.routePara, {
+        await axios.put("https://www.4424081204.com:1111/works_on_projects/" + this.state.routePara, {
             PSTATUS: -1,
         }, {headers: {accesstoken: this.state.CookieSave}})
-        await axios.put("http://localhost:3002/project/" + this.state.routePara, {
+        await axios.put("https://www.4424081204.com:1111/project/" + this.state.routePara, {
             PSTATUS: -1,
         }, {headers: {accesstoken: this.state.CookieSave}})
         return window.location = "/Projects"
