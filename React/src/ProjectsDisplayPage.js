@@ -6,7 +6,6 @@ import NavBar from './NavBar'
 import Cookies from 'js-cookie'
 import Popup from './invPopup'
 import {Link} from "react-router-dom";
-import { wait } from '@testing-library/dom';
 
 class ProjectsDisplayPage extends React.Component {
 
@@ -59,7 +58,9 @@ class ProjectsDisplayPage extends React.Component {
                 headers: {accesstoken: this.state.CookieSave, test: -1}
             }).then(res => {
                 for (var i = 0; i < res.data.length; i++) {
-                    temp[i] = res.data[i].FNAME
+                    if(res.data[i].FSTATUS === 1) {
+                        temp[i] = res.data[i].FNAME
+                    }                    
                 }
                 this.setState({
                     fileNames: temp
@@ -228,7 +229,8 @@ class ProjectsDisplayPage extends React.Component {
           FTYPE: fileType[fileType.length-1],
           FCONTENT: this.state.fileContent,
           DT: this.state.curTime,
-          PIDREF: this.state.routePara
+          PIDREF: this.state.routePara,
+          FSTATUS: 1
         }, {headers: {accesstoken: this.state.CookieSave}}).then(function (res) {
         })
         this.setState({
