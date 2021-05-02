@@ -6,6 +6,7 @@ import NavBar from './NavBar'
 import Cookies from 'js-cookie'
 import Popup from './invPopup'
 import {Link} from "react-router-dom";
+import { wait } from '@testing-library/dom';
 
 class ProjectsDisplayPage extends React.Component {
 
@@ -24,7 +25,8 @@ class ProjectsDisplayPage extends React.Component {
             isOpen: false,
             fileContent: '',
             fileName: '',
-            fileNames: []
+            fileNames: [],
+            error: -1
         };
         this.handleiUserNChange = this.handleiUserNChange.bind(this);
     }
@@ -214,7 +216,13 @@ class ProjectsDisplayPage extends React.Component {
     */
 
     popDB = async () => {
-         const fileType = this.state.fileName.toString().split('.')
+        if(this.state.fileName === ''){
+            this.setState({
+                error: 1
+            })
+            return;
+        }
+        const fileType = this.state.fileName.toString().split('.')
         await axios.post("https://www.4424081204.com:1111/FILES_IN_PROJ", {      
           FNAME: this.state.fileName,
           FTYPE: fileType[fileType.length-1],
@@ -263,7 +271,7 @@ class ProjectsDisplayPage extends React.Component {
                 closeMe={this.closePopup}/>);
         }
 
-        const items = this.state.cHld.map((item, i) => <div key={i}><input type='submit' className='submit2' value={"noclick nowork"+item} onClick={()=>this.inviteRevUser(item)}/></div>)
+        const items = this.state.cHld.map((item, i) => <div key={i}><p>{item}</p></div>)
         const fileLinks = this.createFileLinks()
 
         switch (this.state.authState) {
@@ -282,11 +290,17 @@ class ProjectsDisplayPage extends React.Component {
                                 </div>
                             }
                             {this.state.step === 0 &&
-                                <div className='center2'>
+                                <div className='inline'>
                                 <br></br>
-                                <input type="submit" className="submit" value="Add file to project" onClick={this.popDB}/>  
+                                <input type="file" onChange={(e) => this.setFile(e)}/>   
                                 <br></br>
-                                <input type="file" onChange={(e) => this.setFile(e)}/>    
+                                <input type="submit" className="submit" value="Add file to project" onClick={this.popDB}/>   
+                                {this.state.error === 1 &&
+                                <div>
+                                <br></br>
+                                <div className = 'smll'>No file selected. Please try again.</div>
+                                </div>
+                                }
                                 </div>
                             }
                             {this.state.step === 1 &&
