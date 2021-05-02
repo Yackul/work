@@ -26,6 +26,7 @@ class Homepage extends React.Component {
             RinvLST: [],
             RinvULST: [],
             RinvNum: 0,
+            rFidRefLST: [],
             CookieSave: '',
             isOpen: false,
             isOpen2: false,
@@ -77,11 +78,11 @@ class Homepage extends React.Component {
         return window.location = "/Home"
     }
 
-    acceptRevInv = async (x, y) => {
-        await axios.put("https://www.4424081204.com:1111/invite_to_rev/" + x, {
+    acceptRevInv = async (x, y, z, a) => {
+        await axios.put("http://localhost:3002/invite_to_rev/" + a[z], {
             ACCEPTED: 1,
         }, {headers: {accesstoken: this.state.CookieSave, RIUNAME: this.state.Uname}})
-        return window.location = "/Projects/" + x
+        return window.location = "/Projects/" + x + "/" + y
     }
 
     declineRevInv = async (x, y) => {
@@ -135,10 +136,10 @@ class Homepage extends React.Component {
           })
           await axios.get("https://www.4424081204.com:1111/invite_to_rev/" + this.state.Uname, {
             headers: {accesstoken: this.state.CookieSave}
-        }).then(res2 => {    
-            
+        }).then(res2 => {     
             var hldLST3 = []
             var hldLST4 = []
+            var hldLST5 = []
             var hldRevNames = []
             var hldRevDT = []
             var b = 0
@@ -147,8 +148,9 @@ class Homepage extends React.Component {
               if(res2.data[z].ACCEPTED === 0){
                 hldRevDT[z] = res2.data[z].DT 
                 hldRevNames[z] = res2.data[z].FileName
-                hldLST3[z] = res2.data[z].RIREVID
+                hldLST3[z] = res2.data[z].PIDREF
                 hldLST4[z] = res2.data[z].RFUNAME
+                hldLST5[z] = res2.data[z].FIDREF
                 b++
               }
             }
@@ -157,7 +159,8 @@ class Homepage extends React.Component {
               invRevDT: hldRevDT,
               RinvLST: hldLST3,
               RinvNum: b,
-              RinvULST: hldLST4
+              RinvULST: hldLST4,
+              rFidRefLST: hldLST5
             })
           })
       }
@@ -172,8 +175,10 @@ class Homepage extends React.Component {
         var filtered4 = this.state.invRevDT.filter(function (el) {
             return el != null;
         });
-        var x = 0
-        const Ritems = Object.entries(dRResult).map(([key2, value2]) => <div key = {key2}><div>Invite to review: {filtered3[x]}</div><div>On: {filtered4[x]}</div><div className='hide'>{x++}</div><input type='submit' className='submit' value={"Accept invite from " + value2} onClick={() => this.acceptRevInv(key2, value2)}/><input type='submit' className='submit' value={"Decline invite from " + value2} onClick={() => this.declineRevInv(key2, value2)}/><br></br></div>)
+        var filtered5 = this.state.rFidRefLST.filter(function (el) {
+            return el!= null;
+        })
+        const Ritems = Object.entries(dRResult).map(([key2, value2], index) => <div key = {key2}><div>Invite to review: {filtered3[index]}</div><div>On: {filtered4[index]}</div><input type='submit' className='submit' value={"Accept invite from " + value2} onClick={() => this.acceptRevInv(key2, filtered3[index], index, filtered5)}/><input type='submit' className='submit' value={"Decline invite from " + value2} onClick={() => this.declineRevInv(key2, value2)}/><br></br></div>)
         return Ritems
     }
     
