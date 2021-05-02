@@ -54,7 +54,7 @@ class RevDis extends React.Component {
                 revID: this.state.routeID
             })
             const hld = this.state.routePara;
-            await axios.get("http://localhost:3002/FILES_IN_PROJ/" + hld, {
+            await axios.get("https://www.4424081204.com:1111/FILES_IN_PROJ/" + hld, {
                 headers: {accesstoken: this.state.CookieSave, test: 0, pidref: this.state.routeID}
             }).then(res => {
                 if(res.data[0].FSTATUS < 0) {
@@ -110,7 +110,7 @@ class RevDis extends React.Component {
             }
         })
         if(this.state.resu === -2){
-            await axios.post("http://localhost:3002/INVITE_TO_REV/", {
+            await axios.post("https://www.4424081204.com:1111/INVITE_TO_REV/", {
             FIDREF: this.state.fileID,
             RIUNAME: iuName,
             PIDREF: this.state.routeID,
@@ -180,7 +180,7 @@ class RevDis extends React.Component {
     }
 
     confirmDel = async () => {
-        await axios.put("http://localhost:3002/FILES_IN_PROJ/" + this.state.fileID, {
+        await axios.put("https://www.4424081204.com:1111/FILES_IN_PROJ/" + this.state.fileID, {
             FSTATUS: -1
         },  {headers: {accesstoken: this.state.CookieSave}
         }).then(res => {
@@ -203,7 +203,7 @@ class RevDis extends React.Component {
         let f1Content = ''
         let f2Content = this.state.fileContent
 
-        await axios.get("http://localhost:3002/FILES_IN_PROJ/" + this.state.fileID, {
+        await axios.get("https://www.4424081204.com:1111/FILES_IN_PROJ/" + this.state.fileID, {
             headers: {accesstoken: this.state.CookieSave, test: 2}
         }).then(res => {
             f1Content = res.data
@@ -216,7 +216,7 @@ class RevDis extends React.Component {
                 diffContent: diffRes.data
             })
         })
-        await axios.get("http://localhost:3002/FILES_IN_PROJ/" + this.state.fileID, {
+        await axios.get("https://www.4424081204.com:1111/FILES_IN_PROJ/" + this.state.fileID, {
             headers: {accesstoken: this.state.CookieSave, test: 1}
         }).then(async sqlRes => {
             await axios.post("https://www.4424081204.com:1111/DIFFS_ON_FILES/", {
