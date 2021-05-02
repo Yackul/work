@@ -21,12 +21,14 @@ class RevDis extends React.Component {
             Uname: '',
             RevName: '',
             RevIDLST: [],
+            fname: '',
             step: -1,
             CookieSave: '',
             cHld: [],
             isOpen: false,
             fileContent: '',
             fileName: '',
+            diffContent: '',
             fileID: -1,
             resu: -2,
             RevInv: 0
@@ -191,57 +193,63 @@ class RevDis extends React.Component {
         this.setState({step: 3})
     }
 
-    updateReview = async() => {
+    createReview = async(e) => {
+
+        e.preventDefault()
+
+        let f1Content = ''
+        let f2Content = this.state.fileContent
+
         await axios.get("https://www.4424081204.com:1111/FILES_IN_PROJ/" + this.state.routePara, {
             headers: {accesstoken: this.state.CookieSave}
+        }).then(res => {
+            f1Content = res.data
         })
-        await axios.put("https://www.4424081204.com:1111/FILES_IN_PROJ/" + this.state.routePara, {
-            FCONTENT: this.state.fileContent,
-            FNAME: this.state.fileName,
-            FTYPE: this.state.fileName.split(".").pop()
-        }, {headers: {accesstoken: this.state.CookieSave}})
-        this.setState({ step: -1
+
+        await axios.post('https://www.4424081204.com/file_diff', {
+            file1Content: f1Content,
+            file2Content: f2Content
+        }).then(diffRes => {
+            this.setState({
+                diffContent: diffRes.data
+            })
         })
-        return window.location = "/Projects/" + this.state.routeID + "/" + this.state.fileName
+
+        await axios.get("https://www.4424081204.com:1111/FILES_IN_PROJ/" + this.state.routePara, {
+            headers: {accesstoken: this.state.CookieSave, PIDREF: this.state.routeID}
+        }).then(async sqlRes => {
+            await axios.post("https://www.4424081204.com:1111/DIFFS_ON_FILES/", {
+                FIDREF: sqlRes.data[0].FID,
+                CommDT: this.state.curTime,
+                CommDiff: this.state.diffContent,
+                CREATEDBY: this.state.Uname,
+                APPROVED: 0
+            }, {headers: {accesstoken: this.state.CookieSave}})
+        })
+
+        // await axios.put("https://www.4424081204.com:1111/FILES_IN_PROJ/" + this.state.routePara, {
+        //     FCONTENT: this.state.fileContent,
+        //     FNAME: this.state.fileName,
+        //     FTYPE: this.state.fileName.split(".").pop()
+        // }, {headers: {accesstoken: this.state.CookieSave}})
+        // this.setState({ step: -1
+        // })
         
     }
 
     setFile = async (e) => {
         e.preventDefault()
 
-        let f1Content = ''
-        let f2Content = ''
-        await axios.get("https://www.4424081204.com:1111/FILES_IN_PROJ/" + this.state.routePara, {
-            headers: {accesstoken: this.state.CookieSave}
-        }).then(res => {
-            const reader = new FileReader()
-            reader.onload = async (e) => {
-                f1Content = res.data
-                f2Content = (e.target.result)
-                await axios.post('https://www.4424081204.com/file_diff', {
-                    file1Content: f1Content,
-                    file2Content: f2Content
-                }).then(diffRes => {
-                    axios.get("https://www.4424081204.com:1111/FILES_IN_PROJ/" + this.state.routePara, {
-                        headers: {accesstoken: this.state.CookieSave, PIDREF: this.state.routeID}
-                    }).then(sqlRes => {
-                        axios.post("https://www.4424081204.com:1111/DIFFS_ON_FILES/", {
-                            FIDREF: sqlRes.data[0].FID,
-                            CommDT: this.state.curTime,
-                            CommDiff: diffRes.data
-                         }, {headers: {accesstoken: this.state.CookieSave}})
-                    })
-                    
-                })
-                this.setState({
-                    fileContent: f2Content
-                })
-            };
-
-            reader.readAsText(e.target.files[0])
+        const reader = new FileReader()
+        reader.readAsText(e.target.files[0])
+        reader.onload = async (e) => {
             this.setState({
-                fileName: e.target.files[0].name
+                fileContent: e.target.result
             })
+        }
+
+        this.setState({
+            fileName: e.target.files[0].name,
         })
     }
 
@@ -270,12 +278,11 @@ class RevDis extends React.Component {
                         <div style={{display: 'flex', marginLeft:'auto', marginRight:20}}>
                             <div className='container'>
                                 <input type="submit" className='submit' value="Update File" onClick={this.updatingReview}/>
-
                                 {this.state.step === 3 &&
                                 <div>
                                     <input type="file" style={{}} onChange={(e) => this.setFile(e)}/>
                                     <br></br>
-                                    <input type='submit' className='submit' value='Update Review' style={{alignSelf:"center"}} onClick={this.updateReview}/>
+                                    <input type='submit' className='submit' value='Create Review' style={{alignSelf:"center"}} onClick={this.createReview}/>
                                 </div>
                                 }
                             </div>
