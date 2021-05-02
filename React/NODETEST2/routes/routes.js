@@ -170,9 +170,9 @@ const router = app => {
     app.delete('/DIFFS_ON_FILES/:CommID', (request, response) => {
         const CommID = request.params.CommID;
 
-        pool.query('DELETE FROM COMMITS WHERE CommID = ?', CommID, (error, result) => {
+        pool.query('DELETE FROM DIFFS_ON_FILES WHERE FIDREF = ?', CommID, (error, result) => {
             if (error) throw error;
-            response.send('Commit deleted.');
+            response.send(result);
         });
     });
 
@@ -353,6 +353,7 @@ const router = app => {
     app.get('/INVITE_TO_REV/:RIUNAME', (request, response) => {
         const RIUNAME = request.params.RIUNAME;
         const RIREVID = request.headers.rid;
+        console.log("here")
         if(RIREVID === undefined){
             pool.query('SELECT * FROM INVITE_TO_REV WHERE RIUNAME = ?', RIUNAME, (error, result) => {
                 if (error) console.log(error);
@@ -367,10 +368,10 @@ const router = app => {
         }
     });
 
-    app.put('/INVITE_TO_REV/:RIREVID', (request, response) => {
-        const RIREVID = request.params.RIREVID;
+    app.put('/INVITE_TO_REV/:FIDREF', (request, response) => {
+        const FIDREF = request.params.FIDREF;
         const RIUNAME = request.headers.riuname;
-        pool.query('UPDATE INVITE_TO_REV SET ? WHERE RIREVID = ? AND RIUNAME = ?', [request.body, RIREVID, RIUNAME], (error, result) => {
+        pool.query('UPDATE INVITE_TO_REV SET ? WHERE FIDREF = ? AND RIUNAME = ?', [request.body, FIDREF, RIUNAME], (error, result) => {
             if (error) throw error;
 
             response.send(result);
@@ -401,6 +402,12 @@ const router = app => {
                 //const buf = new Buffer.from(result[0].FCONTENT, "binary")
             
                 response.send(result);
+            });
+        }
+        else if (test == 0 && pidref != null) {
+            pool.query('SELECT * FROM FILES_IN_PROJ WHERE FNAME = ? AND PIDREF = ?', [FNAME, pidref], (error, result) => {
+                if (error) throw error;
+                response.send(result)
             });
         }
         else if (pidref != null){
@@ -439,10 +446,10 @@ const router = app => {
 
     // Delete a user
     app.delete('/FILES_IN_PROJ/:FID', (request, response) => {
-        const PID = request.params.FID;
-
-        pool.query('DELETE FROM PROJECT WHERE FID = ?', FID, (error, result) => {
+        const FID = request.params.FID;
+        pool.query('DELETE FROM FILES_IN_PROJ WHERE FID = ?', FID, (error, result) => {
             if (error) throw error;
+            response.send(result)
         });
     });
 }

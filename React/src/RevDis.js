@@ -21,18 +21,16 @@ class RevDis extends React.Component {
             Uname: '',
             RevName: '',
             RevIDLST: [],
-            iUserN: '',
-            fname: '',
             step: -1,
             CookieSave: '',
             cHld: [],
             isOpen: false,
             fileContent: '',
             fileName: '',
+            fileID: -1,
             resu: -2,
             RevInv: 0
         };
-        this.handleiUserNChange = this.handleiUserNChange.bind(this);
     }
 
     openPopup = () => {
@@ -46,21 +44,22 @@ class RevDis extends React.Component {
         });
     }
 
-    handleiUserNChange(evt) {
-        this.setState({
-            iUserN: evt.target.value,
-        });
-    };
-
     getReview = async () => {
         if (!this.state.RevIDLST.includes(this.state.routeID)) {
-            //return window.location = "/Err404"
+            return window.location = "/Err404"
         } else if (this.state.RevIDLST.includes(this.state.routeID)) {
             this.setState({
                 revID: this.state.routeID
             })
             const hld = this.state.routePara;
             var hld2 = ""
+            await axios.get("http://localhost:3002/FILES_IN_PROJ/" + hld, {
+                headers: {accesstoken: this.state.CookieSave, test: 0, pidref: this.state.routeID}
+            }).then(res => {
+                this.setState({
+                    fileID: res.data[0].FID
+                })
+            })
             await axios.get("https://www.4424081204.com:1111/FILES_IN_PROJ/" + hld, {
                 headers: {accesstoken: this.state.CookieSave}
             }).then(res => {
@@ -71,8 +70,6 @@ class RevDis extends React.Component {
                                      diffText={res.data}>
                         </DiffDisplay>
                     </div>,
-                    fname: hld2[1],
-                    RevName: hld2[0]
                 })
             })
         }
@@ -96,29 +93,10 @@ class RevDis extends React.Component {
             })
         })
     }
-
-    invitingUser = async () => {
-        this.setState({
-            step: 1
-        })
-    }
-
-    inviteUser = async () => {
-        await axios.post("https://www.4424081204.com:1111/INVITES/", {
-            IREVID: this.state.routePara,
-            IUNAME: this.state.iUserN,
-            FUNAME: this.state.Uname,
-            DT: this.state.curTime,
-            ProjName: this.state.RevName
-        }, {headers: {accesstoken: this.state.CookieSave}})
-        this.setState({
-            step: 2
-        })
-    }
     
     inviteRevUser = async (iuName) => {
         await axios.get("https://www.4424081204.com:1111/INVITE_TO_REV/"+iuName, {
-            headers: {accesstoken: this.state.CookieSave, RID: this.state.revID}
+            headers: {accesstoken: this.state.CookieSave, RID: this.state.fileID}
         }).then(res=> {
             if((res.data[0] === undefined) === false){
                 this.setState({
@@ -128,12 +106,13 @@ class RevDis extends React.Component {
             }
         })
         if(this.state.resu === -2){
-            await axios.post("https://www.4424081204.com:1111/INVITE_TO_REV/", {
-            RIREVID: this.state.routePara,
+            await axios.post("http://localhost:3002/INVITE_TO_REV/", {
+            FIDREF: this.state.fileID,
             RIUNAME: iuName,
+            PIDREF: this.state.routeID,
             RFUNAME: this.state.Uname,
             DT: this.state.curTime,
-            FileName: this.state.fname
+            FileName: this.state.routePara
             }, {headers: {accesstoken: this.state.CookieSave}})
             this.setState({
                 RevInv: 2
@@ -197,16 +176,15 @@ class RevDis extends React.Component {
     }
 
     confirmDel = async () => {
-        await axios.delete("https://www.4424081204.com:1111/WORKS_ON_PROJECTS/" + this.state.routePara, {
+        await axios.delete("http://localhost:3002/FILES_IN_PROJ/" + this.state.fileID, {
             headers: {accesstoken: this.state.CookieSave}
+        }).then(res => {
+            console.log(res)
+            return window.location = "/Projects/"+ this.state.routeID
         })
-        await axios.delete("https://www.4424081204.com:1111/INVITES/" + this.state.routePara, {
+        /*await axios.delete("https://www.4424081204.com:1111/INVITES/" + this.state.routePara, {
             headers: {accesstoken: this.state.CookieSave}
-        })
-        await axios.delete("https://www.4424081204.com:1111/PROJECT/" + this.state.routePara, {
-            headers: {accesstoken: this.state.CookieSave}
-        })
-        return window.location = "/Projects"
+        })*/
     }
 
     updatingReview = async() => {
@@ -292,20 +270,7 @@ class RevDis extends React.Component {
                         <div style={{display: 'flex', marginLeft:'auto', marginRight:20}}>
                             <div className='container'>
                                 <input type="submit" className='submit' value="Update File" onClick={this.updatingReview}/>
-                                <input type="submit" className='submit' value="Invite a User to Project"
-                                       onClick={this.invitingUser}/>
-                                {this.state.step === 1 &&
-                                <div>
-                                    <br></br>
-                                    <input style={{width: 150}}type="text" placeholder="Enter a username" value={this.state.iUserN}
-                                           onChange={this.handleiUserNChange}/>
-                                    <br></br>
-                                    <input type='submit' className='submit' value='Send Invite' onClick={this.inviteUser}/>
-                                </div>
-                                }
-                                {this.state.step === 2 &&
-                                <div className='smll'>Invitation sent to {this.state.iUserN}!</div>
-                                }
+
                                 {this.state.step === 3 &&
                                 <div>
                                     <input type="file" style={{}} onChange={(e) => this.setFile(e)}/>
