@@ -66,7 +66,8 @@ class Homepage extends React.Component {
         await axios.post("https://www.4424081204.com:1111/WORKS_ON_PROJECTS", {
             PIDREF: x,
             UNameW: this.state.Uname,
-            PName: y
+            PName: y,
+            PSTATUS: 1
         }, {headers: {accesstoken: this.state.CookieSave}})
         return window.location = "/Home"
     }

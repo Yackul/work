@@ -203,23 +203,21 @@ class RevDis extends React.Component {
         let f1Content = ''
         let f2Content = this.state.fileContent
 
-        await axios.get("https://www.4424081204.com:1111/FILES_IN_PROJ/" + this.state.routePara, {
-            headers: {accesstoken: this.state.CookieSave}
+        await axios.get("http://localhost:3002/FILES_IN_PROJ/" + this.state.fileID, {
+            headers: {accesstoken: this.state.CookieSave, test: 2}
         }).then(res => {
             f1Content = res.data
         })
-
         await axios.post('https://www.4424081204.com/file_diff', {
             file1Content: f1Content,
             file2Content: f2Content
-        }).then(diffRes => {
+        }).then( diffRes => {
             this.setState({
                 diffContent: diffRes.data
             })
         })
-
-        await axios.get("https://www.4424081204.com:1111/FILES_IN_PROJ/" + this.state.routePara, {
-            headers: {accesstoken: this.state.CookieSave, PIDREF: this.state.routeID}
+        await axios.get("http://localhost:3002/FILES_IN_PROJ/" + this.state.fileID, {
+            headers: {accesstoken: this.state.CookieSave, test: 1}
         }).then(async sqlRes => {
             await axios.post("https://www.4424081204.com:1111/DIFFS_ON_FILES/", {
                 FIDREF: sqlRes.data[0].FID,
@@ -230,7 +228,7 @@ class RevDis extends React.Component {
             }, {headers: {accesstoken: this.state.CookieSave}})
         })
 
-        // await axios.put("https://www.4424081204.com:1111/FILES_IN_PROJ/" + this.state.routePara, {
+        // await axios.put("https://www.4424081204.com:1111/FILES_IN_PROJ/" + this.state.fileID, {
         //     FCONTENT: this.state.fileContent,
         //     FNAME: this.state.fileName,
         //     FTYPE: this.state.fileName.split(".").pop()
