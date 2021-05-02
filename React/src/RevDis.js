@@ -54,10 +54,12 @@ class RevDis extends React.Component {
                 revID: this.state.routeID
             })
             const hld = this.state.routePara;
-            var hld2 = ""
             await axios.get("http://localhost:3002/FILES_IN_PROJ/" + hld, {
                 headers: {accesstoken: this.state.CookieSave, test: 0, pidref: this.state.routeID}
             }).then(res => {
+                if(res.data[0].FSTATUS < 0) {
+                    return window.location = "/Err404"
+                }
                 this.setState({
                     fileID: res.data[0].FID
                 })
@@ -178,8 +180,9 @@ class RevDis extends React.Component {
     }
 
     confirmDel = async () => {
-        await axios.delete("http://localhost:3002/FILES_IN_PROJ/" + this.state.fileID, {
-            headers: {accesstoken: this.state.CookieSave}
+        await axios.put("http://localhost:3002/FILES_IN_PROJ/" + this.state.fileID, {
+            FSTATUS: -1
+        },  {headers: {accesstoken: this.state.CookieSave}
         }).then(res => {
             console.log(res)
             return window.location = "/Projects/"+ this.state.routeID

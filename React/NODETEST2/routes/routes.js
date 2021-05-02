@@ -436,11 +436,11 @@ const router = app => {
     });
 
     // Update an existing PROJECT
-    app.put('/FILES_IN_PROJ/:FNAME', (request, response) => {
-        const FNAME = request.params.FNAME;
-        pool.query('UPDATE FILES_IN_PROJ SET ? WHERE FNAME = ?', [request.body, FNAME], (error, result) => {
+    app.put('/FILES_IN_PROJ/:FID', (request, response) => {
+        const FID = request.params.FID;
+        pool.query('UPDATE FILES_IN_PROJ SET ? WHERE FID = ?', [request.body, FID], (error, result) => {
             if (error) throw error;
-            response.send("golden")
+            response.send(result)
         });
     });
 
