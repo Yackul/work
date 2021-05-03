@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import './CommentBox.css';
+import PropTypes from 'prop-types';
 import {Auth} from 'aws-amplify'
 import {number} from "prop-types";
 import axios from 'axios'
@@ -33,28 +34,11 @@ class CommentBox extends React.Component {
         
     }
 
-
-//Post to comment table ???
-    popComment(e) {
-        axios.post("https://www.4424081204.com:1111/COMMENTS_ON_REVIEWS", {
-            PIDREF: this.state.commentId,
-            DT: this.state.curTime,
-            COMM: this.state.comment,            
-            UNameC: this.state.Uname,            
-        }, {headers: {accesstoken: this.state.CookieSave}}).then(function (res) {
-            // console.log(res);
-    })
-    this.setState({
-      step: 1
-    });
-    }
-
-
     render() {
         return (
             <div>
                 <CommentList comments={this.state.comments}/>
-                <CommentInput lineIndex={this.props.lineIndex} updateLine={this.props.updateLine}
+                <CommentInput PID={this.props.PID} FID={this.props.FID} lineIndex={this.props.lineIndex} updateLine={this.props.updateLine}
                               onCommentSubmit={this.handleOnSubmit.bind(this)} 
                               Uname={this.state.Uname}/>
             </div>
@@ -82,23 +66,17 @@ class CommentInput extends React.Component {
     }
 
     handleOnSubmit(e) {
-        let commentText = this.textInput.value;      
+        let commentText = this.textInput.value;    
         if (commentText) {
             this.props.updateLine(this.props.Uname, commentText, this.props.lineIndex - 1)
             this.props.onCommentSubmit(commentText);
             this.textInput.value = '';
         }
-        console.log(this.props.lineIndex)
         this.popComment(commentText, this.props.lineIndex)
     }
 
     componentDidMount = async () => {
         document.body.style.background = "#d0f0f0e1";
-        //const x = parseInt(this.props.match.params.id)
-        //console.log("test", x)
-        //this.setState({
-        //    routePara: x
-        //})
         try {
           await Auth.currentAuthenticatedUser()
           const tokens = await Auth.currentSession();          
@@ -119,10 +97,9 @@ class CommentInput extends React.Component {
     //still needs PID and FID someway/somehow
     //Post to comment table ???
     popComment(e, f) {
-        console.log("here", f)
          axios.post("https://www.4424081204.com:1111/COMMENTS_ON_REVIEWS", {
-            PIDREF: this.state.PIDREF,
-            FIDREF: this.state.FIDREF,
+            PIDREF: this.props.PID,
+            FIDREF: this.props.FID,
             COMMENTINDEX: f,
             DT: this.state.curTime,
             COMM: e,            
@@ -176,6 +153,7 @@ class CommentList extends Component {
 
 class Comment extends Component {
     render() {
+        
         return (
             <li key={this.props.id} className="Comment">
                 {this.props.author}: {this.props.text}
@@ -185,7 +163,9 @@ class Comment extends Component {
 }
 
 Comment.propTypes = {
-    lineIndex: number
+    lineIndex: number,
+    FID: PropTypes.number,
+    PID: PropTypes.number
 }
 
 export default CommentBox;
