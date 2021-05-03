@@ -53,8 +53,6 @@ class CommentInput extends React.Component {
         super(props);
         this.state = {
             commentId: -1,
-            PIDREF: 1,
-            FIDREF: 1,
             CookieSave: '',
             Uname: '',
             curTime : new Date().toLocaleString(),
