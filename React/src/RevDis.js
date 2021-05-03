@@ -97,6 +97,14 @@ class RevDis extends React.Component {
             })
         })
     }
+
+    loadReview = async () => {
+        await axios.get("http://localhost:3002/DIFFS_ON_FILES/" + this.state.fileID, {
+            headers: {accesstoken: this.state.CookieSave}
+        }).then(res => {
+            alert(res.data)
+        })
+    }
     
     inviteRevUser = async (iuName) => {
         await axios.get("https://www.4424081204.com:1111/INVITE_TO_REV/"+iuName, {
@@ -174,9 +182,10 @@ class RevDis extends React.Component {
             this.setState({
                 RevIDLST: hldLST
             })
-            this.getReview()
         })
-        this.loadCollab();
+        await this.getReview()
+        await this.loadCollab()
+        await this.loadReview()
     }
 
     confirmDel = async () => {

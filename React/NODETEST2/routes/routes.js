@@ -144,14 +144,14 @@ const router = app => {
         });
     });
 
-    // Display commits by UName
-    app.get('/DIFFS_ON_FILES/:CommID', (request, response) => {
-        const CommID = request.params.CommID;
+    // Display commits by FIDREF
+    app.get('/DIFFS_ON_FILES/:FIDREF', (request, response) => {
+        const FIDREF = request.params.FIDREF;
 
-        pool.query('SELECT * FROM DIFFS_ON_FILES WHERE CommID = ?', CommID, (error, result) => {
-            if (error) {console.log("something went wrong GET/COMMITS_ON)REVIEWS/:CommID")};
-            //console.log(result);
-            response.send(result);
+        pool.query('SELECT * FROM DIFFS_ON_FILES WHERE FIDREF = ?', FIDREF, (error, result) => {
+            if (error) {console.log("something went wrong GET/DIFFS_ON_FILES/:FIDREF")};
+            console.log(result);
+            response.send(new Buffer.from(result[0].CommDiff, "binary"));
         });
     });
     
