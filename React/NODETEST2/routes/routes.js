@@ -151,7 +151,12 @@ const router = app => {
         pool.query('SELECT * FROM DIFFS_ON_FILES WHERE FIDREF = ?', FIDREF, (error, result) => {
             if (error) {console.log("something went wrong GET/DIFFS_ON_FILES/:FIDREF")};
             console.log(result);
-            response.send(new Buffer.from(result[0].CommDiff, "binary"));
+			if (result[0] != null) {
+				response.send(new Buffer.from(result[0].CommDiff, "binary"));
+			} else {
+				response.send("no diff");
+			}
+            
         });
     });
     
