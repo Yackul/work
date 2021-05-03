@@ -7,6 +7,7 @@ import NavBar from './NavBar'
 import Cookies from 'js-cookie'
 import Popup from './invPopup'
 import DiffDisplay from "./DiffDisplay";
+import { wait } from '@testing-library/dom';
 
 class RevDis extends React.Component {
 
@@ -57,6 +58,7 @@ class RevDis extends React.Component {
             await axios.get("https://www.4424081204.com:1111/FILES_IN_PROJ/" + hld, {
                 headers: {accesstoken: this.state.CookieSave, test: 0, pidref: this.state.routeID}
             }).then(res => {
+                
                 if(res.data[0].FSTATUS < 0) {
                     return window.location = "/Err404"
                 }
@@ -239,7 +241,8 @@ class RevDis extends React.Component {
             }, {headers: {accesstoken: this.state.CookieSave}})
         })
 
-        // await axios.put("https://www.4424081204.com:1111/FILES_IN_PROJ/" + this.state.fileID, {
+        //FILE_UPDATE_ID FIGURE IT OUT BUD
+        // await axios.post("https://www.4424081204.com:1111/FILES_IN_PROJ/", {
         //     FCONTENT: this.state.fileContent,
         //     FNAME: this.state.fileName,
         //     FTYPE: this.state.fileName.split(".").pop()
