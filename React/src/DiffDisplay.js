@@ -24,7 +24,7 @@ class DiffDisplay extends React.Component {
         if (!d[i]) {
             d[i] = [];
         }
-        d[i].push(<div><Comment isOpen={false} comment={c}/></div>)
+        d[i].push(<div><Comment PID={this.props.PID} FID={this.props.FID} isOpen={false} comment={c}/></div>)
         this.setState({commentDict: d})
     }
 
@@ -118,7 +118,9 @@ class DiffDisplay extends React.Component {
                             if (line.charAt(0) === '+') {
                                 return <div>
                                     <DiffLine
-
+                                        
+                                        PID={this.props.PID}
+                                        FID={this.props.FID}
                                         color={'#038A30'}
                                         updateLine={this.updateLine}
                                         lineText={line}
@@ -133,6 +135,8 @@ class DiffDisplay extends React.Component {
                                 return <div>
                                     <DiffLine
 
+                                        PID={this.props.PID}
+                                        FID={this.props.FID}
                                         color={'#EB0E0E'}
                                         updateLine={this.updateLine}
                                         lineText={line}
@@ -147,6 +151,8 @@ class DiffDisplay extends React.Component {
                                 return <div>
                                     <DiffLine
 
+                                        PID={this.props.PID}
+                                        FID={this.props.FID}
                                         updateLine={this.updateLine}
                                         lineText={line}
                                         lineIndex={index + 1}
@@ -175,7 +181,9 @@ DiffDisplay.propTypes = {
     onClose: PropTypes.func,
     isOpen: PropTypes.bool,
     children: PropTypes.node,
-    diffText: PropTypes.string
+    diffText: PropTypes.string,
+    PID: PropTypes.number,
+    FID: PropTypes.number
 };
 
 export default DiffDisplay;

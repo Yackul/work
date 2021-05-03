@@ -70,6 +70,8 @@ class RevDis extends React.Component {
                 this.setState({
                     gotRev: <div>
                         <DiffDisplay
+                                     FID={this.state.fileID}
+                                     PID={this.state.routeID}
                                      isOpen={true}
                                      diffText={res.data}>
                         </DiffDisplay>

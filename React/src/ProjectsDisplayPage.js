@@ -331,7 +331,7 @@ class ProjectsDisplayPage extends React.Component {
                                 {fileLinks}
                         </div>
                         <br></br>
-                        <input type='submit' className='submit' value="Delete Project(todo--NOCLICK)" onClick={this.openPopup}/>
+                        <input type='submit' className='submit' value="Delete Project" onClick={this.openPopup}/>
                         {popup}
                     </div>
                 );
