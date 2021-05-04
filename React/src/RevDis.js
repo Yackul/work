@@ -7,7 +7,7 @@ import NavBar from './NavBar'
 import Cookies from 'js-cookie'
 import Popup from './invPopup'
 import DiffDisplay from "./DiffDisplay";
-import { wait } from '@testing-library/dom';
+import {wait} from '@testing-library/dom';
 
 class RevDis extends React.Component {
 
@@ -33,7 +33,8 @@ class RevDis extends React.Component {
             fileID: -1,
             resu: -2,
             RevInv: 0,
-            revContent: ''
+            revContent: '',
+            isReview: -1
         };
     }
 
@@ -59,8 +60,8 @@ class RevDis extends React.Component {
             await axios.get("https://www.4424081204.com:1111/FILES_IN_PROJ/" + hld, {
                 headers: {accesstoken: this.state.CookieSave, test: 0, pidref: this.state.routeID}
             }).then(res => {
-                
-                if(res.data[0].FSTATUS < 0) {
+
+                if (res.data[0].FSTATUS < 0) {
                     return window.location = "/Err404"
                 }
                 this.setState({
@@ -85,12 +86,11 @@ class RevDis extends React.Component {
         }).then(res => {
             var tHld = []
             for (var i = 0; i < res.data.length; i++) {
-              if(i === 0){
-                tHld[i] = res.data[i].UNameW
-              }
-              else{
-                tHld[i] = res.data[i].UNameW
-              }
+                if (i === 0) {
+                    tHld[i] = res.data[i].UNameW
+                } else {
+                    tHld[i] = res.data[i].UNameW
+                }
             }
             this.setState({
                 cHld: tHld
@@ -102,64 +102,69 @@ class RevDis extends React.Component {
         await axios.get("http://localhost:3002/DIFFS_ON_FILES/" + this.state.fileID, {
             headers: {accesstoken: this.state.CookieSave}
         }).then(res => {
-            if (res.data != 404) {
-                this.setState({
-                    revContent: <div>
-                        <DiffDisplay
-                            FID={this.state.fileID}
-                            PID={this.state.routeID}
-                            isOpen={false}
-                            diffText={res.data}>
-                        </DiffDisplay>
-                    </div>
-                })
-            }
+            this.setState({
+                isReview: 1,
+                revContent: <div>
+                    <DiffDisplay
+                        FID={this.state.fileID}
+                        PID={this.state.routeID}
+                        isOpen={false}
+                        diffText={res.data}>
+                    </DiffDisplay>
+                </div>
+            })
+        }).catch((error) => {
+            this.setState({
+                isReview: 0
+            })
         })
+
+
     }
-    
+
     inviteRevUser = async (iuName) => {
-        await axios.get("https://www.4424081204.com:1111/INVITE_TO_REV/"+iuName, {
+        await axios.get("https://www.4424081204.com:1111/INVITE_TO_REV/" + iuName, {
             headers: {accesstoken: this.state.CookieSave, RID: this.state.fileID}
-        }).then(res=> {
-            if((res.data[0] === undefined) === false){
+        }).then(res => {
+            if ((res.data[0] === undefined) === false) {
                 this.setState({
-                    resu:res.data[0].ACCEPTED,
+                    resu: res.data[0].ACCEPTED,
                     RevInv: 2
                 })
             }
         })
-        if(this.state.resu === -2){
+        if (this.state.resu === -2) {
             await axios.post("https://www.4424081204.com:1111/INVITE_TO_REV/", {
-            FIDREF: this.state.fileID,
-            RIUNAME: iuName,
-            PIDREF: this.state.routeID,
-            RFUNAME: this.state.Uname,
-            DT: this.state.curTime,
-            FileName: this.state.routePara
+                FIDREF: this.state.fileID,
+                RIUNAME: iuName,
+                PIDREF: this.state.routeID,
+                RFUNAME: this.state.Uname,
+                DT: this.state.curTime,
+                FileName: this.state.routePara
             }, {headers: {accesstoken: this.state.CookieSave}})
             this.setState({
                 RevInv: 2
             })
-        }
-        else if(this.state.resu === -1 || this.state.resu === 0) {
-            await axios.put("https://www.4424081204.com:1111/INVITE_TO_REV/"+this.state.revID, {
+        } else if (this.state.resu === -1 || this.state.resu === 0) {
+            await axios.put("https://www.4424081204.com:1111/INVITE_TO_REV/" + this.state.revID, {
                 DT: this.state.curTime,
                 ACCEPTED: 0
-                }, {headers: {accesstoken: this.state.CookieSave, RIUNAME: iuName}
-            }).then(res=> {
+            }, {
+                headers: {accesstoken: this.state.CookieSave, RIUNAME: iuName}
+            }).then(res => {
                 this.setState({
                     RevInv: 2
                 })
             })
-        }
-        else{
+        } else {
             this.setState({
-                RevInv: 1 
+                RevInv: 1
             })
         }
     }
 
     componentDidMount = async () => {
+
         document.body.style.background = "#d0f0f0e1";
         const y = parseInt(this.props.match.params.id)
         const x = this.props.match.params.id2
@@ -202,21 +207,22 @@ class RevDis extends React.Component {
     confirmDel = async () => {
         await axios.put("https://www.4424081204.com:1111/FILES_IN_PROJ/" + this.state.fileID, {
             FSTATUS: -1
-        },  {headers: {accesstoken: this.state.CookieSave}
+        }, {
+            headers: {accesstoken: this.state.CookieSave}
         }).then(res => {
             console.log(res)
-            return window.location = "/Projects/"+ this.state.routeID
+            return window.location = "/Projects/" + this.state.routeID
         })
         /*await axios.delete("https://www.4424081204.com:1111/INVITES/" + this.state.routePara, {
             headers: {accesstoken: this.state.CookieSave}
         })*/
     }
 
-    updatingReview = async() => {
+    updatingReview = async () => {
         this.setState({step: 3})
     }
 
-    createReview = async(e) => {
+    createReview = async (e) => {
 
         e.preventDefault()
 
@@ -231,7 +237,7 @@ class RevDis extends React.Component {
         await axios.post('https://www.4424081204.com/file_diff', {
             file1Content: f1Content,
             file2Content: f2Content
-        }).then( diffRes => {
+        }).then(diffRes => {
             this.setState({
                 diffContent: diffRes.data
             })
@@ -256,7 +262,7 @@ class RevDis extends React.Component {
         // }, {headers: {accesstoken: this.state.CookieSave}})
         // this.setState({ step: -1
         // })
-        
+
     }
 
     setFile = async (e) => {
@@ -287,7 +293,10 @@ class RevDis extends React.Component {
                 closeMe={this.closePopup}/>);
         }
 
-        const items = this.state.cHld.map((item, i) => <div key={i}><input type='submit' className='submit2' value={item} onClick={()=>this.inviteRevUser(item)}/></div>)
+        const items = this.state.cHld.map((item, i) => <div key={i}><input type='submit' className='submit2'
+                                                                           value={item}
+                                                                           onClick={() => this.inviteRevUser(item)}/>
+        </div>)
 
         switch (this.state.authState) {
             case ('loading'):
@@ -297,34 +306,51 @@ class RevDis extends React.Component {
                     <div className='grad1'>
                         <NavBar/>
                         <br></br>
-                        {this.state.revContent}
-                        <div style={{display: 'flex', marginLeft:'auto', marginRight:20}}>
-                            <div className='container'>
-                                <input type="submit" className='submit' value="Update File" onClick={this.updatingReview}/>
-                                {this.state.step === 3 &&
+                        {this.state.isReview === 0 &&
+                        <div style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: 'center',
+                            alignItems: 'center'
+                        }}>
+                            <div style={{display: 'flex'}}>
                                 <div>
-                                    <input type="file" style={{}} onChange={(e) => this.setFile(e)}/>
-                                    <br></br>
-                                    <input type='submit' className='submit' value='Create Review' style={{alignSelf:"center"}} onClick={this.createReview}/>
+                                    <input type="submit" className='submit' value="Update File"
+                                           onClick={this.updatingReview}/>
+                                    {this.state.step === 3 &&
+                                    <div>
+                                        <input type="file" style={{}} onChange={(e) => this.setFile(e)}/>
+                                        <br></br>
+                                        <input type='submit' className='submit' value='Create Review'
+                                               style={{alignSelf: "center"}} onClick={this.createReview}/>
+                                    </div>
+                                    }
                                 </div>
-                                }
+                                <div className='inline'>
+                                    <div>Collaborators:{<div className='smll2'>(Click a user to invite them to
+                                        review!)</div>}{items}</div>
+                                    {this.state.RevInv === 1 &&
+                                    <div className='smllTEST'>Review Invite already sent!</div>}
+                                    {this.state.RevInv === 2 &&
+                                    <div className='smllTEST'>Invite Sent!</div>}
+                                </div>
                             </div>
-                            <div className='inline'>
-                                <div>Collaborators:{<div className='smll2'>(Click a user to invite them to review!)</div>}{items}</div>
-                                {this.state.RevInv === 1 &&
-                                <div className='smllTEST'>Review Invite already sent!</div>}
-                                {this.state.RevInv === 2 &&
-                                <div className='smllTEST'>Invite Sent!</div>}
+                            <div className='colors' style={{textAlign: "center", marginBottom: 10}}>Current
+                                Review: {this.state.routePara}<br></br>File
+                                Type: {this.state.routePara.split('.').pop()}</div>
+                            <div className='grad2'>
+                                <p>{this.state.gotRev}</p>
                             </div>
+                            <br></br>
+                            <input type='submit' className='submit' value="Delete Review" onClick={this.openPopup}/>
+                            {popup}
                         </div>
-                        <div className='colors' style={{textAlign:"center", marginBottom:10}}>Current Review: {this.state.routePara}<br></br>File
-                            Type: {this.state.routePara.split('.').pop()}</div>
-                        <div className='grad2'>
-                            <p>{this.state.gotRev}</p>
+                        }
+                        {this.state.isReview === 1 &&
+                        <div>
+                            {this.state.revContent}
                         </div>
-                        <br></br>
-                        <input type='submit' className='submit' value="Delete Review" onClick={this.openPopup}/>
-                        {popup}
+                        }
                     </div>
                 );
             case ('unauthorized'):
