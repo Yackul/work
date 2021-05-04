@@ -32,7 +32,8 @@ class RevDis extends React.Component {
             diffContent: '',
             fileID: -1,
             resu: -2,
-            RevInv: 0
+            RevInv: 0,
+            revContent: ''
         };
     }
 
@@ -70,13 +71,8 @@ class RevDis extends React.Component {
                 headers: {accesstoken: this.state.CookieSave}
             }).then(res => {
                 this.setState({
-                    gotRev: <div>
-                        <DiffDisplay
-                                     FID={this.state.fileID}
-                                     PID={this.state.routeID}
-                                     isOpen={true}
-                                     diffText={res.data}>
-                        </DiffDisplay>
+                    gotRev: <div style={{whiteSpace: 'pre-wrap'}}>
+                        {res.data}
                     </div>,
                 })
             })
@@ -106,7 +102,18 @@ class RevDis extends React.Component {
         await axios.get("http://localhost:3002/DIFFS_ON_FILES/" + this.state.fileID, {
             headers: {accesstoken: this.state.CookieSave}
         }).then(res => {
-            alert(res.data)
+            if (res.data != 404) {
+                this.setState({
+                    revContent: <div>
+                        <DiffDisplay
+                            FID={this.state.fileID}
+                            PID={this.state.routeID}
+                            isOpen={false}
+                            diffText={res.data}>
+                        </DiffDisplay>
+                    </div>
+                })
+            }
         })
     }
     
@@ -290,6 +297,7 @@ class RevDis extends React.Component {
                     <div className='grad1'>
                         <NavBar/>
                         <br></br>
+                        {this.state.revContent}
                         <div style={{display: 'flex', marginLeft:'auto', marginRight:20}}>
                             <div className='container'>
                                 <input type="submit" className='submit' value="Update File" onClick={this.updatingReview}/>

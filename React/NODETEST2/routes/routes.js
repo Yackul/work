@@ -154,7 +154,7 @@ const router = app => {
 			if (result[0] != null) {
 				response.send(new Buffer.from(result[0].CommDiff, "binary"));
 			} else {
-				response.send("no diff");
+				response.sendStatus(404);
 			}
             
         });
