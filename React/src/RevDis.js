@@ -283,18 +283,18 @@ class RevDis extends React.Component {
     }
 
     approveReview = async () => {
-        // await axios.get("http://localhost:3002/DIFFS_ON_FILES/" + this.state.fileID, {
-        //     headers: {accesstoken: this.state.CookieSave, newfile: 1}
-        // }).then(async res => {
-        //     await axios.put("https://www.4424081204.com:1111/FILES_IN_PROJ/" + this.state.fileID, {
-        //         FNAME: res.data.NewFNAME,
-        //         FTYPE: res.data.NewFTYPE,
-        //         FCONTENT: new Buffer.from(res.data.NewFCONTENT, "binary"),
-        //         DT: this.state.curTime
-        //     }, {headers: {accesstoken: this.state.CookieSave}}).then(async res => {
-        //
-        //     })
-        // })
+        await axios.get("http://localhost:3002/DIFFS_ON_FILES/" + this.state.fileID, {
+            headers: {accesstoken: this.state.CookieSave, newfile: 1}
+        }).then(async res => {
+            await axios.put("https://www.4424081204.com:1111/FILES_IN_PROJ/" + this.state.fileID, {
+                FNAME: res.data.NewFNAME,
+                FTYPE: res.data.NewFTYPE,
+                FCONTENT: new Buffer.from(res.data.NewFCONTENT, "binary"),
+                DT: this.state.curTime
+            }, {headers: {accesstoken: this.state.CookieSave}}).then(async res => {
+
+            })
+        })
         await axios.put("http://localhost:3002/DIFFS_ON_FILES/" + this.state.fileID, {
             APPROVED: 1
         }, {headers: {accesstoken: this.state.CookieSave}}).then(res => {
