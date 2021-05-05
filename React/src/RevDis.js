@@ -22,7 +22,6 @@ class RevDis extends React.Component {
             Uname: '',
             RevName: '',
             RevIDLST: [],
-            fname: '',
             step: -1,
             CookieSave: '',
             cHld: [],
@@ -102,6 +101,7 @@ class RevDis extends React.Component {
         await axios.get("http://localhost:3002/DIFFS_ON_FILES/" + this.state.fileID, {
             headers: {accesstoken: this.state.CookieSave}
         }).then(res => {
+            const diffRes = new Buffer.from(res.data.CommDiff, "binary").toString()
             this.setState({
                 isReview: 1,
                 revContent: <div>
@@ -109,7 +109,7 @@ class RevDis extends React.Component {
                         FID={this.state.fileID}
                         PID={this.state.routeID}
                         isOpen={false}
-                        diffText={res.data}>
+                        diffText={diffRes}>
                     </DiffDisplay>
                 </div>
             })
@@ -118,8 +118,6 @@ class RevDis extends React.Component {
                 isReview: 0
             })
         })
-
-
     }
 
     inviteRevUser = async (iuName) => {
@@ -250,7 +248,10 @@ class RevDis extends React.Component {
                 CommDT: this.state.curTime,
                 CommDiff: this.state.diffContent,
                 CREATEDBY: this.state.Uname,
-                APPROVED: 0
+                APPROVED: 0,
+                NewFCONTENT: f2Content,
+                NewFNAME: this.state.fileName,
+                NewFTYPE: this.state.fileName.split(".").pop()
             }, {headers: {accesstoken: this.state.CookieSave}})
         })
 
@@ -279,6 +280,35 @@ class RevDis extends React.Component {
         this.setState({
             fileName: e.target.files[0].name,
         })
+    }
+
+    approveReview = async () => {
+        // await axios.get("http://localhost:3002/DIFFS_ON_FILES/" + this.state.fileID, {
+        //     headers: {accesstoken: this.state.CookieSave, newfile: 1}
+        // }).then(async res => {
+        //     await axios.put("https://www.4424081204.com:1111/FILES_IN_PROJ/" + this.state.fileID, {
+        //         FNAME: res.data.NewFNAME,
+        //         FTYPE: res.data.NewFTYPE,
+        //         FCONTENT: new Buffer.from(res.data.NewFCONTENT, "binary"),
+        //         DT: this.state.curTime
+        //     }, {headers: {accesstoken: this.state.CookieSave}}).then(async res => {
+        //
+        //     })
+        // })
+        await axios.put("http://localhost:3002/DIFFS_ON_FILES/" + this.state.fileID, {
+            APPROVED: 1
+        }, {headers: {accesstoken: this.state.CookieSave}}).then(res => {
+
+        })
+        // await axios.put("https://www.4424081204.com:1111/FILES_IN_PROJ", {
+        //     FNAME: this.state.fileName,
+        //     FTYPE: fileType[fileType.length-1],
+        //     FCONTENT: this.state.fileContent,
+        //     DT: this.state.curTime,
+        //     PIDREF: this.state.routePara,
+        //     FSTATUS: 1
+        // }, {headers: {accesstoken: this.state.CookieSave}}).then(function (res) {
+        // })
     }
 
     render() {
@@ -348,6 +378,10 @@ class RevDis extends React.Component {
                         }
                         {this.state.isReview === 1 &&
                         <div>
+                            <input type="submit" className='submit' value="Approve Changes"
+                                   onClick={this.approveReview}/>
+                            <input type="submit" className='submit' value="Reject Changes"
+                                   onClick={this.declineReview}/>
                             {this.state.revContent}
                         </div>
                         }
@@ -358,6 +392,10 @@ class RevDis extends React.Component {
             default:
                 return null
         }
+    }
+
+    declineReview() {
+
     }
 }
 

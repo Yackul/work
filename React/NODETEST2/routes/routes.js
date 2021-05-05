@@ -147,16 +147,34 @@ const router = app => {
     // Display commits by FIDREF
     app.get('/DIFFS_ON_FILES/:FIDREF', (request, response) => {
         const FIDREF = request.params.FIDREF;
-
+        const newfile = request.headers.newfile;
         pool.query('SELECT * FROM DIFFS_ON_FILES WHERE FIDREF = ?', FIDREF, (error, result) => {
-            if (error) {console.log("something went wrong GET/DIFFS_ON_FILES/:FIDREF")};
-            console.log(result);
-			if (result[0] != null) {
-				response.send(new Buffer.from(result[0].CommDiff, "binary"));
-			} else {
-				response.sendStatus(404);
-			}
-            
+            if (error) {
+                console.log("something went wrong GET/DIFFS_ON_FILES/:FIDREF")
+            };
+            if (newfile == 1) {
+                console.log(1)
+                if (result[0] != null) {
+                    response.send(result[0]);
+                } else {
+                    response.sendStatus(404);
+                }
+            } else {
+                console.log(0)
+                if (result[0] != null) {
+                    response.send(result[0]);
+                } else {
+                    response.sendStatus(404);
+                }
+            }
+        });
+    });
+
+    app.put('/DIFFS_ON_FILES/:FIDREF', (request, response) => {
+        const FIDREF = request.params.FIDREF;
+        pool.query('UPDATE DIFFS_ON_FILES SET ? WHERE FIDREF = ?', [request.body, FIDREF], (error, result) => {
+            if (error) throw error;
+            response.send(result)
         });
     });
     
