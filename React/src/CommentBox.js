@@ -92,7 +92,6 @@ class CommentInput extends React.Component {
     }
 
 
-    //still needs PID and FID someway/somehow
     //Post to comment table ???
     popComment(e, f) {
          axios.post("https://www.4424081204.com:1111/COMMENTS_ON_REVIEWS", {
