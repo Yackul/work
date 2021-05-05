@@ -7,7 +7,6 @@ import NavBar from './NavBar'
 import Cookies from 'js-cookie'
 import Popup from './invPopup'
 import DiffDisplay from "./DiffDisplay";
-import { wait } from '@testing-library/dom';
 
 class RevDis extends React.Component {
 
