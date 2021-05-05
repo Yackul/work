@@ -24,7 +24,6 @@ class ReviewCreator extends React.Component {
             CookieSave: '',
             commentId: 1,
             comments: '',
-            Uname: '',
         };
     }
 
