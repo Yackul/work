@@ -101,18 +101,24 @@ class RevDis extends React.Component {
         await axios.get("http://localhost:3002/DIFFS_ON_FILES/" + this.state.fileID, {
             headers: {accesstoken: this.state.CookieSave}
         }).then(res => {
-            const diffRes = new Buffer.from(res.data.CommDiff, "binary").toString()
-            this.setState({
-                isReview: 1,
-                revContent: <div>
-                    <DiffDisplay
-                        FID={this.state.fileID}
-                        PID={this.state.routeID}
-                        isOpen={false}
-                        diffText={diffRes}>
-                    </DiffDisplay>
-                </div>
-            })
+            if (res.data.APPROVED == 0) {
+                const diffRes = new Buffer.from(res.data.CommDiff, "binary").toString()
+                this.setState({
+                    isReview: 1,
+                    revContent: <div>
+                        <DiffDisplay
+                            FID={this.state.fileID}
+                            PID={this.state.routeID}
+                            isOpen={false}
+                            diffText={diffRes}>
+                        </DiffDisplay>
+                    </div>
+                })
+            } else {
+                this.setState({
+                    isReview: 0
+                })
+            }
         }).catch((error) => {
             this.setState({
                 isReview: 0
@@ -254,16 +260,6 @@ class RevDis extends React.Component {
                 NewFTYPE: this.state.fileName.split(".").pop()
             }, {headers: {accesstoken: this.state.CookieSave}})
         })
-
-        //FILE_UPDATE_ID FIGURE IT OUT BUD
-        // await axios.post("https://www.4424081204.com:1111/FILES_IN_PROJ/", {
-        //     FCONTENT: this.state.fileContent,
-        //     FNAME: this.state.fileName,
-        //     FTYPE: this.state.fileName.split(".").pop()
-        // }, {headers: {accesstoken: this.state.CookieSave}})
-        // this.setState({ step: -1
-        // })
-
     }
 
     setFile = async (e) => {
@@ -284,12 +280,13 @@ class RevDis extends React.Component {
 
     approveReview = async () => {
         await axios.get("http://localhost:3002/DIFFS_ON_FILES/" + this.state.fileID, {
-            headers: {accesstoken: this.state.CookieSave, newfile: 1}
+            headers: {accesstoken: this.state.CookieSave}
         }).then(async res => {
+            const newContent = new Buffer.from(res.data.NewFCONTENT, "binary").toString()
             await axios.put("https://www.4424081204.com:1111/FILES_IN_PROJ/" + this.state.fileID, {
                 FNAME: res.data.NewFNAME,
                 FTYPE: res.data.NewFTYPE,
-                FCONTENT: new Buffer.from(res.data.NewFCONTENT, "binary"),
+                FCONTENT: newContent,
                 DT: this.state.curTime
             }, {headers: {accesstoken: this.state.CookieSave}}).then(async res => {
 
