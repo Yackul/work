@@ -12,6 +12,7 @@ class ProjectsDisplayPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            ProjName: '',
             routePara: 0,
             routeName: "",
             curTime: new Date().toLocaleString(),
@@ -143,12 +144,23 @@ class ProjectsDisplayPage extends React.Component {
             this.setState({
                 FIDLST: hldLST
             })
-            this.getFiles()
         })
-        this.loadCollab();
+        await this.getProjName();
+        await this.getFiles()
+        await this.loadCollab();
     }
 
- 
+    getProjName = async () => {
+        await axios.get("http://localhost:3002/project/" + this.state.routePara, {
+            headers: {accesstoken: this.state.CookieSave}
+        }).then(res => {
+            this.setState({
+                ProjName: res.data[0].PROJNAME
+            })
+        })
+    }
+
+
     confirmDel = async () => {
         await axios.put("https://www.4424081204.com:1111/works_on_projects/" + this.state.routePara, {
             PSTATUS: -1,
@@ -162,6 +174,12 @@ class ProjectsDisplayPage extends React.Component {
 
     setFile = async (e) => {
         e.preventDefault()
+        if(e.target.files[0] === undefined){
+            this.setState({
+                error: 3
+            })
+            return;
+        }
         const reader = new FileReader()
         reader.onload = async (e) => { 
           const text = (e.target.result)
@@ -213,12 +231,19 @@ class ProjectsDisplayPage extends React.Component {
     */
 
     popDB = async () => {
-        if(this.state.fileName === ''){
+        if(this.state.fileName === '' || this.state.error === 3){
             this.setState({
                 error: 1
             })
             return;
         }
+        else if(this.state.fileNames.includes(this.state.fileName)){
+            this.setState({
+                error: 2
+            })
+            return;
+        }
+        this.setState({error:-1})
         const fileType = this.state.fileName.toString().split('.')
         await axios.post("https://www.4424081204.com:1111/FILES_IN_PROJ", {      
           FNAME: this.state.fileName,
@@ -252,24 +277,33 @@ class ProjectsDisplayPage extends React.Component {
             })
             return window.location = "/Projects/" + this.state.routePara
         }
+        else if(this.state.step > 1){
+            this.setState({
+                step: 0
+            })
+        }
       }
 
     createFileLinks() {
-        const items = this.state.fileNames.map((item, i) =><div><Link key={i} to ={this.state.routePara + "/" + this.state.fileNames[i]}><p key = {i}>{"--" + item}</p></Link></div>)
+        const items = this.state.fileNames.map((item, i) =><div><Link key={i} to ={this.state.routePara + "/" + this.state.fileNames[i]}>{"|--" + item}</Link></div>)
         return items
     }
 
     render() {
 
-
         let popup = null;
         if (this.state.isOpen) {
-            popup = (<Popup
-                message={<div><p>This is permanent, and cannot be reversed</p><input type='submit' className='submit' value='Are you sure?' onClick={this.confirmDel}/></div>}
+            popup = (<Popup 
+                message= {
+                <div>
+                    <p>This is permanent, and cannot be reversed</p>
+                    <input type='submit' className='submit' value='Are you sure?' onClick={this.confirmDel}/>
+                </div>
+                } 
                 closeMe={this.closePopup}/>);
         }
 
-        const items = this.state.cHld.map((item, i) => <div key={i}><p>{item}</p></div>)
+        const items = this.state.cHld.map((item, i) => <div key={i}>{item}<div className='divider'></div></div>)
         const fileLinks = this.createFileLinks()
 
         switch (this.state.authState) {
@@ -277,63 +311,86 @@ class ProjectsDisplayPage extends React.Component {
                 return <h1>Loading</h1>
             case (1):
                 return (
-                    <div className='grad1'>
-                        <NavBar/>
-                        <br></br>
-                        <div style={{display: 'flex', marginLeft:'auto', marginRight:20}}>
-                            <div className='container'> 
-                            {this.state.step === -1 &&
-                                <div className = 'inline'>
-                                    <input type="submit" className="submit" value="Add a file to project" onClick={this.updateStep}/>    
-                                </div>
-                            }
-                            {this.state.step === 0 &&
-                                <div className='inline'>
-                                <br></br>
-                                <input type="file" onChange={(e) => this.setFile(e)}/>   
-                                <br></br>
-                                <input type="submit" className="submit" value="Add file to project" onClick={this.popDB}/>   
-                                {this.state.error === 1 &&
-                                <div>
-                                <br></br>
-                                <div className = 'smll'>No file selected. Please try again.</div>
-                                </div>
-                                }
-                                </div>
-                            }
-                            {this.state.step === 1 &&
-                                <Link to ={"/Projects/"+ this.state.routePara}><input type ="submit" className = "submit" value= "Return to project page?" onClick={this.updateStep}/></Link>    
-                            }
 
-                                <input type="submit" className='submit' value="Invite a User to Project"
-                                       onClick={this.invitingUser}/>
-                                {this.state.step === 3 &&
-                                <div>
-                                    <br></br>
-                                    <input style={{width: 150}}type="text" placeholder="Enter a username" value={this.state.iUserN}
-                                           onChange={this.handleiUserNChange}/>
-                                    <br></br>
-                                    <input type='submit' className='submit' value='Send Invite' onClick={this.inviteUser}/>
+                    <div>
+                        
+                        <NavBar/>
+                        <div className='boldtextSB' style={{marginLeft: '20px', marginRight: 'auto', paddingTop:'8px'}}>
+                            Project: {this.state.ProjName}
+                        </div>
+                        <Link className='boldtextSDB' style={{marginLeft: '20px', marginRight: 'auto'}}>
+                            Project History
+                        </Link>
+
+                        <div style={{display:'flex'}}>      
+
+                            <div style={{marginLeft:'20px', marginRight:'auto', marginTop: '8px'}} className='collab-box'>
+                                <div style={{color:'lightcoral'}}>Collaborators:
+                                    <div className='divider'>
+                                    </div>
                                 </div>
-                                }
-                                {this.state.step === 4 &&
-                                <div className='smll'>Invitation sent to {this.state.iUserN}!</div>
-                                }
-                            
-                            <div className='inline'>
-                                <div>Collaborators:{items}</div>
-                    
-                            <br></br>
+
+                                {items}
+
                             </div>
+
+                            <div>
+
+                                {(this.state.step === -1) &&
+                                    <div>
+                                        <input type="submit" className="submit" value="Add a file to project" onClick={this.updateStep}/>
+                                        <input type="submit" className='submit' value="Invite a User to project" onClick={this.invitingUser}/>
+                                    </div>
+                                }
+
+                                {this.state.step === 0 &&
+                                    <div> 
+                                        <input type="submit" className="submitRED" value="Add file" onClick={this.popDB}/>
+                                        <input type="file" onChange={(e) => this.setFile(e)}/>
+                                        <input type="submit" className='submit' value="Invite a User to project" onClick={this.invitingUser}/>
+                                        {this.state.error === 1 &&
+                                            <div className = 'smll'>No file selected. Please try again.</div>
+                                        }
+                                        {this.state.error === 2 &&
+                                            <div className = 'smll'>File already exists in project!</div>
+                                        }
+                                        {this.state.error === 3 &&
+                                            <div className='smll'>Something went wrong selecting a file. Please try again.</div>
+                                        }
+                                    </div>
+                                }
+
+                                {this.state.step === 1 &&
+                                    <Link to ={"/Projects/"+ this.state.routePara}><input type ="submit" className = "submit" value= "Return to project page?" onClick={this.updateStep}/></Link>    
+                                }
+                                    
+                                {this.state.step === 3 &&
+                                    <div style={{marginRight: '10px'}}>
+                                        <input type="submit" className="submit" value="Add a file to project" onClick={this.updateStep}/>
+                                        <input type='submit' className='submitRED' value='Send Invite' onClick={this.inviteUser}/>
+                                        <input style={{width: 150}}type="text" placeholder="Enter a username" value={this.state.iUserN} onChange={this.handleiUserNChange}/>
+                                    </div>
+                                }
+
+                                {this.state.step === 4 &&
+                                    <div className='smll'>Invitation sent to {this.state.iUserN}!</div>
+                                }                            
                             </div>
                         </div>
-                        <div className= "inline2">
+
+                        <div className='grad1'>
+                        <div className= "files-box">
                                 {fileLinks}
                         </div>
+
                         <br></br>
+
                         <input type='submit' className='submit' value="Delete Project" onClick={this.openPopup}/>
+
                         {popup}
+                        </div>
                     </div>
+                    
                 );
             case ('unauthorized'):
                 return window.location = "/"

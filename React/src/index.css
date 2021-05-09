@@ -23,6 +23,17 @@ input[type=text], input[type=password] {
   width: auto;
 }
 
+.submitRED {  
+  font-size: auto;
+  background-color: #ff0000e1;
+  color: black;
+  padding: 14px 20px;
+  margin: 8px 8px;
+  border: 4px;
+  cursor: pointer;
+  width: auto;
+}
+
 .x{
   position:absolute;
   right: 5px;
@@ -33,7 +44,7 @@ input[type=text], input[type=password] {
 }
 .inline {
   display:inline-table;
-  right: 25px;
+  float:left;
   top: 50px;
   font-weight: bold;
 }
@@ -43,6 +54,57 @@ input[type=text], input[type=password] {
   width: auto;
   margin-top: 0px;
 }
+
+.inline3 {
+  display:inline-table;
+  right: 25px;
+  top: 50px;
+  font-weight: bold;
+}
+
+.boldtext{
+  font-weight: bold;
+}
+
+.boldtextSB{
+  font-weight: bold;
+  color:skyblue;
+}
+
+.boldtextSDB{
+  font-weight: bold;
+  color:rgb(33, 162, 212);
+}
+
+.files-box{
+  display: grid;
+  font-weight: bold;
+  color:rgb(62, 26, 148);
+  text-align: left;
+  border: #157272e1;
+  border-style:solid;
+  border-width:3px;
+  padding: 4px;
+}
+
+.collab-box{
+  display: grid;
+  font-weight: bold;
+  color:rgb(62, 26, 148);
+  text-align: left;
+  border: #157272e1;
+  border-style:solid;
+  border-width:3px;
+  padding: 4px;
+  width:min-content;
+}
+
+.divider{
+  flex-grow: 1;
+  border-bottom: 1px solid black;
+  margin: -2px
+}
+
 .grad1 {
   display: flex;
   flex-direction: column;
@@ -131,6 +193,7 @@ img.avatar {
   width: 25%;
   border-radius: 50%;
 }
+
 img.avatar2 {
   float: left;
   width: 44px;
@@ -143,8 +206,7 @@ img.avatar2 {
 .container {
   overflow-wrap: break-word;
   text-align: center;
-  padding: 16px;
-  margin-top: auto;
+  padding: 8px;
 }
 
 .floater {
@@ -198,12 +260,16 @@ span.psw {
   height: auto;
   max-height: 70vh;
   margin-top: calc(100vh - 85vh - 20px);
-  background: #9adddde1;
+  background: #dedfdfe1;
   border-radius: 4px;
   padding: 20px;
   border: 1px solid #999;
   overflow: auto;
 }
+
+/*#9adddde1
+this was a color used previously in the above. I didn't like it so I changed it.
+*/
 
 .close-icon {
   content: 'x';
