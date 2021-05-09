@@ -207,6 +207,7 @@ const router = app => {
             //const buf = new Buffer.from(result[0].CurrRev, "binary")
             //console.log(buf)
             //response.send(result[0].PROJNAME + "$#BREAKBREAK" + result[0].FName + "$#BREAKBREAK" + buf);
+            response.send(result)
         });
     });
 
@@ -431,7 +432,6 @@ const router = app => {
             });
         }
         else if (test == 1){
-            console.log("here")
             pool.query('SELECT * FROM FILES_IN_PROJ WHERE FID = ?', FNAME, (error, result) =>{
                 if(error){
                     console.log(error)
@@ -440,7 +440,6 @@ const router = app => {
             })
         }
         else if (test == null && pidref == null){
-            
             pool.query('SELECT * FROM FILES_IN_PROJ WHERE FNAME = ?', FNAME, (error, result) => {
                 if (error) throw error;
                 const buf = new Buffer.from(result[0].FCONTENT, "binary")

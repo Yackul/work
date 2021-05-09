@@ -7,7 +7,6 @@ import NavBar from './NavBar'
 import Cookies from 'js-cookie'
 import Popup from './invPopup'
 import DiffDisplay from "./DiffDisplay";
-import {wait} from '@testing-library/dom';
 
 class RevDis extends React.Component {
 
@@ -33,7 +32,8 @@ class RevDis extends React.Component {
             resu: -2,
             RevInv: 0,
             revContent: '',
-            isReview: -1
+            isReview: -1,
+            error: -1
         };
     }
 
@@ -101,7 +101,7 @@ class RevDis extends React.Component {
         await axios.get("http://localhost:3002/DIFFS_ON_FILES/" + this.state.fileID, {
             headers: {accesstoken: this.state.CookieSave}
         }).then(res => {
-            if (res.data.APPROVED == 0) {
+            if (res.data.APPROVED === 0) {
                 const diffRes = new Buffer.from(res.data.CommDiff, "binary").toString()
                 this.setState({
                     isReview: 1,
@@ -206,6 +206,7 @@ class RevDis extends React.Component {
         await this.getReview()
         await this.loadCollab()
         await this.loadReview()
+        await this.getFiles()
     }
 
     confirmDel = async () => {
@@ -214,7 +215,6 @@ class RevDis extends React.Component {
         }, {
             headers: {accesstoken: this.state.CookieSave}
         }).then(res => {
-            console.log(res)
             return window.location = "/Projects/" + this.state.routeID
         })
         /*await axios.delete("https://www.4424081204.com:1111/INVITES/" + this.state.routePara, {
@@ -226,10 +226,39 @@ class RevDis extends React.Component {
         this.setState({step: 3})
     }
 
+    getFiles = async () => {
+        
+        const PIDREF = this.state.routeID;
+        var temp = []
+        await axios.get("https://www.4424081204.com:1111/FILES_IN_PROJ/" + PIDREF, {
+            headers: {accesstoken: this.state.CookieSave, test: -1}
+        }).then(res => {
+            for (var i = 0; i < res.data.length; i++) {
+                if(res.data[i].FSTATUS === 1) {
+                    temp[i] = res.data[i].FNAME
+                }                    
+            }
+            this.setState({
+                fileNames: temp
+            })
+        })
+    }
+
     createReview = async (e) => {
 
         e.preventDefault()
-
+        if(this.state.fileName === '' || this.state.error === 3){
+            this.setState({
+                error: 1
+            })
+            return;
+        }      
+        else if(this.state.fileNames.includes(this.state.fileName)){
+            this.setState({
+                error: 2
+            })
+            return;
+        }
         let f1Content = ''
         let f2Content = this.state.fileContent
 
@@ -264,18 +293,22 @@ class RevDis extends React.Component {
 
     setFile = async (e) => {
         e.preventDefault()
-
+        if(e.target.files[0] === undefined){
+            this.setState({
+                error: 3
+            })
+            return;
+        }
+        this.setState({
+            fileName: e.target.files[0].name,
+        })
         const reader = new FileReader()
         reader.readAsText(e.target.files[0])
         reader.onload = async (e) => {
             this.setState({
                 fileContent: e.target.result
             })
-        }
-
-        this.setState({
-            fileName: e.target.files[0].name,
-        })
+        }        
     }
 
     approveReview = async () => {
@@ -288,9 +321,7 @@ class RevDis extends React.Component {
                 FTYPE: res.data.NewFTYPE,
                 FCONTENT: newContent,
                 DT: this.state.curTime
-            }, {headers: {accesstoken: this.state.CookieSave}}).then(async res => {
-
-            })
+            }, {headers: {accesstoken: this.state.CookieSave}})
         })
         await axios.put("http://localhost:3002/DIFFS_ON_FILES/" + this.state.fileID, {
             APPROVED: 1
@@ -313,17 +344,10 @@ class RevDis extends React.Component {
 
         let popup = null;
         if (this.state.isOpen) {
-            popup = (<Popup
-                message={<div><p>This is permanent, and cannot be reversed</p><input type='submit' className='submit'
-                                                                                     value='Are you sure?'
-                                                                                     onClick={this.confirmDel}/></div>}
-                closeMe={this.closePopup}/>);
+            popup = (<Popup message={<div><p>This is permanent, and cannot be reversed</p><input type='submit' className='submit' value='Are you sure?' onClick={this.confirmDel}/></div>} closeMe={this.closePopup}/>);
         }
 
-        const items = this.state.cHld.map((item, i) => <div key={i}><input type='submit' className='submit2'
-                                                                           value={item}
-                                                                           onClick={() => this.inviteRevUser(item)}/>
-        </div>)
+        const items = this.state.cHld.map((item, i) => <div key={i}><input type='submit' className='submit2' value={item} onClick={() => this.inviteRevUser(item)}/></div>)
 
         switch (this.state.authState) {
             case ('loading'):
@@ -331,48 +355,55 @@ class RevDis extends React.Component {
             case (1):
                 return (
                     <div className='grad1'>
-                        <NavBar/>
                         <br></br>
+                        <NavBar/>
+                        <div style={{ 
+                            marginLeft:'auto', 
+                            marginRight:20}}>
+                            <div className='boldtext'>Collaborators:{items}</div>
+                                {this.state.RevInv === 1 &&
+                                    <div className='smllTEST'>Review Invite already sent!</div>
+                                }
+                                {this.state.RevInv === 2 &&
+                                    <div className='smllTEST'>Invite Sent!</div>
+                                }
+                        </div>
+                            <br></br>
                         {this.state.isReview === 0 &&
                         <div style={{
-                            display: "flex",
-                            flexDirection: "column",
-                            justifyContent: 'center',
-                            alignItems: 'center'
+                            alignItems: 'center',
+                            flexDirection:"column"
                         }}>
-                            <div style={{display: 'flex'}}>
+                            {this.state.step !== 3 &&
+                                <input type="submit" className='submit' value="Update File" onClick={this.updatingReview}/>
+                            }
+                            {this.state.step === 3 &&
                                 <div>
-                                    <input type="submit" className='submit' value="Update File"
-                                           onClick={this.updatingReview}/>
-                                    {this.state.step === 3 &&
-                                    <div>
-                                        <input type="file" style={{}} onChange={(e) => this.setFile(e)}/>
-                                        <br></br>
-                                        <input type='submit' className='submit' value='Create Review'
-                                               style={{alignSelf: "center"}} onClick={this.createReview}/>
-                                    </div>
+                                    <input type="file" accept=".js" onChange={(e) => this.setFile(e)}/>
+                                    {this.state.error === 1 &&
+                                        <div className = 'smll'>No file selected. Please try again.</div>
                                     }
+                                    {this.state.error === 2 &&
+                                        <div className = 'smll'>File already exists in project!</div>
+                                    }
+                                    {this.state.error === 3 &&
+                                        <div className='smll'>Something went wrong selecting a file. Please try again.</div>
+                                    }
+                                    <br></br>
+                                    <input type='submit' className='submit' value='Create Review' style={{alignSelf: "center"}} onClick={this.createReview}/>
                                 </div>
-                                <div className='inline'>
-                                    <div>Collaborators:{<div className='smll2'>(Click a user to invite them to
-                                        review!)</div>}{items}</div>
-                                    {this.state.RevInv === 1 &&
-                                    <div className='smllTEST'>Review Invite already sent!</div>}
-                                    {this.state.RevInv === 2 &&
-                                    <div className='smllTEST'>Invite Sent!</div>}
-                                </div>
-                            </div>
+                            }                        
                             <div className='colors' style={{textAlign: "center", marginBottom: 10}}>Current
                                 Review: {this.state.routePara}<br></br>File
                                 Type: {this.state.routePara.split('.').pop()}</div>
                             <div className='grad2'>
-                                <p>{this.state.gotRev}</p>
+                                <div>{this.state.gotRev}</div>
                             </div>
                             <br></br>
                             <input type='submit' className='submit' value="Delete Review" onClick={this.openPopup}/>
                             {popup}
                         </div>
-                        }
+                        }                        
                         {this.state.isReview === 1 &&
                         <div>
                             <input type="submit" className='submit' value="Approve Changes"
