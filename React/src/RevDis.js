@@ -38,6 +38,8 @@ class RevDis extends React.Component {
         };
     }
 
+    //these are manager functions for toggling the display of the pop-up component
+    //true = open, false = close.
     openPopup = () => {
         this.setState({
             isOpen: true
@@ -49,6 +51,12 @@ class RevDis extends React.Component {
         });
     }
 
+    //this is called at the tail end of componentDidMount so it's rendered on page load
+    //it first checks to make sure the user is on a valid page(by seeing if the routeID exists in the list RevIDLST, which
+    //contains all of the projectIDs the user is included in).
+    //then if that's valid, it checks to see if the file has been deleted. if so, it returns 404.
+    //if the file hasn't been deleted, it pulls the contents of the file and stores it in
+    //the stateful variable gotRev
     getReview = async () => {
         if (!this.state.RevIDLST.includes(this.state.routeID)) {
             return window.location = "/Err404"
@@ -80,6 +88,13 @@ class RevDis extends React.Component {
         }
     }
 
+    //this function is called in componentDidMount to render on page load
+    //this checks to see if any other user is working on this project
+    //and if so, it saves them to a list, cHld.
+
+    //idk why it's an if/else in the for loop, statements are the same
+    //may need clean-up 
+    //TLamb -- 10/05/2021
     loadCollab = async () => {
         await axios.get("https://www.4424081204.com:1111/WORKS_ON_PROJECTS/", {
             headers: {accesstoken: this.state.CookieSave, test: this.state.routeID}
@@ -98,6 +113,10 @@ class RevDis extends React.Component {
         })
     }
 
+    //this function is called in componentDidMount to render on page load
+    //this function checks to see if any diffs are associated with the file
+    //and if so, it renders the page into a review display, instead of a 
+    //file contents display
     loadReview = async () => {
         await axios.get("http://localhost:3002/DIFFS_ON_FILES/" + this.state.fileID, {
             headers: {accesstoken: this.state.CookieSave}
@@ -127,9 +146,12 @@ class RevDis extends React.Component {
         })
     }
 
+    //this function is associated with the links created to display Collaborators
+    //by clicking on a name from the Collaborator menu, a user can be invited 
+    //to review the file immediately
     inviteRevUser = async (iuName) => {
         await axios.get("https://www.4424081204.com:1111/INVITE_TO_REV/" + iuName, {
-            headers: {accesstoken: this.state.CookieSave, RID: this.state.fileID}
+            headers: {accesstoken: this.state.CookieSave, fidref: this.state.fileID}
         }).then(res => {
             if ((res.data[0] === undefined) === false) {
                 this.setState({
@@ -150,20 +172,17 @@ class RevDis extends React.Component {
             this.setState({
                 RevInv: 2
             })
-        } else if (this.state.resu === -1 || this.state.resu === 0) {
-            await axios.put("https://www.4424081204.com:1111/INVITE_TO_REV/" + this.state.revID, {
+        } 
+        else {
+            console.log("here", this.state.revID)
+            await axios.put("https://www.4424081204.com:1111/INVITE_TO_REV/" + this.state.fileID, {
                 DT: this.state.curTime,
                 ACCEPTED: 0
-            }, {
-                headers: {accesstoken: this.state.CookieSave, RIUNAME: iuName}
+            }, {headers: {accesstoken: this.state.CookieSave, riuname: iuName}
             }).then(res => {
                 this.setState({
                     RevInv: 2
                 })
-            })
-        } else {
-            this.setState({
-                RevInv: 1
             })
         }
     }
@@ -395,10 +414,6 @@ class RevDis extends React.Component {
                                 </div>
 
                                 {items}
-
-                                {this.state.RevInv === 1 &&
-                                    <div className='smllTEST'>Review Invite already sent!</div>
-                                }
 
                                 {this.state.RevInv === 2 &&
                                     <div className='smllTEST'>Invite Sent!</div>
