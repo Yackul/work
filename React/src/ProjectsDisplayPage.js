@@ -26,7 +26,8 @@ class ProjectsDisplayPage extends React.Component {
             fileContent: '',
             fileName: '',
             fileNames: [],
-            error: -1
+            error: -1,
+            inv: 0
         };
         this.handleiUserNChange = this.handleiUserNChange.bind(this);
     }
@@ -104,7 +105,8 @@ class ProjectsDisplayPage extends React.Component {
             ProjName: this.state.routeName
         }, {headers: {accesstoken: this.state.CookieSave}})
         this.setState({
-            step: 4
+            inv: 1,
+            step: -1
         })
     }
 
@@ -304,30 +306,38 @@ class ProjectsDisplayPage extends React.Component {
         }
 
         const items = this.state.cHld.map((item, i) => <div key={i}>{item}<div className='divider'></div></div>)
+
         const fileLinks = this.createFileLinks()
 
         switch (this.state.authState) {
+
             case ('loading'):
                 return <h1>Loading</h1>
+
             case (1):
                 return (
 
                     <div>
-                        
-                        <NavBar/>
+                        <div style={{display:'flex', justifyContent:'center'}}>
+                            <NavBar/>
+                        </div>
+
                         <div className='boldtextSB' style={{marginLeft: '20px', marginRight: 'auto', paddingTop:'8px'}}>
                             Project: {this.state.ProjName}
                         </div>
+
                         <Link className='boldtextSDB' style={{marginLeft: '20px', marginRight: 'auto'}}>
                             Project History
                         </Link>
 
-                        <div style={{display:'flex'}}>      
+                        <div style={{display:'flex'}}>
 
-                            <div style={{marginLeft:'20px', marginRight:'auto', marginTop: '8px'}} className='collab-box'>
+                            <div style={{marginLeft:'20px', marginRight:'auto', marginTop: '8px', marginBottom: '8px'}} className='collab-box'>
+                                
                                 <div style={{color:'lightcoral'}}>Collaborators:
-                                    <div className='divider'>
-                                    </div>
+                                    
+                                    <div className='divider'></div>
+
                                 </div>
 
                                 {items}
@@ -335,14 +345,13 @@ class ProjectsDisplayPage extends React.Component {
                             </div>
 
                             <div>
-
-                                {(this.state.step === -1) &&
+                                {this.state.step === -1 &&
                                     <div>
                                         <input type="submit" className="submit" value="Add a file to project" onClick={this.updateStep}/>
-                                        <input type="submit" className='submit' value="Invite a User to project" onClick={this.invitingUser}/>
+                                        <input type="submit" className='submit' value="Invite a user to project" onClick={this.invitingUser}/>
                                     </div>
                                 }
-
+                                
                                 {this.state.step === 0 &&
                                     <div> 
                                         <input type="submit" className="submitRED" value="Add file" onClick={this.popDB}/>
@@ -368,32 +377,35 @@ class ProjectsDisplayPage extends React.Component {
                                     <div style={{marginRight: '10px'}}>
                                         <input type="submit" className="submit" value="Add a file to project" onClick={this.updateStep}/>
                                         <input type='submit' className='submitRED' value='Send Invite' onClick={this.inviteUser}/>
-                                        <input style={{width: 150}}type="text" placeholder="Enter a username" value={this.state.iUserN} onChange={this.handleiUserNChange}/>
+                                        <input style={{width: 150}}type="text" placeholder="Enter a username" value={this.state.iUserN} onChange={this.handleiUserNChange}/> 
                                     </div>
                                 }
 
-                                {this.state.step === 4 &&
+                                {this.state.inv === 1 &&
                                     <div className='smll'>Invitation sent to {this.state.iUserN}!</div>
-                                }                            
+                                }
+
                             </div>
                         </div>
 
                         <div className='grad1'>
-                        <div className= "files-box">
+                            <div className= "files-box">
                                 {fileLinks}
+                            </div>
                         </div>
 
-                        <br></br>
-
-                        <input type='submit' className='submit' value="Delete Project" onClick={this.openPopup}/>
-
-                        {popup}
+                        <div style={{float:'right'}}>
+                            <div style={{display:'flex', justifyContent:'right'}}>
+                                <input type='submit' className='submit' value="Delete Project" onClick={this.openPopup}/>
+                            </div>
+                            {popup}
                         </div>
-                    </div>
-                    
+                    </div>                    
                 );
+
             case ('unauthorized'):
                 return window.location = "/"
+
             default:
                 return null
         }
