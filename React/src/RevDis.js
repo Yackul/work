@@ -7,6 +7,7 @@ import NavBar from './NavBar'
 import Cookies from 'js-cookie'
 import Popup from './invPopup'
 import DiffDisplay from "./DiffDisplay";
+import {Link} from "react-router-dom";
 
 class RevDis extends React.Component {
 
@@ -203,6 +204,7 @@ class RevDis extends React.Component {
                 RevIDLST: hldLST
             })
         })
+        await this.getProjName()
         await this.getReview()
         await this.loadCollab()
         await this.loadReview()
@@ -220,6 +222,16 @@ class RevDis extends React.Component {
         /*await axios.delete("https://www.4424081204.com:1111/INVITES/" + this.state.routePara, {
             headers: {accesstoken: this.state.CookieSave}
         })*/
+    }
+
+    getProjName = async () => {
+        await axios.get("http://localhost:3002/project/" + this.state.routeID, {
+            headers: {accesstoken: this.state.CookieSave}
+        }).then(res => {
+            this.setState({
+                ProjName: res.data[0].PROJNAME
+            })
+        })
     }
 
     updatingReview = async () => {
@@ -347,63 +359,102 @@ class RevDis extends React.Component {
             popup = (<Popup message={<div><p>This is permanent, and cannot be reversed</p><input type='submit' className='submit' value='Are you sure?' onClick={this.confirmDel}/></div>} closeMe={this.closePopup}/>);
         }
 
-        const items = this.state.cHld.map((item, i) => <div key={i}><input type='submit' className='submit2' value={item} onClick={() => this.inviteRevUser(item)}/></div>)
+        const items = this.state.cHld.map((item, i) => <div key={i}><Link to={"/Projects/" + this.state.routeID + "/" + this.state.routePara} onClick={() => this.inviteRevUser(item)}>{item}<div className='divider'></div></Link></div>)
 
         switch (this.state.authState) {
             case ('loading'):
                 return <h1>Loading</h1>
             case (1):
                 return (
-                    <div className='grad1'>
-                        <br></br>
-                        <NavBar/>
-                        <div style={{ 
-                            marginLeft:'auto', 
-                            marginRight:20}}>
-                            <div className='boldtext'>Collaborators:{items}</div>
+
+                    
+                    <div>
+                        <div style={{display:'flex', justifyContent:'center'}}>
+                            <NavBar/>
+                        </div>
+
+                        <div className='boldtextSB' style={{marginLeft: '20px', marginRight: 'auto', paddingTop:'8px'}}>
+                            Project: <Link to={"/Projects/" + this.state.routeID}>{this.state.ProjName}</Link>
+                        </div>
+
+                        <div className='boldtextLSB' style={{marginLeft: '20px', marginRight: 'auto'}}>
+                                File: {this.state.routePara}<br></br>File
+                                Type: {this.state.routePara.split('.').pop()}</div>
+                        
+                        <Link to={"/Projects/" + this.state.routeID + "/" + this.state.routePara}className='boldtextSDB' style={{marginLeft: '20px', marginRight: 'auto'}}>
+                            File History
+                        </Link>
+
+                        <div style={{display:'flex'}}>
+                            <div style={{marginLeft:'20px', marginRight:'auto', marginTop: '8px', marginBottom: '8px'}} className='collab-box'>
+                                
+                                <div style={{color:'lightcoral'}}>Collaborators:
+                                    
+                                    <div className='divider'></div>
+
+                                </div>
+
+                                {items}
+
                                 {this.state.RevInv === 1 &&
                                     <div className='smllTEST'>Review Invite already sent!</div>
                                 }
+
                                 {this.state.RevInv === 2 &&
                                     <div className='smllTEST'>Invite Sent!</div>
                                 }
-                        </div>
-                            <br></br>
-                        {this.state.isReview === 0 &&
-                        <div style={{
-                            alignItems: 'center',
-                            flexDirection:"column"
-                        }}>
-                            {this.state.step !== 3 &&
-                                <input type="submit" className='submit' value="Update File" onClick={this.updatingReview}/>
-                            }
-                            {this.state.step === 3 &&
-                                <div>
-                                    <input type="file" accept=".js" onChange={(e) => this.setFile(e)}/>
-                                    {this.state.error === 1 &&
-                                        <div className = 'smll'>No file selected. Please try again.</div>
-                                    }
-                                    {this.state.error === 2 &&
-                                        <div className = 'smll'>File already exists in project!</div>
-                                    }
-                                    {this.state.error === 3 &&
-                                        <div className='smll'>Something went wrong selecting a file. Please try again.</div>
-                                    }
-                                    <br></br>
-                                    <input type='submit' className='submit' value='Create Review' style={{alignSelf: "center"}} onClick={this.createReview}/>
-                                </div>
-                            }                        
-                            <div className='colors' style={{textAlign: "center", marginBottom: 10}}>Current
-                                Review: {this.state.routePara}<br></br>File
-                                Type: {this.state.routePara.split('.').pop()}</div>
-                            <div className='grad2'>
-                                <div>{this.state.gotRev}</div>
+
                             </div>
-                            <br></br>
-                            <input type='submit' className='submit' value="Delete Review" onClick={this.openPopup}/>
-                            {popup}
+
+                            {this.state.isReview !== 1 &&
+                                
+                                <div>
+                                    {this.state.step !==3 &&
+                                        <input type="submit" className='submit' value="Update File" onClick={this.updatingReview}/>    
+                                    }
+                                    {this.state.step === 3 &&
+                                        <div>
+
+                                            <input type='submit' className='submitRED' value='Create Review' style={{alignSelf: "center"}} onClick={this.createReview}/>
+                                            
+                                            {this.state.error === 1 &&
+                                                <div className = 'smll'>No file selected. Please try again.</div>
+                                            }
+
+                                            {this.state.error === 2 &&
+                                                <div className = 'smll'>File already exists in project!</div>
+                                            }
+
+                                            {this.state.error === 3 &&
+                                                <div className='smll'>Something went wrong selecting a file. Please try again.</div>
+                                            }
+
+                                            <input type="file" onChange={(e) => this.setFile(e)}/>
+
+                                        </div>
+                                    }
+                                </div>
+                            }
                         </div>
-                        }                        
+
+                        {this.state.isReview === 0 &&
+                            <div className='grad1'>
+                                <div className='grad2' style={{
+                                    alignItems: 'center',
+                                    flexDirection:"column"
+                                }}>
+                                    
+                                    <div>{this.state.gotRev}</div>
+
+                                </div>
+                                
+                                {popup}
+                                <input type='submit' className='submit' value="Delete Review" onClick={this.openPopup}/>
+
+                            </div>
+                        }
+                    
+                        
                         {this.state.isReview === 1 &&
                         <div>
                             <input type="submit" className='submit' value="Approve Changes"
@@ -415,8 +466,10 @@ class RevDis extends React.Component {
                         }
                     </div>
                 );
+
             case ('unauthorized'):
                 return window.location = "/"
+
             default:
                 return null
         }

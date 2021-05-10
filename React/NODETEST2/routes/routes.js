@@ -148,13 +148,11 @@ const router = app => {
     app.get('/DIFFS_ON_FILES/:FIDREF', (request, response) => {
         const FIDREF = request.params.FIDREF;
         pool.query('SELECT * FROM DIFFS_ON_FILES WHERE FIDREF = ? AND APPROVED = 0', FIDREF, (error, result) => {
-            if (error) {
-                console.log("something went wrong GET/DIFFS_ON_FILES/:FIDREF")
-            };
             if (result[0] != null) {
                 response.send(result[0]);
-            } else {
-                response.sendStatus(404);
+            } 
+            else {
+                response.send(result);
             }
         });
     });
