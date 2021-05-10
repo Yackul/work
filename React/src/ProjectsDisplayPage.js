@@ -97,17 +97,72 @@ class ProjectsDisplayPage extends React.Component {
     }
 
     inviteUser = async () => {
-        await axios.post("https://www.4424081204.com:1111/INVITES/", {
-            IREVID: this.state.routePara,
-            IUNAME: this.state.iUserN,
-            FUNAME: this.state.Uname,
-            DT: this.state.curTime,
-            ProjName: this.state.routeName
-        }, {headers: {accesstoken: this.state.CookieSave}})
-        this.setState({
-            inv: 1,
-            step: -1
+        var switch_var
+        await axios.get("https://www.4424081204.com:1111/INVITES/" + this.state.iUserN, {
+            headers: {accesstoken: this.state.CookieSave, rid: this.state.routePara}
+        }).then(res => {
+            if (res.data[0] === undefined) {
+                switch_var = 0
+            }
+            else if(res.data[0].ACCEPTED === 1){
+                switch_var = 1
+            }
+            else{
+                switch_var = 2
+            }
         })
+        if(switch_var === 0){
+            var switch_var_lock;
+            await axios.get("https://www.4424081204.com:1111/PROJECT/" + this.state.routePara, {
+                headers:{accesstoken: this.state.CookieSave}
+            }).then(res => {
+                if(res.data[0].CREATOR === this.state.iUserN){
+                    console.log("here1")
+                    this.setState({
+                        inv:2
+                    })
+                    switch_var_lock = 1;
+                }
+            })
+            if(switch_var_lock !== 1) {
+                await axios.post("https://www.4424081204.com:1111/INVITES/", {
+                IREVID: this.state.routePara,
+                IUNAME: this.state.iUserN,
+                FUNAME: this.state.Uname,
+                DT: this.state.curTime,
+                ProjName: this.state.routeName
+                }, {
+                    headers: {accesstoken: this.state.CookieSave}
+                })
+
+                this.setState({
+                    inv: 1,
+                    step: -1
+                })
+            }
+        }
+        else if(switch_var === 1){
+            this.setState({
+                inv:2
+            })
+        }
+
+        else if(switch_var === 2){
+
+            await axios.put("https://www.4424081204.com:1111/INVITES/" + this.state.routePara, {
+                DT: this.state.curTime,
+                ACCEPTED: 0
+                }, {
+                    headers: {accesstoken: this.state.CookieSave, iuname: this.state.iUserN}
+                })
+    
+                this.setState({
+                    inv: 1,
+                    step: -1
+                })
+        }
+        
+        
     }
 
     componentDidMount = async () => {
@@ -377,12 +432,16 @@ class ProjectsDisplayPage extends React.Component {
                                     <div style={{marginRight: '10px'}}>
                                         <input type="submit" className="submit" value="Add a file to project" onClick={this.updateStep}/>
                                         <input type='submit' className='submitRED' value='Send Invite' onClick={this.inviteUser}/>
+                                        
                                         <input style={{width: 150}}type="text" placeholder="Enter a username" value={this.state.iUserN} onChange={this.handleiUserNChange}/> 
                                     </div>
                                 }
 
                                 {this.state.inv === 1 &&
-                                    <div className='smll'>Invitation sent to {this.state.iUserN}!</div>
+                                    <div style={{float:'right', marginRight:'14px'}} className='smll'>Invitation sent to {this.state.iUserN}!</div>
+                                }
+                                {this.state.inv === 2 &&
+                                    <div style={{float:'right', marginRight:'14px'}} className='smll'>User already on project.</div>
                                 }
 
                             </div>

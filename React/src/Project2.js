@@ -74,6 +74,7 @@ class Project2 extends React.Component {
     await axios.post("https://www.4424081204.com:1111/PROJECT", {      
       PROJNAME: this.state.PROJNAME,
       DT: this.state.curTime,
+      CREATOR: this.state.Uname,
       PSTATUS: 1
     }, {headers: {accesstoken: this.state.CookieSave}}).then(function (res) {
     })
