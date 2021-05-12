@@ -147,22 +147,14 @@ const router = app => {
     // Display commits by FIDREF
     app.get('/DIFFS_ON_FILES/:FIDREF', (request, response) => {
         const FIDREF = request.params.FIDREF;
-        const history_var = request.headers.history_var
-        if(history_var) {
-            pool.query('SELECT * FROM DIFFS_ON_FILES WHERE FIDREF = ? ORDER BY DID DESC', FIDREF, (error, result) => {
+        pool.query('SELECT * FROM DIFFS_ON_FILES WHERE FIDREF = ? AND APPROVED = 0', FIDREF, (error, result) => {
+            if (result[0] != null) {
+                response.send(result[0]);
+            } 
+            else {
                 response.send(result);
-            })
-        }
-        else {
-            pool.query('SELECT * FROM DIFFS_ON_FILES WHERE FIDREF = ? AND APPROVED = 0', FIDREF, (error, result) => {
-                if (result[0] != null) {
-                    response.send(result[0]);
-                } 
-                else {
-                    response.send(result);
-                }
-            });
-        }
+            }
+        });
     });
 
     app.put('/DIFFS_ON_FILES/:FIDREF', (request, response) => {
@@ -300,9 +292,9 @@ const router = app => {
     });
 
     //Display COMMENTS_ON_REVIEW by uName
-    app.get('/COMMENTS_ON_REVIEWS/:UNameC', (request, response) => {
-        const UNameC = request.params.UNameC;
-        pool.query('SELECT * FROM COMMENTS_ON_REVIEWS WHERE UNameC = ?', UNameC, (error, result) => {
+    app.get('/COMMENTS_ON_REVIEWS/:FIDREF', (request, response) => {
+        const FIDREF = request.params.FIDREF;
+        pool.query('SELECT * FROM COMMENTS_ON_REVIEWS WHERE FIDREF = ?', FIDREF, (error, result) => {
             if (error) console.log(error)
             response.send(result);
             // console.log("comments here")
