@@ -2,23 +2,28 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import DiffLine from "./DiffLine";
 import Comment from "./Comment";
+import {Auth} from 'aws-amplify';
+import Cookies from 'js-cookie';
+import axios from 'axios';
 
 class DiffDisplay extends React.Component {
-
     constructor(props) {
         super(props)
         this.state = {
+            CookieSave: "",
+            routeID: this.props.FID,
             show: props.isOpen,
             lineArray: [],
             commentDict: {},
-            lineArrayLength: 0
+            lineArrayLength: 0,
+            commList: []
         };
         this.updateLine = this.updateLine.bind(this)
     }
 
     updateLine(uname, comment, index) {
         let d = this.state.commentDict
-        let i = eval(index)
+        let i = index
         let c = uname + ': ' + comment
         if (!d[i]) {
             d[i] = [];
@@ -35,7 +40,44 @@ class DiffDisplay extends React.Component {
         } catch (err) {
             alert(err)
         }
-    }
+
+        const tokens = await Auth.currentSession();
+        document.cookie = "clientaccesstoken=" + tokens.getAccessToken().getJwtToken() + ';';
+        const temp = Cookies.get('clientaccesstoken')
+        this.setState({
+            CookieSave: temp
+        })
+
+
+    const COMMID = this.state.routeID;
+    var hld2 = [];
+    
+    await axios.get("http://localhost:3002/COMMENTS_ON_REVIEWS/" + COMMID, {
+        headers: {accesstoken: this.state.CookieSave}
+    }).then(res => {
+        var x
+        for (var i=0; i<res.data.length; i++){
+            x = i
+            hld2[x] = res.data[x]
+        }
+        this.setState({
+            commList: hld2
+        })
+        // console.log(res.data[0].COMM)
+    }).catch(error => {
+        console.log(error);
+    });
+        var x
+        for(var j=0; j<this.state.commList.length; j++){
+            x = j
+            if(!this.state.commentDict[this.state.commList[x].COMMENTINDEX]){
+                this.state.commentDict[this.state.commList[x].COMMENTINDEX] = []
+            }
+            this.state.commentDict[this.state.commList[x].COMMENTINDEX].push(<div><Comment PID={this.props.PID} FID={this.props.FID} isOpen={true} comment={this.state.commList[x].UNameC + ": " + this.state.commList[x].COMM}/></div>)   
+        }
+        console.log(this.state.commentDict)
+}
+
 
     componentDidUpdate = async (prevProps, prevState) => {
         if (prevProps.diffText !== this.props.diffText) {
