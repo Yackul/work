@@ -16,12 +16,11 @@ class RevDis extends React.Component {
         this.state = {
             routePara: 0,
             routeID: 0,
-            revID: -1,
             curTime: new Date().toLocaleString(),
             gotRev: '',
             Uname: '',
             RevName: '',
-            RevIDLST: [],
+            list_file_ids: [],
             step: -1,
             CookieSave: '',
             cHld: [],
@@ -52,24 +51,23 @@ class RevDis extends React.Component {
     }
 
     //this is called at the tail end of componentDidMount so it's rendered on page load
-    //it first checks to make sure the user is on a valid page(by seeing if the routeID exists in the list RevIDLST, which
+    //it first checks to make sure the user is on a valid page(by seeing if the routeID exists in the list list_file_ids, which
     //contains all of the projectIDs the user is included in).
     //then if that's valid, it checks to see if the file has been deleted. if so, it returns 404.
     //if the file hasn't been deleted, it pulls the contents of the file and stores it in
     //the stateful variable gotRev
     getReview = async () => {
-        if (!this.state.RevIDLST.includes(this.state.routeID)) {
+        if (!this.state.list_file_ids.includes(this.state.routeID)) {
             return window.location = "/Err404"
-        } else if (this.state.RevIDLST.includes(this.state.routeID)) {
-            this.setState({
-                revID: this.state.routeID
-            })
+        } else if (this.state.list_file_ids.includes(this.state.routeID)) {
             const hld = this.state.routePara;
             await axios.get("https://www.4424081204.com:1111/FILES_IN_PROJ/" + hld, {
                 headers: {accesstoken: this.state.CookieSave, test: 0, pidref: this.state.routeID}
             }).then(res => {
-
-                if (res.data[0].FSTATUS < 0) {
+                if (res.data[0] === undefined) {
+                    return window.location = "/Err404"
+                }
+                else if(res.data[0].FSTATUS < 0){
                     return window.location = "/Err404"
                 }
                 this.setState({
@@ -95,6 +93,7 @@ class RevDis extends React.Component {
     //idk why it's an if/else in the for loop, statements are the same
     //may need clean-up 
     //TLamb -- 10/05/2021
+
     loadCollab = async () => {
         await axios.get("https://www.4424081204.com:1111/WORKS_ON_PROJECTS/", {
             headers: {accesstoken: this.state.CookieSave, test: this.state.routeID}
@@ -174,7 +173,6 @@ class RevDis extends React.Component {
             })
         } 
         else {
-            console.log("here", this.state.revID)
             await axios.put("https://www.4424081204.com:1111/INVITE_TO_REV/" + this.state.fileID, {
                 DT: this.state.curTime,
                 ACCEPTED: 0
@@ -220,7 +218,7 @@ class RevDis extends React.Component {
                 hldLST[x] = res.data[x].PIDREF
             }
             this.setState({
-                RevIDLST: hldLST
+                list_file_ids: hldLST
             })
         })
         await this.getProjName()
@@ -267,7 +265,7 @@ class RevDis extends React.Component {
             for (var i = 0; i < res.data.length; i++) {
                 if(res.data[i].FSTATUS === 1) {
                     temp[i] = res.data[i].FNAME
-                }                    
+                }                   
             }
             this.setState({
                 fileNames: temp
@@ -281,12 +279,6 @@ class RevDis extends React.Component {
         if(this.state.fileName === '' || this.state.error === 3){
             this.setState({
                 error: 1
-            })
-            return;
-        }      
-        else if(this.state.fileNames.includes(this.state.fileName)){
-            this.setState({
-                error: 2
             })
             return;
         }
@@ -315,6 +307,9 @@ class RevDis extends React.Component {
                 CommDiff: this.state.diffContent,
                 CREATEDBY: this.state.Uname,
                 APPROVED: 0,
+                OldFCONTENT: sqlRes.data[0].FCONTENT,
+                OldFNAME: sqlRes.data[0].FNAME,
+                OldFTYPE: sqlRes.data[0].FTYPE,
                 NewFCONTENT: f2Content,
                 NewFNAME: this.state.fileName,
                 NewFTYPE: this.state.fileName.split(".").pop()
@@ -400,7 +395,7 @@ class RevDis extends React.Component {
                                 File: {this.state.routePara}<br></br>File
                                 Type: {this.state.routePara.split('.').pop()}</div>
                         
-                        <Link to={"/Projects/" + this.state.routeID + "/" + this.state.routePara}className='boldtextSDB' style={{marginLeft: '20px', marginRight: 'auto'}}>
+                        <Link to={"/Projects/" + this.state.routeID + "/" + this.state.routePara + "/History_" + this.state.fileID}className='boldtextSDB' style={{marginLeft: '20px', marginRight: 'auto'}}>
                             File History
                         </Link>
 

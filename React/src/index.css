@@ -104,7 +104,7 @@ input[type=text], input[type=password] {
   border-style:solid;
   border-width:3px;
   border-radius:12px;
-  padding: 4px;
+  padding: 6px;
   width:min-content;
 }
 
@@ -138,6 +138,7 @@ input[type=text], input[type=password] {
   margin-left: 4px;
   margin-right: 4px;
   overflow-x:auto;
+  overflow-y:hidden;
 }
 
 .smll {
@@ -281,6 +282,16 @@ span.psw {
   overflow: auto;
 }
 
+.box2 {
+  position:fixed;
+  top:50%;
+  left:50%;
+  width:auto;
+  background: #dedfdfe1;
+  border-radius: 4px;
+  border: 1px solid #999;
+}
+
 /*#9adddde1
 this was a color used previously in the above. I didn't like it so I changed it.
 */
@@ -312,4 +323,20 @@ this was a color used previously in the above. I didn't like it so I changed it.
   display: inline-flex;
   justify-content: center;
   align-items: center;
+}
+
+table {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #020202;
+  text-align: left;
+  padding: 4px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
 }
