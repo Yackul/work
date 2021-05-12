@@ -27,7 +27,8 @@ class ProjectsDisplayPage extends React.Component {
             fileName: '',
             fileNames: [],
             error: -1,
-            inv: 0
+            inv: 0,
+            creator_flag: -1
         };
         this.handleiUserNChange = this.handleiUserNChange.bind(this);
     }
@@ -205,6 +206,24 @@ class ProjectsDisplayPage extends React.Component {
         await this.getProjName();
         await this.getFiles()
         await this.loadCollab();
+        await this.isCreator();
+    }
+
+    isCreator = async () => {
+        await axios.get("https://www.4424081204.com:1111/PROJECT/" + this.state.routePara, {
+            headers:{accesstoken: this.state.CookieSave}
+        }).then(res => {
+            if(res.data[0].CREATOR === this.state.Uname){
+                this.setState({
+                    creator_flag: 1
+                })
+            }
+            else{
+                this.setState({
+                    creator_flag: 0
+                })
+            }            
+        })
     }
 
     getProjName = async () => {
@@ -381,7 +400,7 @@ class ProjectsDisplayPage extends React.Component {
                             Project: {this.state.ProjName}
                         </div>
 
-                        <Link className='boldtextSDB' style={{marginLeft: '20px', marginRight: 'auto'}}>
+                        <Link to={"/Projects/" + this.state.routePara} className='boldtextSDB' style={{marginLeft: '20px', marginRight: 'auto'}}>
                             Project History
                         </Link>
 
@@ -453,12 +472,14 @@ class ProjectsDisplayPage extends React.Component {
                             </div>
                         </div>
 
-                        <div style={{float:'right'}}>
-                            <div style={{display:'flex', justifyContent:'right'}}>
-                                <input type='submit' className='submit' value="Delete Project" onClick={this.openPopup}/>
+                        {this.state.creator_flag === 1 &&
+                            <div style={{float:'right'}}>
+                                <div style={{display:'flex', justifyContent:'right'}}>
+                                    <input type='submit' className='submit' value="Delete Project" onClick={this.openPopup}/>
+                                </div>
+                                {popup}
                             </div>
-                            {popup}
-                        </div>
+                        }
                     </div>                    
                 );
 
