@@ -66,7 +66,7 @@ class CommentInput extends React.Component {
     handleOnSubmit(e) {
         let commentText = this.textInput.value;    
         if (commentText) {
-            this.props.updateLine(this.props.Uname, commentText, this.props.lineIndex - 1)
+            this.props.updateLine(this.props.Uname, commentText, this.props.lineIndex - 2)
             this.props.onCommentSubmit(commentText);
             this.textInput.value = '';
         }
@@ -97,7 +97,7 @@ class CommentInput extends React.Component {
          axios.post("https://www.4424081204.com:1111/COMMENTS_ON_REVIEWS", {
             PIDREF: this.props.PID,
             FIDREF: this.props.FID,
-            COMMENTINDEX: f,
+            COMMENTINDEX: f-1,
             DT: this.state.curTime,
             COMM: e,            
             UNameC: this.state.Uname,            

@@ -73,9 +73,8 @@ class DiffDisplay extends React.Component {
             if(!this.state.commentDict[this.state.commList[x].COMMENTINDEX]){
                 this.state.commentDict[this.state.commList[x].COMMENTINDEX] = []
             }
-            this.state.commentDict[this.state.commList[x].COMMENTINDEX].push(<div><Comment PID={this.props.PID} FID={this.props.FID} isOpen={true} comment={this.state.commList[x].UNameC + ": " + this.state.commList[x].COMM}/></div>)   
+            this.state.commentDict[this.state.commList[x].COMMENTINDEX].push(<div><Comment PID={this.props.PID} FID={this.props.FID} isOpen={true}comment={this.state.commList[x].UNameC + ": " + this.state.commList[x].COMM}/></div>)   
         }
-        console.log(this.state.commentDict)
 }
 
 
@@ -157,6 +156,7 @@ class DiffDisplay extends React.Component {
                     <text style={toggleText} onClick={(e) => this.close()}>-</text>
                     <div>
                         {this.state.lineArray.map((line, index) => {
+                            console.log('spaceninja', line)
                             if (line.charAt(0) === '+') {
                                 return <div>
                                     <DiffLine
@@ -171,7 +171,7 @@ class DiffDisplay extends React.Component {
 
                                     </DiffLine>
                                     {this.state.commentDict[index] && this.state.commentDict[index].map(comment => <div
-                                        key={comment}> {comment} </div>)}
+                                        key={comment}> {"here" + comment} </div>)}
                                 </div>
                             } else if (line.charAt(0) === '-') {
                                 return <div>
