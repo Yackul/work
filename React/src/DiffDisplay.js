@@ -5,7 +5,6 @@ import Comment from "./Comment";
 
 class DiffDisplay extends React.Component {
 
-
     constructor(props) {
         super(props)
         this.state = {
@@ -23,9 +22,10 @@ class DiffDisplay extends React.Component {
         let c = uname + ': ' + comment
         if (!d[i]) {
             d[i] = [];
-        }
+        }        
         d[i].push(<div><Comment PID={this.props.PID} FID={this.props.FID} isOpen={false} comment={c}/></div>)
         this.setState({commentDict: d})
+        
     }
 
     componentDidMount = async () => {
