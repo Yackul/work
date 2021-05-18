@@ -132,6 +132,7 @@ class File_Hist extends React.Component {
             this.setState({
                 Diffs_Arr: temp_arr
             })
+            console.log(this.state.Diffs_Arr)
         })
     }  
 
