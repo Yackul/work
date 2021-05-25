@@ -33,8 +33,11 @@ class RevDis extends React.Component {
             RevInv: 0,
             revContent: '',
             isReview: -1,
-            error: -1
+            error: -1,
+            isSplit: false
         };
+
+        this.handleInputChange = this.handleInputChange.bind(this);
     }
 
     //these are manager functions for toggling the display of the pop-up component
@@ -129,7 +132,8 @@ class RevDis extends React.Component {
                             FID={this.state.fileID}
                             PID={this.state.routeID}
                             isOpen={false}
-                            diffText={diffRes}>
+                            diffText={diffRes}
+                            isSplit={this.state.isSplit}>
                         </DiffDisplay>
                     </div>
                 })
@@ -226,6 +230,20 @@ class RevDis extends React.Component {
         await this.loadCollab()
         await this.loadReview()
         await this.getFiles()
+    }
+
+    componentDidUpdate = async (prevProps, prevState) => {
+        if (prevState.isSplit !== this.state.isSplit) {
+            try {
+                await this.getProjName()
+                await this.getReview()
+                await this.loadCollab()
+                await this.loadReview()
+                await this.getFiles()
+            } catch (err) {
+                alert(err)
+            }
+        }
     }
 
     confirmDel = async () => {
@@ -365,6 +383,14 @@ class RevDis extends React.Component {
         // })
     }
 
+    async handleInputChange(event) {
+        const target = event.target;
+        const value = target.type === 'checkbox' ? target.checked : target.value;
+        await this.setState({
+            isSplit: value
+        })
+    }
+
     render() {
 
 
@@ -467,10 +493,17 @@ class RevDis extends React.Component {
                         
                         {this.state.isReview === 1 &&
                         <div>
-                            <input type="submit" className='submit' value="Approve Changes"
-                                   onClick={this.approveReview}/>
-                            <input type="submit" className='submit' value="Reject Changes"
-                                   onClick={this.declineReview}/>
+                            <div style={{paddingLeft: 15}}>
+                                <label className="switch">
+                                    <input type="checkbox" checked={this.state.isSplit} onChange={this.handleInputChange}/>
+                                    <span className="slider"/>
+                                </label>
+                            </div>
+                            <div><input type="submit" className='submit' value="Approve Changes"
+                                        onClick={this.approveReview}/>
+                                <input type="submit" className='submit' value="Reject Changes"
+                                       onClick={this.declineReview}/></div>
+
                             {this.state.revContent}
                         </div>
                         }
