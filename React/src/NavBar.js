@@ -15,14 +15,16 @@ class NavBar extends React.Component{
 
     render(){
         return(
-            <div className="pill-nav">
+          <div className="navbar">          
+            <div className="pill-nav">              
                 <img src={logo} alt="avatar2" className="avatar2" />
                 <a href="/Home">Home</a>
                 <a href="/Me">My Profile</a>
                 <a href="/Projects">My Projects</a>
                 <a href="/Review">Review (Beta)</a>
-                <a href='/' onClick={this.signOut}>Sign Out</a>
+                <a className="sign-out" href='/' onClick={this.signOut}>Sign Out</a>
             </div>
+          </div>
 
         )
     }
