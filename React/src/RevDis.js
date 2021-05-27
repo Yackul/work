@@ -17,7 +17,7 @@ class RevDis extends React.Component {
             routePara: 0,
             routeID: 0,
             curTime: new Date().toLocaleString(),
-            gotRev: '',
+            gotRev: "",
             Uname: '',
             RevName: '',
             list_file_ids: [],
@@ -33,7 +33,10 @@ class RevDis extends React.Component {
             RevInv: 0,
             revContent: '',
             isReview: -1,
-            error: -1
+            error: -1,
+            num_of_lines: -1,
+            adj_num_of_lines: -1,
+            blank_lines: -1
         };
     }
 
@@ -78,12 +81,30 @@ class RevDis extends React.Component {
                 headers: {accesstoken: this.state.CookieSave}
             }).then(res => {
                 this.setState({
-                    gotRev: <div style={{whiteSpace: 'pre-wrap'}}>
-                        {res.data}
-                    </div>,
+                    gotRev: res.data
                 })
-            })
+            })    
         }
+        var input = this.state.gotRev
+        var char = '\n';
+        var i = 0;
+        var j = 0;
+        var x = 0;
+        var y = 0;
+        while ((j = input.indexOf(char, i)) !== -1) {
+            if(!input.substring(i, j).replace(/\s/g, '').length){
+                y++
+            }
+            i = j + 1;
+            x++;
+            
+            
+        }
+        this.setState({
+            num_of_lines: x+1,
+            blank_lines: y,
+            adj_num_of_lines: x+1-y
+        })
     }
 
     //this function is called in componentDidMount to render on page load
@@ -383,7 +404,7 @@ class RevDis extends React.Component {
 
                     
                     <div>
-                        <div style={{display:'flex', justifyContent:'center'}}>
+                        <div className="test2" style={{display:'flex', justifyContent:'center'}}>
                             <NavBar/>
                         </div>
 
@@ -449,24 +470,31 @@ class RevDis extends React.Component {
 
                         {this.state.isReview === 0 &&
                             <div className='grad1'>
-                                <div className='grad2' style={{
-                                    alignItems: 'center',
-                                    flexDirection:"column"
-                                }}>
+                                <div className='grad2' >
                                     
-                                    <div>{this.state.gotRev}</div>
-
+                                    <div className="file_contents">
+                                        <div className="file_display_header">
+                                            <div className ="file_display_text">
+                                                # of lines: {this.state.num_of_lines + " "}
+                                                | # of blank lines: {this.state.blank_lines + " "} 
+                                                | # of adjusted lines: {this.state.adj_num_of_lines}
+                                            </div>
+                                            <div className = "file_display_delete">
+                                                <input type='submit' className='submit_delete' value="Delete Review" onClick={this.openPopup}/>
+                                            </div>
+                                        </div>                                       
+                                        {popup}
+                                        <div className="file_contents_margin">{this.state.gotRev}</div>
+                                    </div>
+                                 
                                 </div>
-                                
-                                {popup}
                                 <input type='submit' className='submit' value="Delete Review" onClick={this.openPopup}/>
 
                             </div>
-                        }
-                    
+                        }                    
                         
                         {this.state.isReview === 1 &&
-                        <div>
+                        <div className="grad1">
                             <input type="submit" className='submit' value="Approve Changes"
                                    onClick={this.approveReview}/>
                             <input type="submit" className='submit' value="Reject Changes"

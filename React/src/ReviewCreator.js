@@ -166,8 +166,8 @@ class ReviewCreator extends React.Component {
 
         return (
 
-            <div className='grad1'>
-                <NavBar/>
+            <div>
+                <div className='test2'><NavBar/></div>
                 <div className="ReviewCreator">
                     {this.props.children}
                     <button onClick={(e) => this.handleClick1()}>

@@ -195,8 +195,8 @@ class Project2 extends React.Component {
       case (1):
         return (
 
-          <div className='grad1'>
-            <NavBar/>
+          <div>
+            <div className='test2'><NavBar/></div>
             <div className='container'>
             <div>{this.state.Uname}'s Projects<br></br>{projs}</div>
             

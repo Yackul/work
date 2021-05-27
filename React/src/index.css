@@ -24,6 +24,31 @@ input[type=text], input[type=password] {
   border-radius: 12px;
 }
 
+.submit_delete {  
+  font-size: auto;
+  display: flex;
+  float: right;
+  background-color: #4ab3b3e1;
+  color: black;
+  padding: 4px 4px;
+  border: 4px;
+  cursor: pointer;
+  width: auto;
+  border-radius: 6px;
+}
+
+.submit_Overlay {  
+  font-size: auto;
+  background-color: #4ab3b3e1;
+  color: black;
+  padding: 13px 12px;
+  margin: 4px 4px;
+  border: 4px;
+  cursor: pointer;
+  width: auto;
+  border-radius: 12px;
+}
+
 .submitRED {  
   font-size: auto;
   background-color: #ff0000e1;
@@ -100,10 +125,9 @@ input[type=text], input[type=password] {
   font-weight: bold;
   color:rgb(62, 26, 148);
   text-align: left;
-  border: #157272e1;
-  border-style:solid;
+  border: solid #5f8f8fe1;
   border-width:3px;
-  border-radius:12px;
+  border-radius:2px;
   padding: 6px;
   width:min-content;
 }
@@ -114,32 +138,27 @@ input[type=text], input[type=password] {
   margin: -2px
 }
 
-.grad1 {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
 .colors {
   color: rgb(6, 48, 126);
   font-weight: bold;
   margin-left:30px;
 }
 
-.grad2 {
+.grad1 {
   display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.grad2 {
+  width: 82vw;
   justify-content: center;
   background-color: #d0f0f0e1;
-  margin: 0 auto;
   border: solid #157272e1;
-  padding-left: 20px;
-  padding-right: 20px;
-  border-radius:12px;
-  margin-left: 4px;
-  margin-right: 4px;
-  overflow-x:auto;
-  overflow-y:hidden;
+  border-radius:2px;
 }
+
+
 
 .smll {
   font-size: 12px;
@@ -213,8 +232,48 @@ img.avatar2 {
   width: 44px;
   text-align:center;
   font-size: 17px;
-  border-radius: 50%;
-  padding: 5px 20px 0 20px;
+  border-radius: 100%;
+  padding: 5px 20px 5px 20px;
+}
+
+#overlay {
+  position: fixed; /* Sit on top of the page content */
+  display: none; /* Hidden by default */
+  width: 25%; /* Full width (cover the whole page) */
+  height: 100%; /* Full height (cover the whole page) */
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(250, 136, 42, 0.3); /* Black background with opacity */
+  z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+  cursor: pointer; /* Add a pointer on hover */
+}
+
+#delete_overlay {
+  position: fixed; /* Sit on top of the page content */
+  display: none; /* Hidden by default */
+  width: 100%; /* Full width (cover the whole page) */
+  height: 100%; /* Full height (cover the whole page) */
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(250, 136, 42, 0.3); /* Black background with opacity */
+  z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+  cursor: pointer; /* Add a pointer on hover */
+}
+
+#text4{
+  position: relative;
+  background-color: rgb(82, 209, 167);
+  top: 25%;
+  left: 50%;
+  border-radius: 8px;
+  padding: 3px;
+  margin: 2px;
+  font-size: 17px;
+  color: rgb(0, 0, 0);
+  transform: translate(-50%,-50%);
+  -ms-transform: translate(-50%,-50%);
 }
 
 .container {
@@ -226,6 +285,39 @@ img.avatar2 {
 .floater {
   margin: auto;
   float: right;
+}
+
+.test2 {
+  display: flex;
+  justify-content: center;
+  background-color: #aadddde1;
+}
+.file_contents{
+  width: 82vw;
+  border-radius: 4px;
+  overflow-x: auto;
+  white-space:pre;
+}
+
+.file_contents_margin{
+  margin-left: 24px;
+}
+
+.file_display_header {
+  display: flex;
+  background-color: #aadddde1;
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
+.file_display_delete{
+  width: 100%;
+  position:relative;
+  right: 12px;
+}
+
+.file_display_text{
+  text-indent: 12px
 }
 
 span.psw {
@@ -247,6 +339,10 @@ span.psw {
 .pill-nav a:hover {
   background-color:#4ab3b3e1;
   color: black;
+}
+
+.test11 {
+  background-color:#000;
 }
 
 /* Add a color to the active/current link */
@@ -338,5 +434,9 @@ td, th {
 }
 
 tr:nth-child(even) {
-  background-color: #dddddd;
+  background-color: #b3fdfde1;
+}
+
+tr:nth-child(odd) {
+  background-color: #8cb1b1e1;
 }
