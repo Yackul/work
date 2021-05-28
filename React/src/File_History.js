@@ -151,6 +151,7 @@ class File_Hist extends React.Component {
                 PID={this.state.Project_ID}
                 isOpen={true}
                 diffText={Pop_Mess}
+                isSplit={false}
                 >
             </DiffDisplay>} closeMe={this.closePopup}/>);
         }
