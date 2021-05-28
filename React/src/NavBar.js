@@ -195,6 +195,7 @@ class NavBar extends React.Component{
         const Rinvites = this.creRevInvButts()
 
         return(
+            <div className="navbar">
             <div className="pill-nav">
                 <img src={logo} alt="avatar2" className="avatar2" />   
                 <a onClick ={this.on} style={{fontWeight:"bold", color: "red", borderRadius: "100%"}}>{this.state.Count}</a>    
@@ -202,7 +203,7 @@ class NavBar extends React.Component{
                 <a href="/Me">My Profile</a>
                 <a href="/Projects">My Projects</a>
                 <a href="/Review">Review (Beta)</a>
-                <a href='/' onClick={this.signOut}>Sign Out</a>
+                <a href='/' className="sign-out" onClick={this.signOut}>Sign Out</a>
                     {this.state.Count > 0 && 
                         <div id="overlay" onClick={this.off}>
                             <div id="text4"><b>Projects</b>{invites}</div>                      
@@ -215,6 +216,7 @@ class NavBar extends React.Component{
                         </div>
                     }
                 
+            </div>
             </div>
 
         )

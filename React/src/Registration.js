@@ -199,46 +199,51 @@ class RegisterPage extends React.Component {
               <h2>Register a new account</h2>
               <label><b>Account Details</b></label>
               <br></br>
-              <input type="text" name="UEmail" id="UEmail" placeholder="Enter Email" data-test="email" value={this.state.email} onChange={this.handleEmailChange} />
-              {this.state.emerror === 1 && 
-              <div className="smll">Email cannot be empty.</div>}
-              {this.state.emerror === 0 && 
-              <div className="smll">Please enter a valid e-mail.</div>}
-              <br></br>
-              <input type="text" name="UName" id="UName" placeholder="Enter Username" data-test="username" value={this.state.username} onChange={this.handleUserChange} />
-              {this.state.error === 1 && 
-              <div className="smll">Username cannot be empty.</div>}
-              {this.state.error === 0 && 
-              <div className="smll">Username already in use.</div>}
-              {this.state.error === 3 && 
-              <div className="smll">Username too short.</div>}
+              <div className="input-registration">
+                <input type="text" name="UEmail" id="UEmail" placeholder="Enter Email" data-test="email" value={this.state.email} onChange={this.handleEmailChange} />
+                {this.state.emerror === 1 && 
+                <div className="smll">Email cannot be empty.</div>}
+                {this.state.emerror === 0 && 
+                <div className="smll">Please enter a valid e-mail.</div>}
+                <br></br>
+                <input type="text" name="UName" id="UName" placeholder="Enter Username" data-test="username" value={this.state.username} onChange={this.handleUserChange} />
+                {this.state.error === 1 && 
+                <div className="smll">Username cannot be empty.</div>}
+                {this.state.error === 0 && 
+                <div className="smll">Username already in use.</div>}
+                {this.state.error === 3 && 
+                <div className="smll">Username too short.</div>}
+                            
               <br></br>
               <label><b>Password</b></label>
-              <br></br>
-              <div className = "requi"><b>Password Rules:</b><br></br><i> 1+ capital letter<br></br>1+ special character<br></br>(!@#$%^&*())</i><br></br></div>
-              <br></br>
-              <input type="password" name="UPW" id="UPW" placeholder="Enter Password" data-test="password" value={this.state.password} onChange={this.handlePassChange} />
-              {this.state.pwerror === 1 && 
-              <div className="smll">Passwords cannot be empty.</div>}
-              {this.state.pwerror === 2 && 
-              <div className="smll">Passwords must contain a capital letter and one special character.</div>}
-              {this.state.pwerror === 0 && 
-              <div className="smll">Passwords must match.</div>}
-              {this.state.pwerror === 3 && 
-              <div className="smll">Passwords must contain at least 8 characters.</div>}
-              <br></br>
-              <input type="password" placeholder="Re-enter Password" data-test="password" value={this.state.password2} onChange={this.handlePassChange2} />
-              {this.state.pw2error === 1 && 
-              <div className="smll">Passwords cannot be empty.</div>}
-              {this.state.pw2error === 0 && 
-              <div className="smll">Passwords must match.</div>}
-              <br></br>
-              <div>
-              <input type = "hidden" name ="UName"  value = {this.state.username}/>
-              <input type = "hidden" name ="UEmail"  value = {this.state.email}/>
-              <input type="submit" className="submit" value="Create Account" onClick={this.submitForm}/>          
-              </div>
+              <br></br>              
+                <div className = "requi"><b>Password Rules:</b><br></br><i> 1+ capital letter<br></br>1+ special character<br></br>(!@#$%^&*())</i><br></br></div>
+                <br></br>              
+               <input type="password" name="UPW" id="UPW" placeholder="Enter Password" data-test="password" value={this.state.password} onChange={this.handlePassChange} />
+                
+                {this.state.pwerror === 1 && 
+                <div className="smll">Passwords cannot be empty.</div>}
+                {this.state.pwerror === 2 && 
+                <div className="smll">Passwords must contain a capital letter and one special character.</div>}
+                {this.state.pwerror === 0 && 
+                <div className="smll">Passwords must match.</div>}
+                {this.state.pwerror === 3 && 
+                <div className="smll">Passwords must contain at least 8 characters.</div>}
+              
+                <br></br>
+                <input type="password" placeholder="Re-enter Password" data-test="password" value={this.state.password2} onChange={this.handlePassChange2} />
+                {this.state.pw2error === 1 && 
+                <div className="smll">Passwords cannot be empty.</div>}
+                {this.state.pw2error === 0 && 
+                <div className="smll">Passwords must match.</div>}
+                <br></br>
+                <div>
+                <input type = "hidden" name ="UName"  value = {this.state.username}/>
+                <input type = "hidden" name ="UEmail"  value = {this.state.email}/>
+                <input type="submit" className="submit" value="Create Account" onClick={this.submitForm}/>          
+                </div>  
               <p>Already have an account? <a href='/'>Sign In</a></p>
+            </div>
           </div>
           )
           }

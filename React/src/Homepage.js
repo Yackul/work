@@ -3,9 +3,7 @@ import './index.css';
 import NavBar from './NavBar'
 import { Auth } from 'aws-amplify'
 import axios from 'axios';
-import Cookies from 'js-cookie'
-import Popup from './invPopup'; 
-import RPopup from './RinvPopup'; 
+import Cookies from 'js-cookie' 
 
 
 class Homepage extends React.Component {
@@ -44,8 +42,13 @@ class Homepage extends React.Component {
             case (1):
                 return (
                     <div>
-                        <div className='test2'><NavBar/></div>         
-                        <h1 style={{paddingLeft: 20}}>Welcome to Git Going, {this.state.Uname}!</h1>
+                        <div className='test2'><NavBar/></div>        
+                        <br></br>
+                        <br></br>
+                        <br></br> 
+                        <div className = "grad1">
+                            <h1 style={{paddingLeft: 20}}>Welcome to Git Going, {this.state.Uname}!</h1>
+                        </div>
                         <br></br>                        
                     </div>
                 );

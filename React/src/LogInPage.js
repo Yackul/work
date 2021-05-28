@@ -102,7 +102,7 @@ class LoginPage extends React.Component {
             </div>
             { this.state.rediHome ? (<Redirect to="/Home"/>) : null  }
             <h2>Log In and Git Going!</h2>
-            <label><b>User Name</b></label>
+            <label><b>Username</b></label>
             <br/>
             <input type="text" placeholder="Enter Username" value={this.state.username} onKeyPress={event => {
               if (event.key === "Enter") {
@@ -120,11 +120,11 @@ class LoginPage extends React.Component {
             {this.state.pwerror === 1 && 
             <div className="smll">Password cannot be empty.</div>}
             <br/>
-            <input type ="submit" className="submit" onClick={this.signIn} value = "Log In"/>
+            <input type ="submit" className="submit" onClick={this.signIn} value = "Login"/>
             <Link to='/Register'><input type="submit" className="submit" value="Register"/></Link><br></br>
             {/*<input type="checkbox" checked={this.state.checked} onChange={this.handleCheck}/>
             <label>Remember Me?</label>*/}
-          <span className="psw">Forgot <a href="/RecoverAccount">password?</a></span>
+          <span className="psw"> <a href="/RecoverAccount">Forgot password?</a></span>
           </div>     
           </div>   
       );
