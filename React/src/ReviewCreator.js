@@ -28,7 +28,7 @@ class ReviewCreator extends React.Component {
     }
 
     componentDidMount = async () => {
-        document.body.style.background = "#d0f0f0e1";
+        document.body.style.background = "#F5F5DC";
         const tokens = await Auth.currentSession();
         const userName = tokens.getIdToken().payload['cognito:username'];
         var userNameHold = userName.charAt(0).toUpperCase() + userName.slice(1);

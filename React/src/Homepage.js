@@ -2,7 +2,6 @@ import React from 'react';
 import './index.css';
 import NavBar from './NavBar'
 import { Auth } from 'aws-amplify'
-import axios from 'axios';
 import Cookies from 'js-cookie' 
 
 
@@ -17,7 +16,7 @@ class Homepage extends React.Component {
         };
     }
     componentDidMount = async () => {
-        document.body.style.background = "#d0f0f0e1";
+        document.body.style.background = "#F5F5DC";
         try {
           await Auth.currentAuthenticatedUser()
           const tokens = await Auth.currentSession();          
