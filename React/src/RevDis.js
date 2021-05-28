@@ -208,7 +208,7 @@ class RevDis extends React.Component {
 
     componentDidMount = async () => {
 
-        document.body.style.background = "#d0f0f0e1";
+        document.body.style.background = "#F5F5DC";
         const y = parseInt(this.props.match.params.id)
         const x = this.props.match.params.id2
         this.setState({
@@ -470,8 +470,7 @@ class RevDis extends React.Component {
 
                         {this.state.isReview === 0 &&
                             <div className='grad1'>
-                                <div className='grad2' >
-                                    
+                                <div className='grad2' >                                    
                                     <div className="file_contents">
                                         <div className="file_display_header">
                                             <div className ="file_display_text">
@@ -485,10 +484,8 @@ class RevDis extends React.Component {
                                         </div>                                       
                                         {popup}
                                         <div className="file_contents_margin">{this.state.gotRev}</div>
-                                    </div>
-                                 
+                                    </div>                                 
                                 </div>
-                                <input type='submit' className='submit' value="Delete Review" onClick={this.openPopup}/>
 
                             </div>
                         }                    

@@ -167,7 +167,7 @@ class ProjectsDisplayPage extends React.Component {
     }
 
     componentDidMount = async () => {
-        document.body.style.background = "#d0f0f0e1";
+        document.body.style.background = "#F5F5DC";
         const x = parseInt(this.props.match.params.id)
         this.setState({
             routePara: x
