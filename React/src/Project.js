@@ -81,7 +81,7 @@ class Project extends React.Component {
             case (1):
                 return (
                     <div>
-                        <NavBar/>
+                        <div className='test2'><NavBar/></div>
 
                         <button onClick={this.toggleModal}>
                             Create a new project

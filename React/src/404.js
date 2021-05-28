@@ -9,7 +9,8 @@ class Err extends React.Component {
     render() {
 
         return(
-            <div><NavBar/>
+            <div>
+                <div className='test2'><NavBar/></div>
             <div>
                 Sorry, something went wrong!
                 This page should have a neat logo eventually. Or something.

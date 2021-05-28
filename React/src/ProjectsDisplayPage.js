@@ -392,7 +392,7 @@ class ProjectsDisplayPage extends React.Component {
                 return (
 
                     <div>
-                        <div style={{display:'flex', justifyContent:'center'}}>
+                        <div className = 'test2'>
                             <NavBar/>
                         </div>
 
