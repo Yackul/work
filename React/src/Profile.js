@@ -20,7 +20,7 @@ class ProfilePage extends React.Component {
   }
 
   componentDidMount = async () => {
-    document.body.style.background = "#d0f0f0e1";
+    document.body.style.background = "#F5F5DC";
     console.log('componentDidMount calledHP')
     try {
       await Auth.currentAuthenticatedUser()
@@ -51,8 +51,8 @@ class ProfilePage extends React.Component {
         return <h1>Loading</h1>
       case (1):
         return (
-          <div className='grad1'>
-            <NavBar />
+          <div>
+            <div className='test2'><NavBar/></div>
             <h2 style={{paddingLeft: 20}}>You are: {this.state.Uname}</h2>
           </div>
         );

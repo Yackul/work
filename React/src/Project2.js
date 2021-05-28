@@ -122,7 +122,7 @@ class Project2 extends React.Component {
   }
 */
   componentDidMount = async () => {
-    document.body.style.background = "#d0f0f0e1";
+    document.body.style.background = "#F5F5DC";
     this._myMounted = true;
         try {
           await Auth.currentAuthenticatedUser()
@@ -195,8 +195,8 @@ class Project2 extends React.Component {
       case (1):
         return (
 
-          <div className='grad1'>
-            <NavBar/>
+          <div>
+            <div className='test2'><NavBar/></div>
             <div className='container'>
             <div>{this.state.Uname}'s Projects<br></br>{projs}</div>
             

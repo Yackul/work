@@ -12,12 +12,44 @@ input[type=text], input[type=password] {
   box-sizing: border-box;
 }
 
+.input-registration {
+  height: 35px;
+  width: 70vw;
+  padding: 0 5px;
+}
+
+
 .submit {  
   font-size: auto;
-  background-color: #4ab3b3e1;
+  background-color: #6699cc;
   color: black;
   padding: 14px 20px;
   margin: 8px 8px;
+  border: 4px;
+  cursor: pointer;
+  width: auto;
+  border-radius: 12px;
+}
+
+.submit_delete {  
+  font-size: auto;
+  display: flex;
+  float: right;
+  background-color: #4ab3b3e1;
+  color: black;
+  padding: 4px 4px;
+  border: 4px;
+  cursor: pointer;
+  width: auto;
+  border-radius: 6px;
+}
+
+.submit_Overlay {  
+  font-size: auto;
+  background-color: #4ab3b3e1;
+  color: black;
+  padding: 13px 12px;
+  margin: 4px 4px;
   border: 4px;
   cursor: pointer;
   width: auto;
@@ -100,10 +132,9 @@ input[type=text], input[type=password] {
   font-weight: bold;
   color:rgb(62, 26, 148);
   text-align: left;
-  border: #157272e1;
-  border-style:solid;
+  border: solid #000000e1;
   border-width:3px;
-  border-radius:12px;
+  border-radius:2px;
   padding: 6px;
   width:min-content;
 }
@@ -114,32 +145,28 @@ input[type=text], input[type=password] {
   margin: -2px
 }
 
-.grad1 {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
 .colors {
   color: rgb(6, 48, 126);
   font-weight: bold;
   margin-left:30px;
 }
 
-.grad2 {
+.grad1 {
   display: flex;
-  justify-content: center;
-  background-color: #d0f0f0e1;
-  margin: 0 auto;
-  border: solid #157272e1;
-  padding-left: 20px;
-  padding-right: 20px;
-  border-radius:12px;
-  margin-left: 4px;
-  margin-right: 4px;
-  overflow-x:auto;
-  overflow-y:hidden;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 12px;
 }
+
+.grad2 {
+  width: 82vw;
+  justify-content: center;
+  background-color: #fce8c6;
+  border: solid #000000e1;
+  border-radius:2px;
+}
+
+
 
 .smll {
   font-size: 12px;
@@ -208,13 +235,66 @@ img.avatar {
   border-radius: 50%;
 }
 
-img.avatar2 {
+img.avatar2 {   
   float: left;
   width: 44px;
   text-align:center;
   font-size: 17px;
-  border-radius: 50%;
-  padding: 5px 20px 0 20px;
+  border-radius: 100%;
+  padding: 5px 20px 5px 20px;
+}
+
+#overlay {
+  position: fixed; /* Sit on top of the page content */
+  display: none; /* Hidden by default */
+  width: 25%; /* Full width (cover the whole page) */
+  height: 100%; /* Full height (cover the whole page) */
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(250, 136, 42, 0.3); /* Black background with opacity */
+  z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+  cursor: pointer; /* Add a pointer on hover */
+}
+
+#overlay2 {
+  position: fixed; /* Sit on top of the page content */
+  display: none; /* Hidden by default */
+  width: 25%; /* Full width (cover the whole page) */
+  height: 100%; /* Full height (cover the whole page) */
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(250, 136, 42, 0.3); /* Black background with opacity */
+  z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+  cursor: pointer; /* Add a pointer on hover */
+}
+
+#delete_overlay {
+  position: fixed; /* Sit on top of the page content */
+  display: none; /* Hidden by default */
+  width: 100%; /* Full width (cover the whole page) */
+  height: 100%; /* Full height (cover the whole page) */
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(250, 136, 42, 0.3); /* Black background with opacity */
+  z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+  cursor: pointer; /* Add a pointer on hover */
+}
+
+#text4{
+  position: relative;
+  background-color: rgb(82, 209, 167);
+  top: 25%;
+  left: 50%;
+  border-radius: 8px;
+  padding: 3px;
+  margin: 2px;
+  font-size: 17px;
+  color: rgb(0, 0, 0);
+  transform: translate(-50%,-50%);
+  -ms-transform: translate(-50%,-50%);
 }
 
 .container {
@@ -228,25 +308,86 @@ img.avatar2 {
   float: right;
 }
 
+.test2 {
+  display: flex;
+  justify-content: center;
+  background-color: #aadddde1;
+}
+.file_contents{
+  width: 82vw;
+  border-radius: 4px;
+  overflow-x: auto;
+  white-space:pre;
+}
+
+.file_contents_margin{
+  margin-left: 24px;
+}
+
+.file_display_header {
+  display: flex;
+  width: 100%;
+  border-bottom: solid 2px black;
+  min-width: 1000px;
+  background-color: #F5F5DC;
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
+.file_display_delete{
+  position:static;
+  padding-left: 12px;
+  right: 0%;
+}
+
+.file_display_text{
+  text-indent: 12px
+}
+
 span.psw {
   float: right;
   padding-top: 16px;
 }
 
+.sign-out{
+  position: absolute;
+  left: 92%;
+  margin:auto;
+  background-color: #3f7faa ;
+  padding: 14px 26px;
+  border: none;
+  cursor: pointer;
+}
+
 .pill-nav a {
   display: inline-block;
-  color: black;
+  color: rgb(5, 238, 160);
   text-align: center;
   padding: 14px;
-  text-decoration: none;
-  font-size: 17px;
-  border-radius: 50px;
+  font-size: 16px;
+  border-radius: 15px;
+  height:fit-content;
+  width: fit-content;
+  font-weight: bold;
+}
+
+.navbar {
+  width: 100%;
+  background-color: #7c7574;
+  /* background-color: #659fa3e1; */
+  overflow: auto;
+  padding: 5px;
+  top: 0px;
 }
 
 /* Change the color of links on mouse-over */
 .pill-nav a:hover {
-  background-color:#4ab3b3e1;
+  background-color:#F5F5DC;
   color: black;
+}
+
+.test11 {
+  background-color:rgb(255, 214, 181);
 }
 
 /* Add a color to the active/current link */
@@ -400,5 +541,9 @@ td, th {
 }
 
 tr:nth-child(even) {
-  background-color: #dddddd;
+  background-color: #b3fdfde1;
+}
+
+tr:nth-child(odd) {
+  background-color: #8cb1b1e1;
 }

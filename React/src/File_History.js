@@ -165,11 +165,9 @@ class File_Hist extends React.Component {
                 return (
 
                     <div>
-                        <div style={{display:'flex', justifyContent:'center'}}>
+                        <div className = 'test2'>
                             <NavBar/>
                         </div>
-
-                        <h1 style={{paddingLeft: 20}}>Welcome to File_History, {this.state.User_Name}!</h1>
                 
                         <div style={{display:'flex'}}>
 
@@ -187,8 +185,7 @@ class File_Hist extends React.Component {
                         </div>
 
                         <div className = 'grad1'>
-                        {popup}
-                            <div className='grad2' style={{
+                            <div style={{
                                 alignItems: 'center',
                                 flexDirection:"column"
                             }}>     
@@ -205,12 +202,12 @@ class File_Hist extends React.Component {
                                         <th>View</th>
                                     </tr>
 
-                                    {Hist_Display}
-
+                                    {Hist_Display}                                    
                                 </table> 
                                 </div>   
                             </div>                            
-                        </div>          
+                        </div>  
+                        {popup}        
                     </div>
                 );
 

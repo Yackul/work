@@ -28,7 +28,7 @@ class ReviewCreator extends React.Component {
     }
 
     componentDidMount = async () => {
-        document.body.style.background = "#d0f0f0e1";
+        document.body.style.background = "#F5F5DC";
         const tokens = await Auth.currentSession();
         const userName = tokens.getIdToken().payload['cognito:username'];
         var userNameHold = userName.charAt(0).toUpperCase() + userName.slice(1);
@@ -166,8 +166,8 @@ class ReviewCreator extends React.Component {
 
         return (
 
-            <div className='grad1'>
-                <NavBar/>
+            <div>
+                <div className='test2'><NavBar/></div>
                 <div className="ReviewCreator">
                     {this.props.children}
                     <button onClick={(e) => this.handleClick1()}>

@@ -17,7 +17,7 @@ class RevDis extends React.Component {
             routePara: 0,
             routeID: 0,
             curTime: new Date().toLocaleString(),
-            gotRev: '',
+            gotRev: "",
             Uname: '',
             RevName: '',
             list_file_ids: [],
@@ -34,6 +34,9 @@ class RevDis extends React.Component {
             revContent: '',
             isReview: -1,
             error: -1,
+            num_of_lines: -1,
+            adj_num_of_lines: -1,
+            blank_lines: -1,
             isSplit: false
         };
 
@@ -81,12 +84,30 @@ class RevDis extends React.Component {
                 headers: {accesstoken: this.state.CookieSave}
             }).then(res => {
                 this.setState({
-                    gotRev: <div style={{whiteSpace: 'pre-wrap'}}>
-                        {res.data}
-                    </div>,
+                    gotRev: res.data
                 })
             })
         }
+        var input = this.state.gotRev
+        var char = '\n';
+        var i = 0;
+        var j = 0;
+        var x = 0;
+        var y = 0;
+        while ((j = input.indexOf(char, i)) !== -1) {
+            if(!input.substring(i, j).replace(/\s/g, '').length){
+                y++
+            }
+            i = j + 1;
+            x++;
+
+
+        }
+        this.setState({
+            num_of_lines: x+1,
+            blank_lines: y,
+            adj_num_of_lines: x+1-y
+        })
     }
 
     //this function is called in componentDidMount to render on page load
@@ -94,7 +115,7 @@ class RevDis extends React.Component {
     //and if so, it saves them to a list, cHld.
 
     //idk why it's an if/else in the for loop, statements are the same
-    //may need clean-up 
+    //may need clean-up
     //TLamb -- 10/05/2021
 
     loadCollab = async () => {
@@ -117,7 +138,7 @@ class RevDis extends React.Component {
 
     //this function is called in componentDidMount to render on page load
     //this function checks to see if any diffs are associated with the file
-    //and if so, it renders the page into a review display, instead of a 
+    //and if so, it renders the page into a review display, instead of a
     //file contents display
     loadReview = async () => {
         await axios.get("http://localhost:3002/DIFFS_ON_FILES/" + this.state.fileID, {
@@ -150,7 +171,7 @@ class RevDis extends React.Component {
     }
 
     //this function is associated with the links created to display Collaborators
-    //by clicking on a name from the Collaborator menu, a user can be invited 
+    //by clicking on a name from the Collaborator menu, a user can be invited
     //to review the file immediately
     inviteRevUser = async (iuName) => {
         await axios.get("https://www.4424081204.com:1111/INVITE_TO_REV/" + iuName, {
@@ -175,7 +196,7 @@ class RevDis extends React.Component {
             this.setState({
                 RevInv: 2
             })
-        } 
+        }
         else {
             await axios.put("https://www.4424081204.com:1111/INVITE_TO_REV/" + this.state.fileID, {
                 DT: this.state.curTime,
@@ -191,7 +212,7 @@ class RevDis extends React.Component {
 
     componentDidMount = async () => {
 
-        document.body.style.background = "#d0f0f0e1";
+        document.body.style.background = "#F5F5DC";
         const y = parseInt(this.props.match.params.id)
         const x = this.props.match.params.id2
         this.setState({
@@ -274,7 +295,7 @@ class RevDis extends React.Component {
     }
 
     getFiles = async () => {
-        
+
         const PIDREF = this.state.routeID;
         var temp = []
         await axios.get("https://www.4424081204.com:1111/FILES_IN_PROJ/" + PIDREF, {
@@ -283,7 +304,7 @@ class RevDis extends React.Component {
             for (var i = 0; i < res.data.length; i++) {
                 if(res.data[i].FSTATUS === 1) {
                     temp[i] = res.data[i].FNAME
-                }                   
+                }
             }
             this.setState({
                 fileNames: temp
@@ -352,7 +373,7 @@ class RevDis extends React.Component {
             this.setState({
                 fileContent: e.target.result
             })
-        }        
+        }
     }
 
     approveReview = async () => {
@@ -407,9 +428,9 @@ class RevDis extends React.Component {
             case (1):
                 return (
 
-                    
+
                     <div>
-                        <div style={{display:'flex', justifyContent:'center'}}>
+                        <div className="test2" style={{display:'flex', justifyContent:'center'}}>
                             <NavBar/>
                         </div>
 
@@ -420,16 +441,16 @@ class RevDis extends React.Component {
                         <div className='boldtextLSB' style={{marginLeft: '20px', marginRight: 'auto'}}>
                                 File: {this.state.routePara}<br></br>File
                                 Type: {this.state.routePara.split('.').pop()}</div>
-                        
+
                         <Link to={"/Projects/" + this.state.routeID + "/" + this.state.routePara + "/History_" + this.state.fileID}className='boldtextSDB' style={{marginLeft: '20px', marginRight: 'auto'}}>
                             File History
                         </Link>
 
                         <div style={{display:'flex'}}>
                             <div style={{marginLeft:'20px', marginRight:'auto', marginTop: '8px', marginBottom: '8px'}} className='collab-box'>
-                                
+
                                 <div style={{color:'lightcoral'}}>Collaborators:
-                                    
+
                                     <div className='divider'></div>
 
                                 </div>
@@ -443,16 +464,16 @@ class RevDis extends React.Component {
                             </div>
 
                             {this.state.isReview !== 1 &&
-                                
+
                                 <div>
                                     {this.state.step !==3 &&
-                                        <input type="submit" className='submit' value="Update File" onClick={this.updatingReview}/>    
+                                        <input type="submit" className='submit' value="Update File" onClick={this.updatingReview}/>
                                     }
                                     {this.state.step === 3 &&
                                         <div>
 
                                             <input type='submit' className='submitRED' value='Create Review' style={{alignSelf: "center"}} onClick={this.createReview}/>
-                                            
+
                                             {this.state.error === 1 &&
                                                 <div className = 'smll'>No file selected. Please try again.</div>
                                             }
@@ -475,22 +496,26 @@ class RevDis extends React.Component {
 
                         {this.state.isReview === 0 &&
                             <div className='grad1'>
-                                <div className='grad2' style={{
-                                    alignItems: 'center',
-                                    flexDirection:"column"
-                                }}>
-                                    
-                                    <div>{this.state.gotRev}</div>
-
+                                <div className='grad2' >
+                                    <div className="file_contents">
+                                        <div className="file_display_header">
+                                            <div className ="file_display_text">
+                                                # of lines: {this.state.num_of_lines + " "}
+                                                | # of blank lines: {this.state.blank_lines + " "}
+                                                | # of adjusted lines: {this.state.adj_num_of_lines}
+                                            </div>
+                                            <div className = "file_display_delete">
+                                                <input type='submit' className='submit_delete' value="Delete Review" onClick={this.openPopup}/>
+                                            </div>
+                                        </div>                                       
+                                        {popup}
+                                        <div className="file_contents_margin">{this.state.gotRev}</div>
+                                    </div>
                                 </div>
-                                
-                                {popup}
-                                <input type='submit' className='submit' value="Delete Review" onClick={this.openPopup}/>
 
                             </div>
                         }
-                    
-                        
+
                         {this.state.isReview === 1 &&
                         <div>
                             <div style={{paddingLeft: 15}}>
