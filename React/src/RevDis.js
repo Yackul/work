@@ -103,6 +103,21 @@ class RevDis extends React.Component {
 
 
         }
+        var input = this.state.gotRev
+        var char = '\n';
+        var i = 0;
+        var j = 0;
+        var x = 0;
+        var y = 0;
+        while ((j = input.indexOf(char, i)) !== -1) {
+            if(!input.substring(i, j).replace(/\s/g, '').length){
+                y++
+            }
+            i = j + 1;
+            x++;
+
+
+        }
         this.setState({
             num_of_lines: x+1,
             blank_lines: y,
@@ -507,7 +522,7 @@ class RevDis extends React.Component {
                                             <div className = "file_display_delete">
                                                 <input type='submit' className='submit_delete' value="Delete Review" onClick={this.openPopup}/>
                                             </div>
-                                        </div>                                       
+                                        </div>
                                         {popup}
                                         <div className="file_contents_margin">{this.state.gotRev}</div>
                                     </div>
