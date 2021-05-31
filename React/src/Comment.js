@@ -7,6 +7,7 @@ class Comment extends React.Component {
 
     constructor(props) {
         super(props)
+        //alert("Comment creation with split side: " + this.props.splitSide)
         this.state = {
             show: props.isOpen
         };
@@ -91,7 +92,8 @@ Comment.propTypes = {
     onClose: PropTypes.func,
     isOpen: PropTypes.bool,
     children: PropTypes.node,
-    comment: PropTypes.string
+    comment: PropTypes.string,
+    splitSide: PropTypes.string
 };
 
 export default Comment;

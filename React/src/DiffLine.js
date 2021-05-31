@@ -17,8 +17,8 @@ class DiffLine extends React.Component {
 
 
     open = () => {
-        this.setState({ showComment: true });
-    };
+        this.setState({ showComment: true })
+    }
 
     close() {
         this.setState({ showComment: false })
@@ -31,10 +31,9 @@ class DiffLine extends React.Component {
                 <div>
                 <button className="submit3" onClick={(e) => this.close()}> {this.props.lineIndex}</button>
                     <text style={{color: this.props.color}}>{this.props.lineText}</text>
-                <Comment PID={this.props.PID} FID={this.props.FID} updateLine={this.props.updateLine} lineIndex={this.props.lineIndex} open={this.open} close={this.close}/>
-
+                <Comment PID={this.props.PID} FID={this.props.FID} updateLine={this.props.updateLine} lineIndex={this.props.lineIndex} splitSide={this.props.splitSide} open={this.open} close={this.close}/>
             </div>
-            );
+            )
         } else {
             return (<div>
                 <button className="submit3" onClick={this.open}> {this.props.lineIndex}</button>
@@ -55,7 +54,8 @@ DiffLine.propTypes = {
     lineIndex: PropTypes.number,
     color: PropTypes.string,
     PID: PropTypes.number,
-    FID: PropTypes.number
+    FID: PropTypes.number,
+    splitSide: PropTypes.string
 };
 
 export default DiffLine;

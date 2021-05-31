@@ -36,8 +36,11 @@ class RevDis extends React.Component {
             error: -1,
             num_of_lines: -1,
             adj_num_of_lines: -1,
-            blank_lines: -1
+            blank_lines: -1,
+            isSplit: false
         };
+
+        this.handleInputChange = this.handleInputChange.bind(this);
     }
 
     //these are manager functions for toggling the display of the pop-up component
@@ -83,7 +86,7 @@ class RevDis extends React.Component {
                 this.setState({
                     gotRev: res.data
                 })
-            })    
+            })
         }
         var input = this.state.gotRev
         var char = '\n';
@@ -97,8 +100,23 @@ class RevDis extends React.Component {
             }
             i = j + 1;
             x++;
-            
-            
+
+
+        }
+        var input = this.state.gotRev
+        var char = '\n';
+        var i = 0;
+        var j = 0;
+        var x = 0;
+        var y = 0;
+        while ((j = input.indexOf(char, i)) !== -1) {
+            if(!input.substring(i, j).replace(/\s/g, '').length){
+                y++
+            }
+            i = j + 1;
+            x++;
+
+
         }
         this.setState({
             num_of_lines: x+1,
@@ -112,7 +130,7 @@ class RevDis extends React.Component {
     //and if so, it saves them to a list, cHld.
 
     //idk why it's an if/else in the for loop, statements are the same
-    //may need clean-up 
+    //may need clean-up
     //TLamb -- 10/05/2021
 
     loadCollab = async () => {
@@ -135,7 +153,7 @@ class RevDis extends React.Component {
 
     //this function is called in componentDidMount to render on page load
     //this function checks to see if any diffs are associated with the file
-    //and if so, it renders the page into a review display, instead of a 
+    //and if so, it renders the page into a review display, instead of a
     //file contents display
     loadReview = async () => {
         await axios.get("http://localhost:3002/DIFFS_ON_FILES/" + this.state.fileID, {
@@ -150,7 +168,8 @@ class RevDis extends React.Component {
                             FID={this.state.fileID}
                             PID={this.state.routeID}
                             isOpen={false}
-                            diffText={diffRes}>
+                            diffText={diffRes}
+                            isSplit={this.state.isSplit}>
                         </DiffDisplay>
                     </div>
                 })
@@ -167,7 +186,7 @@ class RevDis extends React.Component {
     }
 
     //this function is associated with the links created to display Collaborators
-    //by clicking on a name from the Collaborator menu, a user can be invited 
+    //by clicking on a name from the Collaborator menu, a user can be invited
     //to review the file immediately
     inviteRevUser = async (iuName) => {
         await axios.get("https://www.4424081204.com:1111/INVITE_TO_REV/" + iuName, {
@@ -192,7 +211,7 @@ class RevDis extends React.Component {
             this.setState({
                 RevInv: 2
             })
-        } 
+        }
         else {
             await axios.put("https://www.4424081204.com:1111/INVITE_TO_REV/" + this.state.fileID, {
                 DT: this.state.curTime,
@@ -249,6 +268,20 @@ class RevDis extends React.Component {
         await this.getFiles()
     }
 
+    componentDidUpdate = async (prevProps, prevState) => {
+        if (prevState.isSplit !== this.state.isSplit) {
+            try {
+                await this.getProjName()
+                await this.getReview()
+                await this.loadCollab()
+                await this.loadReview()
+                await this.getFiles()
+            } catch (err) {
+                alert(err)
+            }
+        }
+    }
+
     confirmDel = async () => {
         await axios.put("https://www.4424081204.com:1111/FILES_IN_PROJ/" + this.state.fileID, {
             FSTATUS: -1
@@ -277,7 +310,7 @@ class RevDis extends React.Component {
     }
 
     getFiles = async () => {
-        
+
         const PIDREF = this.state.routeID;
         var temp = []
         await axios.get("https://www.4424081204.com:1111/FILES_IN_PROJ/" + PIDREF, {
@@ -286,7 +319,7 @@ class RevDis extends React.Component {
             for (var i = 0; i < res.data.length; i++) {
                 if(res.data[i].FSTATUS === 1) {
                     temp[i] = res.data[i].FNAME
-                }                   
+                }
             }
             this.setState({
                 fileNames: temp
@@ -355,7 +388,7 @@ class RevDis extends React.Component {
             this.setState({
                 fileContent: e.target.result
             })
-        }        
+        }
     }
 
     approveReview = async () => {
@@ -386,6 +419,14 @@ class RevDis extends React.Component {
         // })
     }
 
+    async handleInputChange(event) {
+        const target = event.target;
+        const value = target.type === 'checkbox' ? target.checked : target.value;
+        await this.setState({
+            isSplit: value
+        })
+    }
+
     render() {
 
 
@@ -402,7 +443,7 @@ class RevDis extends React.Component {
             case (1):
                 return (
 
-                    
+
                     <div>
                         <div className="test2" style={{display:'flex', justifyContent:'center'}}>
                             <NavBar/>
@@ -415,16 +456,16 @@ class RevDis extends React.Component {
                         <div className='boldtextLSB' style={{marginLeft: '20px', marginRight: 'auto'}}>
                                 File: {this.state.routePara}<br></br>File
                                 Type: {this.state.routePara.split('.').pop()}</div>
-                        
+
                         <Link to={"/Projects/" + this.state.routeID + "/" + this.state.routePara + "/History_" + this.state.fileID}className='boldtextSDB' style={{marginLeft: '20px', marginRight: 'auto'}}>
                             File History
                         </Link>
 
                         <div style={{display:'flex'}}>
                             <div style={{marginLeft:'20px', marginRight:'auto', marginTop: '8px', marginBottom: '8px'}} className='collab-box'>
-                                
+
                                 <div style={{color:'lightcoral'}}>Collaborators:
-                                    
+
                                     <div className='divider'></div>
 
                                 </div>
@@ -438,16 +479,16 @@ class RevDis extends React.Component {
                             </div>
 
                             {this.state.isReview !== 1 &&
-                                
+
                                 <div>
                                     {this.state.step !==3 &&
-                                        <input type="submit" className='submit' value="Update File" onClick={this.updatingReview}/>    
+                                        <input type="submit" className='submit' value="Update File" onClick={this.updatingReview}/>
                                     }
                                     {this.state.step === 3 &&
                                         <div>
 
                                             <input type='submit' className='submitRED' value='Create Review' style={{alignSelf: "center"}} onClick={this.createReview}/>
-                                            
+
                                             {this.state.error === 1 &&
                                                 <div className = 'smll'>No file selected. Please try again.</div>
                                             }
@@ -470,32 +511,39 @@ class RevDis extends React.Component {
 
                         {this.state.isReview === 0 &&
                             <div className='grad1'>
-                                <div className='grad2' >                                    
+                                <div className='grad2' >
                                     <div className="file_contents">
                                         <div className="file_display_header">
                                             <div className ="file_display_text">
                                                 # of lines: {this.state.num_of_lines + " "}
-                                                | # of blank lines: {this.state.blank_lines + " "} 
+                                                | # of blank lines: {this.state.blank_lines + " "}
                                                 | # of adjusted lines: {this.state.adj_num_of_lines}
                                             </div>
                                             <div className = "file_display_delete">
                                                 <input type='submit' className='submit_delete' value="Delete Review" onClick={this.openPopup}/>
                                             </div>
-                                        </div>                                       
+                                        </div>
                                         {popup}
                                         <div className="file_contents_margin">{this.state.gotRev}</div>
-                                    </div>                                 
+                                    </div>
                                 </div>
 
                             </div>
-                        }                    
-                        
+                        }
+
                         {this.state.isReview === 1 &&
                         <div className="grad1">
-                            <input type="submit" className='submit' value="Approve Changes"
-                                   onClick={this.approveReview}/>
-                            <input type="submit" className='submit' value="Reject Changes"
-                                   onClick={this.declineReview}/>
+                            <div><input type="submit" className='submit' value="Approve Changes"
+                                        onClick={this.approveReview}/>
+                                <input type="submit" className='submit' value="Reject Changes"
+                                       onClick={this.declineReview}/></div>
+                            <div style={{display: "flex", paddingLeft: 15, alignItems: "center"}}>
+                                <label className="switch">
+                                    <input type="checkbox" checked={this.state.isSplit} onChange={this.handleInputChange}/>
+                                    <span className="slider"/>
+                                </label>
+                                <p style={{paddingLeft: 10}}>Diff style: {(this.state.isSplit ? "Split diff" : "Unified diff")}</p>
+                            </div>
                             {this.state.revContent}
                         </div>
                         }

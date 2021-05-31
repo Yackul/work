@@ -40,7 +40,9 @@ class CommentBox extends React.Component {
                 <CommentList comments={this.state.comments}/>
                 <CommentInput PID={this.props.PID} FID={this.props.FID} lineIndex={this.props.lineIndex} updateLine={this.props.updateLine}
                               onCommentSubmit={this.handleOnSubmit.bind(this)} 
-                              Uname={this.state.Uname}/>
+                              Uname={this.state.Uname}
+                              splitSide={this.props.splitSide}
+                />
             </div>
         );
     }
@@ -64,7 +66,7 @@ class CommentInput extends React.Component {
     }
 
     handleOnSubmit(e) {
-        let commentText = this.textInput.value;    
+        let commentText = this.textInput.value;
         if (commentText) {
             this.props.updateLine(this.props.Uname, commentText, this.props.lineIndex - 2)
             this.props.onCommentSubmit(commentText);
@@ -100,7 +102,8 @@ class CommentInput extends React.Component {
             COMMENTINDEX: f-1,
             DT: this.state.curTime,
             COMM: e,            
-            UNameC: this.state.Uname,            
+            UNameC: this.state.Uname,
+            SplitSide: this.props.splitSide
         }, {headers: {accesstoken: this.state.CookieSave}}).then(function (res) {
             // console.log(res);
     })
@@ -160,9 +163,14 @@ class Comment extends Component {
 }
 
 Comment.propTypes = {
-    lineIndex: number,
+    lineIndex: PropTypes.number,
     FID: PropTypes.number,
-    PID: PropTypes.number
+    PID: PropTypes.number,
+    splitSide: PropTypes.string
+}
+
+CommentInput.propTypes = {
+    splitSide: PropTypes.string
 }
 
 export default CommentBox;
