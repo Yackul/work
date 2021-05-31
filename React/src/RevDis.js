@@ -532,7 +532,11 @@ class RevDis extends React.Component {
                         }
 
                         {this.state.isReview === 1 &&
-                        <div>
+                        <div className="grad1">
+                            <div><input type="submit" className='submit' value="Approve Changes"
+                                        onClick={this.approveReview}/>
+                                <input type="submit" className='submit' value="Reject Changes"
+                                       onClick={this.declineReview}/></div>
                             <div style={{display: "flex", paddingLeft: 15, alignItems: "center"}}>
                                 <label className="switch">
                                     <input type="checkbox" checked={this.state.isSplit} onChange={this.handleInputChange}/>
@@ -540,11 +544,6 @@ class RevDis extends React.Component {
                                 </label>
                                 <p style={{paddingLeft: 10}}>Diff style: {(this.state.isSplit ? "Split diff" : "Unified diff")}</p>
                             </div>
-                            <div><input type="submit" className='submit' value="Approve Changes"
-                                        onClick={this.approveReview}/>
-                                <input type="submit" className='submit' value="Reject Changes"
-                                       onClick={this.declineReview}/></div>
-
                             {this.state.revContent}
                         </div>
                         }
