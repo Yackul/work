@@ -134,7 +134,7 @@ class DiffDisplay extends React.Component {
         const openDiff = {
             display: 'inline-block',
             whiteSpace: 'prewrap',
-            backgroundColor: '#FDF5ED',
+            backgroundColor: '#fce8c6',
             padding: 5,
             paddingLeft: 10,
             borderStyle: 'solid',
