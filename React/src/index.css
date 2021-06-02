@@ -191,7 +191,7 @@ input[type=text], input[type=password] {
   font-size: auto;
   display:inline-block;
   text-align: center;
-  background-color: #4ab3b3e1;
+  background-color: #6699cc;
 }
 
 .submit2 {
@@ -362,14 +362,16 @@ span.psw {
 
 .pill-nav a {
   display: inline-block;
-  color: rgb(5, 238, 160);
+  color: #000000 ;
+  /* color: rgb(5, 238, 160); */
   text-align: center;
   padding: 14px;
-  font-size: 16px;
+  font-size: 17px;
   border-radius: 15px;
   height:fit-content;
   width: fit-content;
-  font-weight: bold;
+  font-weight: 600;
+  text-decoration: none;
 }
 
 .navbar {
