@@ -28,7 +28,7 @@ class ReviewCreator extends React.Component {
     }
 
     componentDidMount = async () => {
-        document.body.style.background = "#F5F5DC";
+        document.body.style.background = "#d0f0f0e1";
         const tokens = await Auth.currentSession();
         const userName = tokens.getIdToken().payload['cognito:username'];
         var userNameHold = userName.charAt(0).toUpperCase() + userName.slice(1);
@@ -69,32 +69,7 @@ class ReviewCreator extends React.Component {
           }).then(res => {
             this.setState({newCommID: res.data})
           })
-        // await axios.post("https://www.4424081204.com:1111/COMMITS_ON_REVIEWS", {
-        //     CommID: this.state.newCommID,
-        //     REVID: 1,
-        //     CommDT: this.state.curTime,
-        //     CommDiff: this.state.diffText
-        //   }, {headers: {accesstoken: this.state.CookieSave}}).then(function (res) {
-        //   })
-
-
-        //   await axios.post("https://www.4424081204.com:1111/COMMENTS_ON_REVIEWS", {
-        //     PIDREF: this.state.commentId,
-        //     DT: this.state.curTime,
-        //     COMM: this.state.comments,            
-        //     UNameC: this.state.Uname,            
-        //   }, {headers: {accesstoken: this.state.CookieSave}}).then(function (res) {
-        //         // console.log(res);
-        //   })
-        //   this.setState({
-        //   step: 1
-        //   });
     }
-    
-
-
-
-
 
     handleClick2() {
         axios.post('https://www.4424081204.com/full_diff', {
@@ -136,8 +111,6 @@ class ReviewCreator extends React.Component {
           })
     }
 
-
-
     showFile() {
 
         const reader = new FileReader();
@@ -166,23 +139,17 @@ class ReviewCreator extends React.Component {
 
         return (
 
-            <div>
-                <div className='test2'><NavBar/></div>
-                <div className="ReviewCreator">
+            <div className='grad1'>
+                <NavBar/>
+                
                     {this.props.children}
-                    <button onClick={(e) => this.handleClick1()}>
-                        Set minimal diff
-                    </button>
-                    <button onClick={(e) => this.handleClick2()}>
-                        Set full diff
-                    </button>
-                    <br/>
-                    <button onClick={(e) => this.createDiff()}>
-                        Create Diff
-                    </button>
-                    <button onClick={(e) => this.clearDiffs()}>
-                        Clear Diffs
-                    </button>
+                    <div className="button">
+                    <button onClick={(e) => this.handleClick1()}>Set minimal diff</button> &nbsp;
+                    <button onClick={(e) => this.handleClick2()}>Set full diff</button> &nbsp;&nbsp;&nbsp;&nbsp;
+                    {/* <br/>
+                    <br/> */}
+                    <button onClick={(e) => this.createDiff()}>Create Diff</button> &nbsp;
+                    <button onClick={(e) => this.clearDiffs()}>Clear Diffs</button>
                 </div>
                 <div style={{padding: 10}}>
                     {this.state.diffList}
