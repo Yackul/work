@@ -46,7 +46,7 @@ input[type=text], input[type=password] {
 
 .submit_Overlay {  
   font-size: auto;
-  background-color: #4ab3b3e1;
+  background-color: #6699cc;
   color: black;
   padding: 13px 12px;
   margin: 4px 4px;
@@ -252,9 +252,10 @@ img.avatar2 {
   top: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(250, 136, 42, 0.3); /* Black background with opacity */
+  background-color: rgba(253, 201, 158, 0.7); /* Black background with opacity */
   z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
   cursor: pointer; /* Add a pointer on hover */
+  overflow-y:scroll;
 }
 
 #overlay2 {
@@ -285,7 +286,7 @@ img.avatar2 {
 
 #text4{
   position: relative;
-  background-color: rgb(82, 209, 167);
+  background-color: #4682b4;
   top: 25%;
   left: 50%;
   border-radius: 8px;

@@ -129,7 +129,9 @@ class NavBar extends React.Component{
         var filtered5 = this.state.rFidRefLST.filter(function (el) {
             return el!= null;
         })
-        const Ritems = Object.entries(dRResult).map(([key2, value2], index) => <div style={{border: "solid #4ab3b3e1", borderRadius: "12px", marginTop: "2px", padding: "2px"}} key = {key2}><div>Invite to review: {filtered3[index]}</div><div>On: {filtered4[index]}</div><input type='submit' className='submit_Overlay' value={"Accept invite from " + value2} onClick={() => this.acceptRevInv(key2, filtered3[index], index, filtered5)}/><input type='submit' className='submit_Overlay' value={"Decline invite from " + value2} onClick={() => this.declineRevInv(key2, value2)}/><br></br></div>)
+        console.log(filtered5)
+        const Ritems = Object.entries(dRResult).map(([key2, value2], index) => <div style={{border: "solid black", borderRadius: "2px", marginTop: "2px", padding: "2px"}} key = {key2}><div>Invite to review: {filtered3[index]}</div><div>On: {filtered4[index]}</div><input type='submit' className='submit_Overlay' value={"Accept invite from " + value2} onClick={() => this.acceptRevInv(key2, filtered3[index], index, filtered5)}/><input type='submit' className='submit_Overlay' value={"Decline invite from " + value2} onClick={() => this.declineRevInv(key2, value2)}/><br></br></div>)
+        console.log(Ritems)
         return Ritems
     }
     
@@ -144,7 +146,7 @@ class NavBar extends React.Component{
         var filtered2 = this.state.invDT.filter(function (el) {
             return el != null;
         });
-        const items = Object.entries(dResult).map(([key, value], index) => <div style={{border: "solid #4ab3b3e1", borderRadius: "12px", marginTop: "2px", padding: "2px"}} key = {key}><div >Invite to project: {filtered[index]}</div><div>On: {filtered2[index]}</div><input type='submit' className='submit_Overlay' value={"Accept invite from " + value} onClick={() => this.acceptInv(key, filtered[index])}/><input type='submit' className='submit_Overlay' value={"Decline invite from " + value} onClick={() => this.declineInv(key, value)}/><br></br></div>)
+        const items = Object.entries(dResult).map(([key, value], index) => <div style={{border: "solid black", borderRadius: "2px", marginTop: "2px", padding: "2px"}} key = {key}><div >Invite to project: {filtered[index]}</div><div>On: {filtered2[index]}</div><input type='submit' className='submit_Overlay' value={"Accept invite from " + value} onClick={() => this.acceptInv(key, filtered[index])}/><input type='submit' className='submit_Overlay' value={"Decline invite from " + value} onClick={() => this.declineInv(key, value)}/><br></br></div>)
         return items
     }
 
@@ -207,10 +209,11 @@ class NavBar extends React.Component{
 
                 {this.state.Count > 0 && 
                     <div id="overlay" onClick={this.off}>
-                        <div id="text4"><b>Projects</b>{invites}</div>                      
+                        {/*<div id="text4"><b>Projects</b>{invites}</div>        */}              
                         <div id="text4"><b>Reviews</b>{Rinvites}</div>
                     </div>
                 }
+                
                 {this.state.Count === 0 &&
                     <div id="overlay" onClick={this.off}>
                         <div id="text4">No Invites Found!{<br></br>}Join your peers projects to get invited to review a file today!</div>

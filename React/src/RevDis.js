@@ -189,7 +189,7 @@ class RevDis extends React.Component {
     //by clicking on a name from the Collaborator menu, a user can be invited
     //to review the file immediately
     inviteRevUser = async (iuName) => {
-        await axios.get("https://www.4424081204.com:1111/INVITE_TO_REV/" + iuName, {
+        await axios.get("http://localhost:3002/INVITE_TO_REV/" + iuName, {
             headers: {accesstoken: this.state.CookieSave, fidref: this.state.fileID}
         }).then(res => {
             if ((res.data[0] === undefined) === false) {
@@ -199,6 +199,7 @@ class RevDis extends React.Component {
                 })
             }
         })
+        console.log(this.state.resu)
         if (this.state.resu === -2) {
             await axios.post("https://www.4424081204.com:1111/INVITE_TO_REV/", {
                 FIDREF: this.state.fileID,
