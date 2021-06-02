@@ -381,8 +381,6 @@ const router = app => {
     app.get('/INVITE_TO_REV/:RIUNAME', (request, response) => {
         const RIUNAME = request.params.RIUNAME;
         const RIREVID = request.headers.fidref;
-        console.log("here")
-        console.log(RIREVID)
         if(RIREVID === undefined){
             pool.query('SELECT * FROM INVITE_TO_REV WHERE RIUNAME = ?', RIUNAME, (error, result) => {
                 if (error) console.log(error);

@@ -468,6 +468,7 @@ class ProjectsDisplayPage extends React.Component {
 
                         <div className='grad1'>
                             <div className= "files-box">
+                                <b style={{fontWeight: "bolder", textDecoration: "underline", color: 'black'}}>|--File Name{"    --    "}File Type -- Date Upload -- Date Modified --|</b>
                                 {fileLinks}
                             </div>
                         </div>
