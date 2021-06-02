@@ -72,6 +72,7 @@ class AccountRecovery extends React.Component {
   }
 
   render() {
+    document.body.style.background = "#F5F5DC";
     return (
         <div className='grad1'>
         <div className="container">

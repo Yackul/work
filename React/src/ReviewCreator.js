@@ -136,12 +136,11 @@ class ReviewCreator extends React.Component {
     }
 
     render() {
-
+        document.body.style.background = "#F5F5DC";    
         return (
-
             <div className='grad1'>
                 <NavBar/>
-                
+                    <br/>
                     {this.props.children}
                     <div className="button">
                     <button onClick={(e) => this.handleClick1()}>Set minimal diff</button> &nbsp;
