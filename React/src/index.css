@@ -35,7 +35,7 @@ input[type=text], input[type=password] {
   font-size: auto;
   display: flex;
   float: right;
-  background-color: #4ab3b3e1;
+  background-color: #6699cc ;;
   color: black;
   padding: 4px 4px;
   border: 4px;
@@ -354,7 +354,7 @@ span.psw {
   position: absolute;
   left: 92%;
   margin:auto;
-  background-color: #3f7faa ;
+  background-color: #4682b4 ;
   padding: 14px 26px;
   border: none;
   cursor: pointer;
@@ -544,9 +544,9 @@ td, th {
 }
 
 tr:nth-child(even) {
-  background-color: #b3fdfde1;
+  background-color: #f7e1bc;
 }
 
 tr:nth-child(odd) {
-  background-color: #8cb1b1e1;
+  background-color: #c4b6a0;
 }

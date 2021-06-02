@@ -137,7 +137,8 @@ class File_Hist extends React.Component {
     }  
 
     render() {
-
+        document.body.style.background = "#F5F5DC";    
+        
         const Collab_Display = this.state.Collab_List.map((item, i) => <div key={i}>{item}<div className='divider'></div></div>)
         const Hist_Display = this.state.Diffs_Arr.map((item, i) => <tr key={i}><th>{this.state.Diffs_Arr[i].DID}</th><th>{this.state.Diffs_Arr[i].CREATEDBY}</th><th>{this.state.Diffs_Arr[i].FIDREF}</th><th>{this.state.Diffs_Arr[i].CommDT}</th><th>{this.state.Diffs_Arr[i].APPROVED}</th><th>{this.state.Diffs_Arr[i].OldFNAME}</th><th>{this.state.Diffs_Arr[i].OldFTYPE}</th><th><button style={{background:'lightblue', fontWeight:'bold'}} onClick={() => this.openPopup(i)}>x</button></th></tr>);
 
