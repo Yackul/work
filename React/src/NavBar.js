@@ -19,7 +19,6 @@ class NavBar extends React.Component{
             invRevName: [],
             invRevDT: [],
             invNum: 0,
-            RinvLST: [],
             RinvULST: [],
             RinvNum: 0,
             rFidRefLST: [],
@@ -84,7 +83,6 @@ class NavBar extends React.Component{
           await axios.get("https://www.4424081204.com:1111/invite_to_rev/" + this.state.Uname, {
               headers: {accesstoken: this.state.CookieSave}
           }).then(res2 => {     
-              var hldLST3 = []
               var hldLST4 = []
               var hldLST5 = []
               var hldRevNames = []
@@ -95,7 +93,6 @@ class NavBar extends React.Component{
                   if(res2.data[z].ACCEPTED === 0){
                     hldRevDT[z] = res2.data[z].DT 
                     hldRevNames[z] = res2.data[z].FileName
-                    hldLST3[z] = res2.data[z].PIDREF
                     hldLST4[z] = res2.data[z].RFUNAME
                     hldLST5[z] = res2.data[z].FIDREF
                     b++
@@ -104,7 +101,6 @@ class NavBar extends React.Component{
               this.setState({
                 invRevName: hldRevNames,
                 invRevDT: hldRevDT,
-                RinvLST: hldLST3,
                 RinvNum: b,
                 RinvULST: hldLST4,
                 rFidRefLST: hldLST5
@@ -116,7 +112,8 @@ class NavBar extends React.Component{
         }
 
       creRevInvButts() {
-        let list3 = this.state.RinvLST
+        let list3 = this.state.rFidRefLST
+        console.log(list3)
         let list4 = this.state.RinvULST
         var dRResult = {}
         list3.forEach((key2, i2) => dRResult[key2] = list4[i2])
@@ -129,9 +126,8 @@ class NavBar extends React.Component{
         var filtered5 = this.state.rFidRefLST.filter(function (el) {
             return el!= null;
         })
-        console.log(filtered5)
+        
         const Ritems = Object.entries(dRResult).map(([key2, value2], index) => <div style={{border: "solid black", borderRadius: "2px", marginTop: "2px", padding: "2px"}} key = {key2}><div>Invite to review: {filtered3[index]}</div><div>On: {filtered4[index]}</div><input type='submit' className='submit_Overlay' value={"Accept invite from " + value2} onClick={() => this.acceptRevInv(key2, filtered3[index], index, filtered5)}/><input type='submit' className='submit_Overlay' value={"Decline invite from " + value2} onClick={() => this.declineRevInv(key2, value2)}/><br></br></div>)
-        console.log(Ritems)
         return Ritems
     }
     
@@ -209,8 +205,8 @@ class NavBar extends React.Component{
 
                 {this.state.Count > 0 && 
                     <div id="overlay" onClick={this.off}>
-                        {/*<div id="text4"><b>Projects</b>{invites}</div>        */}              
-                        <div id="text4"><b>Reviews</b>{Rinvites}</div>
+                        <div id="text4"><b style={{color:"white",}}>Projects</b>{invites}<br></br><b style={{color:"white",}}> Reviews</b>{Rinvites}</div>          
+                        
                     </div>
                 }
                 

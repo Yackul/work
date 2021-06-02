@@ -285,11 +285,11 @@ img.avatar2 {
 }
 
 #text4{
-  position: relative;
+  position:relative;
   background-color: #4682b4;
-  top: 25%;
+  top:69%;
   left: 50%;
-  border-radius: 8px;
+  border-radius: 2px;
   padding: 3px;
   margin: 2px;
   font-size: 17px;
