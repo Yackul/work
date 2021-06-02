@@ -93,8 +93,7 @@ class CommentInput extends React.Component {
         }
     }
 
-
-    //Post to comment table ???
+    //Post to comment table
     popComment(e, f) {
          axios.post("https://www.4424081204.com:1111/COMMENTS_ON_REVIEWS", {
             PIDREF: this.props.PID,
@@ -112,13 +111,6 @@ class CommentInput extends React.Component {
     });   
 }
 
-// handleClick(e) {
-//     this.handleOnSubmit();
-//     this.popComment();
-//   }
-
-
-
     render() {
         return (
             <div>
@@ -130,8 +122,6 @@ class CommentInput extends React.Component {
 
                 </textarea>
                 <br/>
-                {/* <button onClick={this.handleOnSubmit.bind(this)} className="comment-box__submit-button">Submit</button> */}
-                {/* <input type="submit" className="comment-box__submit-button" value="Submit" onClick={() => {this.handleOnSubmit.bind(this); this.popComment();}}/> */}
                 <button onClick={this.handleOnSubmit.bind(this)} className="comment-box__submit-button">Submit</button>
                </div>
         );
