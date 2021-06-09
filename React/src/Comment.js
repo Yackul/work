@@ -93,7 +93,8 @@ Comment.propTypes = {
     isOpen: PropTypes.bool,
     children: PropTypes.node,
     comment: PropTypes.string,
-    splitSide: PropTypes.string
+    splitSide: PropTypes.string,
+    updateLine: PropTypes.func
 };
 
 export default Comment;

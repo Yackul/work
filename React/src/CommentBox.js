@@ -14,7 +14,7 @@ class CommentBox extends React.Component {
             commentId: 1,
             Uname: '',
             curTime : new Date().toLocaleString(),
-            comment: '',
+            comment: ''
         };
     }
 
@@ -39,6 +39,7 @@ class CommentBox extends React.Component {
             <div>
                 <CommentList comments={this.state.comments}/>
                 <CommentInput PID={this.props.PID} FID={this.props.FID} lineIndex={this.props.lineIndex} updateLine={this.props.updateLine}
+                              reloadComments={this.props.reloadComments}
                               onCommentSubmit={this.handleOnSubmit.bind(this)} 
                               Uname={this.state.Uname}
                               splitSide={this.props.splitSide}
@@ -68,7 +69,7 @@ class CommentInput extends React.Component {
     handleOnSubmit(e) {
         let commentText = this.textInput.value;
         if (commentText) {
-            this.props.updateLine(this.props.Uname, commentText, this.props.lineIndex - 2)
+            this.props.updateLine(this.props.Uname, commentText, this.props.lineIndex-1, this.props.splitSide)
             this.props.onCommentSubmit(commentText);
             this.textInput.value = '';
         }
@@ -76,7 +77,7 @@ class CommentInput extends React.Component {
     }
 
     componentDidMount = async () => {
-        document.body.style.background = "#d0f0f0e1";
+        document.body.style.background = "#F5F5DC";
         try {
           await Auth.currentAuthenticatedUser()
           const tokens = await Auth.currentSession();          
@@ -106,9 +107,6 @@ class CommentInput extends React.Component {
         }, {headers: {accesstoken: this.state.CookieSave}}).then(function (res) {
             // console.log(res);
     })
-    this.setState({
-      step: 1
-    });   
 }
 
     render() {

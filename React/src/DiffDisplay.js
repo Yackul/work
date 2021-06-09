@@ -21,18 +21,54 @@ class DiffDisplay extends React.Component {
             splitRight: []
         };
         this.updateLine = this.updateLine.bind(this)
+        this.reloadComments = this.reloadComments.bind(this)
     }
 
-    updateLine(uname, comment, index) {
+    reloadComments = async() => {
+
+        const COMMID = this.state.routeID;
+        var hld2 = [];
+
+        await axios.get("http://localhost:3002/COMMENTS_ON_REVIEWS/" + COMMID, {
+            headers: {accesstoken: this.state.CookieSave}
+        }).then(res => {
+            var x
+            for (var i = 0; i < res.data.length; i++) {
+                x = i
+                hld2[x] = res.data[x]
+            }
+            this.setState({
+                commList: hld2
+            })
+            // console.log(res.data[0].COMM)
+        }).catch(error => {
+            console.log(error);
+        });
+        var x
+        for (var j = 0; j < this.state.commList.length; j++) {
+            x = j
+            if (!this.state.commentDict[this.state.commList[x].COMMENTINDEX]) {
+                this.state.commentDict[this.state.commList[x].COMMENTINDEX] = []
+            }
+            let side = this.state.commList[x].SplitSide
+            this.state.commentDict[this.state.commList[x].COMMENTINDEX].push(<Comment PID={this.props.PID}
+                                                                                      FID={this.props.FID}
+                                                                                      isOpen={true}
+                                                                                      comment={this.state.commList[x].UNameC + ": " + this.state.commList[x].COMM}
+                                                                                      splitSide={side}
+            />)
+        }
+    }
+
+    updateLine(uname, comment, index, split) {
         let d = this.state.commentDict
         let i = index
         let c = uname + ': ' + comment
         if (!d[i]) {
             d[i] = [];
         }
-        d[i].push(<Comment PID={this.props.PID} FID={this.props.FID} isOpen={false} comment={c}/>)
+        d[i].push(<Comment PID={this.props.PID} FID={this.props.FID} isOpen={false} comment={c} splitSide={split}/>)
         this.setState({commentDict: d})
-
     }
 
     componentDidMount = async () => {
@@ -75,35 +111,7 @@ class DiffDisplay extends React.Component {
         const COMMID = this.state.routeID;
         var hld2 = [];
 
-        await axios.get("http://localhost:3002/COMMENTS_ON_REVIEWS/" + COMMID, {
-            headers: {accesstoken: this.state.CookieSave}
-        }).then(res => {
-            var x
-            for (var i = 0; i < res.data.length; i++) {
-                x = i
-                hld2[x] = res.data[x]
-            }
-            this.setState({
-                commList: hld2
-            })
-            // console.log(res.data[0].COMM)
-        }).catch(error => {
-            console.log(error);
-        });
-        var x
-        for (var j = 0; j < this.state.commList.length; j++) {
-            x = j
-            if (!this.state.commentDict[this.state.commList[x].COMMENTINDEX]) {
-                this.state.commentDict[this.state.commList[x].COMMENTINDEX] = []
-            }
-            let side = this.state.commList[x].SplitSide
-            this.state.commentDict[this.state.commList[x].COMMENTINDEX].push(<Comment PID={this.props.PID}
-                                                                                           FID={this.props.FID}
-                                                                                           isOpen={true}
-                                                                                           comment={this.state.commList[x].UNameC + ": " + this.state.commList[x].COMM}
-                                                                                           splitSide={side}
-            />)
-        }
+        await this.reloadComments()
     }
 
 
@@ -140,6 +148,7 @@ class DiffDisplay extends React.Component {
             borderStyle: 'solid',
             borderWidth: 2,
             margin: 5,
+            paddingRight: 20
         };
 
         const closedDiff = {
@@ -196,6 +205,7 @@ class DiffDisplay extends React.Component {
                                         FID={this.props.FID}
                                         color={'#038A30'}
                                         updateLine={this.updateLine}
+                                        reloadComments={this.reloadComments}
                                         lineText={line}
                                         lineIndex={index + 1}
                                         showComment={false}
@@ -213,6 +223,7 @@ class DiffDisplay extends React.Component {
                                         FID={this.props.FID}
                                         color={'#EB0E0E'}
                                         updateLine={this.updateLine}
+                                        reloadComments={this.reloadComments}
                                         lineText={line}
                                         lineIndex={index + 1}
                                         showComment={false}
@@ -229,6 +240,7 @@ class DiffDisplay extends React.Component {
                                         PID={this.props.PID}
                                         FID={this.props.FID}
                                         updateLine={this.updateLine}
+                                        reloadComments={this.reloadComments}
                                         lineText={line}
                                         lineIndex={index + 1}
                                         showComment={false}
@@ -254,6 +266,7 @@ class DiffDisplay extends React.Component {
                                         FID={this.props.FID}
                                         color={'#038A30'}
                                         updateLine={this.updateLine}
+                                        reloadComments={this.reloadComments}
                                         lineText={line}
                                         lineIndex={index + 1}
                                         showComment={false}
@@ -271,6 +284,7 @@ class DiffDisplay extends React.Component {
                                         FID={this.props.FID}
                                         color={'#EB0E0E'}
                                         updateLine={this.updateLine}
+                                        reloadComments={this.reloadComments}
                                         lineText={line}
                                         lineIndex={index + 1}
                                         showComment={false}
@@ -287,6 +301,7 @@ class DiffDisplay extends React.Component {
                                         PID={this.props.PID}
                                         FID={this.props.FID}
                                         updateLine={this.updateLine}
+                                        reloadComments={this.reloadComments}
                                         lineText={line}
                                         lineIndex={index + 1}
                                         showComment={false}
@@ -308,6 +323,7 @@ class DiffDisplay extends React.Component {
                                         FID={this.props.FID}
                                         color={'#038A30'}
                                         updateLine={this.updateLine}
+                                        reloadComments={this.reloadComments}
                                         lineText={line}
                                         lineIndex={index + 1}
                                         showComment={false}
@@ -325,6 +341,7 @@ class DiffDisplay extends React.Component {
                                         FID={this.props.FID}
                                         color={'#EB0E0E'}
                                         updateLine={this.updateLine}
+                                        reloadComments={this.reloadComments}
                                         lineText={line}
                                         lineIndex={index + 1}
                                         showComment={false}
@@ -341,6 +358,7 @@ class DiffDisplay extends React.Component {
                                         PID={this.props.PID}
                                         FID={this.props.FID}
                                         updateLine={this.updateLine}
+                                        reloadComments={this.reloadComments}
                                         lineText={line}
                                         lineIndex={index + 1}
                                         showComment={false}
