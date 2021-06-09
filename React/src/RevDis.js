@@ -167,7 +167,7 @@ class RevDis extends React.Component {
                         <DiffDisplay
                             FID={this.state.fileID}
                             PID={this.state.routeID}
-                            isOpen={false}
+                            isOpen={true}
                             diffText={diffRes}
                             isSplit={this.state.isSplit}>
                         </DiffDisplay>

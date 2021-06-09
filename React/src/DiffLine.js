@@ -27,15 +27,14 @@ class DiffLine extends React.Component {
     render() {
         if (this.state.showComment) {
             return (
-                
                 <div>
                 <button className="submit3" onClick={(e) => this.close()}> {this.props.lineIndex}</button>
                     <text style={{color: this.props.color}}>{this.props.lineText}</text>
-                <Comment PID={this.props.PID} FID={this.props.FID} updateLine={this.props.updateLine} reloadComments={this.props.reloadComments} lineIndex={this.props.lineIndex} splitSide={this.props.splitSide} open={this.open} close={this.close}/>
+                <Comment PID={this.props.PID} FID={this.props.FID} updateLine={this.props.updateLine} lineIndex={this.props.lineIndex} splitSide={this.props.splitSide} open={this.open} close={this.close}/>
             </div>
             )
         } else {
-            return (<div>
+            return (<div style={{whiteSpace: 'nowrap'}}>
                 <button className="submit3" onClick={this.open}> {this.props.lineIndex}</button>
                 <text style={{color: this.props.color}}>{this.props.lineText}</text>
             </div>

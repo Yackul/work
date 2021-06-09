@@ -39,7 +39,6 @@ class CommentBox extends React.Component {
             <div>
                 <CommentList comments={this.state.comments}/>
                 <CommentInput PID={this.props.PID} FID={this.props.FID} lineIndex={this.props.lineIndex} updateLine={this.props.updateLine}
-                              reloadComments={this.props.reloadComments}
                               onCommentSubmit={this.handleOnSubmit.bind(this)} 
                               Uname={this.state.Uname}
                               splitSide={this.props.splitSide}
@@ -68,12 +67,12 @@ class CommentInput extends React.Component {
 
     handleOnSubmit(e) {
         let commentText = this.textInput.value;
+        this.popComment(commentText, this.props.lineIndex)
         if (commentText) {
             this.props.updateLine(this.props.Uname, commentText, this.props.lineIndex-1, this.props.splitSide)
             this.props.onCommentSubmit(commentText);
             this.textInput.value = '';
         }
-        this.popComment(commentText, this.props.lineIndex)
     }
 
     componentDidMount = async () => {
