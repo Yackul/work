@@ -244,6 +244,14 @@ img.avatar2 {
   padding: 5px 20px 5px 20px;
 }
 
+img.notif {   
+  float: left;
+  width: 30px;
+  border-radius: 100%;
+  padding: 10px 5px 10px 5px;
+  margin-right: 10px;
+}
+
 #overlay {
   position: fixed; /* Sit on top of the page content */
   display: none; /* Hidden by default */
@@ -351,7 +359,7 @@ span.psw {
 }
 
 .sign-out{
-  position: absolute;
+  position:sticky;
   left: 92%;
   margin:auto;
   background-color: #4682b4 ;

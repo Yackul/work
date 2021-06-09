@@ -428,6 +428,14 @@ class RevDis extends React.Component {
         })
     }
 
+    on() {
+        document.getElementById("delete_overlay").style.display = "block";
+    }
+      
+    off() {
+        document.getElementById("delete_overlay").style.display = "none";
+    }
+
     render() {
 
 
@@ -521,11 +529,22 @@ class RevDis extends React.Component {
                                                 | # of adjusted lines: {this.state.adj_num_of_lines}
                                             </div>
                                             <div className = "file_display_delete">
-                                                <input type='submit' className='submit_delete' value="Delete Review" onClick={this.openPopup}/>
+                                                <input type='submit' className='submit_delete' value="Delete Review" onClick={this.on}/>
+                                            </div>
+                                            <div id="delete_overlay" onClick={this.off}>
+                                                <div style={{justifyContent:"center"}}><p style={{justifyContent:"center"}}>This is permanent, and cannot be reversed</p><input type='submit' className='submit' value='Are you sure?' onClick={this.confirmDel}/></div>
                                             </div>
                                         </div>
-                                        {popup}
-                                        <div className="file_contents_margin">{this.state.gotRev}</div>
+                                        <div>
+                                            <DiffDisplay
+                                                FID={this.state.fileID}
+                                                PID={this.state.routeID}
+                                                isOpen={true}
+                                                diffText={this.state.gotRev}
+                                                isSplit={false}>
+                                            </DiffDisplay>
+                                        </div>
+                                        {/*<div className="file_contents_margin">{this.state.gotRev}</div>*/}
                                     </div>
                                 </div>
 

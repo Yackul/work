@@ -1,5 +1,7 @@
 import React from "react";
 import logo from './GitGoing.jpeg';
+import bell_none from './Bell_None.jpg'
+import bell_on from './Bell_On.jpg'
 import { Auth } from 'aws-amplify'
 import axios from 'axios';
 import Cookies from 'js-cookie'
@@ -196,7 +198,12 @@ class NavBar extends React.Component{
             <div className="navbar">
             <div className="pill-nav">
                 <img src={logo} alt="avatar2" className="avatar2" />   
-                <a onClick ={this.on} style={{ color: "red", borderRadius: "100%"}}>{this.state.Count}</a>    
+                {this.state.Count === 0 &&
+                <img src={bell_none} alt="notif" className="notif" onClick ={this.on} style={{borderRadius: "100%"}}/>   
+                } 
+                {this.state.Count > 0 &&
+                <img src={bell_on} alt="notif" className="notif" onClick ={this.on} style={{borderRadius: "100%", borderRadius: "25px", background:"red"}}/>   
+                } 
                 <a href="/Home">Home</a>  
                 <a href="/Me">My Profile</a>
                 <a href="/Projects">My Projects</a>
@@ -205,14 +212,14 @@ class NavBar extends React.Component{
 
                 {this.state.Count > 0 && 
                     <div id="overlay" onClick={this.off}>
-                        <div id="text4"><b style={{color:"white",}}>Projects</b>{invites}<br></br><b style={{color:"white",}}> Reviews</b>{Rinvites}</div>          
+                        <div id="text4"><b style={{color:"white",}}>Projects</b>{invites}<br></br><b style={{color:"white"}}> Reviews</b>{Rinvites}</div>          
                         
                     </div>
                 }
                 
                 {this.state.Count === 0 &&
                     <div id="overlay" onClick={this.off}>
-                        <div id="text4">No Invites Found!{<br></br>}Join your peers projects to get invited to review a file today!</div>
+                        <div id="text4">No Invites Found!{<br></br>}Join or create collaborative projects to receive review invites!</div>
                     </div>
                 }                
             </div>
