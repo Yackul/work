@@ -145,14 +145,14 @@ class DiffDisplay extends React.Component {
             sel.removeAllRanges();
             sel.addRange(range);
 
-            await this.setState({ testComponent: <div> {selection.toString()} </div> })
+            await this.setState({testComponent: <div> {selection.toString()} </div>})
             let endNode = selection.endContainer
             let endNode1 = endNode.nodeValue
-            await this.setState({ endComponent1: endNode1 })
+            await this.setState({endComponent1: endNode1})
             await this.setState({
                 lineComponent: this.state.lineComponent.concat(
                     <div>{await this.state.lineArray.map((line, index) => {
-                        this.setState({ lineText: line })
+                        this.setState({lineText: line})
                         if (line == this.state.endComponent1) {
                             this.setState({multiIndex1: index + 1})
                             // Colorize text
@@ -234,19 +234,24 @@ class DiffDisplay extends React.Component {
             borderWidth: 2
         }
 
-        const container = {
+        const container1 = {
             padding: 5
+        }
+
+        const container2 = {
+            display: 'flex',
+            justifyContent: 'center'
         }
 
         if (this.state.show) {
             return (
-                <div style={container}>
+                <div style={container1}>
                     <div style={{textAlign: 'center'}}>
                         <button className="submit_capped" onClick={this.selectionFunction}>
                             MultiComment
                         </button>
                     </div>
-                    <div style={{display: 'flex', justifyContent: 'center'}}>
+                    <div style={container2}>
                         <div className="DiffDisplay" style={openDiff}>
                             <text style={toggleTextMinus} onClick={(e) => this.close()}>-</text>
 
@@ -493,7 +498,6 @@ class DiffDisplay extends React.Component {
                                         </div>
                                     }
                                 })}</div>
-
                             </div>}
                         </div>
                     </div>
@@ -501,8 +505,10 @@ class DiffDisplay extends React.Component {
             );
         } else {
             return (
-                <div className="DiffDisplay" style={closedDiff}>
-                    <text style={toggleTextPlus} onClick={(e) => this.open()}>+</text>
+                <div style={container2}>
+                    <div className="DiffDisplay" style={closedDiff}>
+                        <text style={toggleTextPlus} onClick={(e) => this.open()}>+</text>
+                    </div>
                 </div>
             )
         }
