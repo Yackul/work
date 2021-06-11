@@ -72,8 +72,7 @@ class RevDis extends React.Component {
             }).then(res => {
                 if (res.data[0] === undefined) {
                     return window.location = "/Err404"
-                }
-                else if(res.data[0].FSTATUS < 0){
+                } else if (res.data[0].FSTATUS < 0) {
                     return window.location = "/Err404"
                 }
                 this.setState({
@@ -95,7 +94,7 @@ class RevDis extends React.Component {
         var x = 0;
         var y = 0;
         while ((j = input.indexOf(char, i)) !== -1) {
-            if(!input.substring(i, j).replace(/\s/g, '').length){
+            if (!input.substring(i, j).replace(/\s/g, '').length) {
                 y++
             }
             i = j + 1;
@@ -110,7 +109,7 @@ class RevDis extends React.Component {
         var x = 0;
         var y = 0;
         while ((j = input.indexOf(char, i)) !== -1) {
-            if(!input.substring(i, j).replace(/\s/g, '').length){
+            if (!input.substring(i, j).replace(/\s/g, '').length) {
                 y++
             }
             i = j + 1;
@@ -119,9 +118,9 @@ class RevDis extends React.Component {
 
         }
         this.setState({
-            num_of_lines: x+1,
+            num_of_lines: x + 1,
             blank_lines: y,
-            adj_num_of_lines: x+1-y
+            adj_num_of_lines: x + 1 - y
         })
     }
 
@@ -212,12 +211,12 @@ class RevDis extends React.Component {
             this.setState({
                 RevInv: 2
             })
-        }
-        else {
+        } else {
             await axios.put("https://www.4424081204.com:1111/INVITE_TO_REV/" + this.state.fileID, {
                 DT: this.state.curTime,
                 ACCEPTED: 0
-            }, {headers: {accesstoken: this.state.CookieSave, riuname: iuName}
+            }, {
+                headers: {accesstoken: this.state.CookieSave, riuname: iuName}
             }).then(res => {
                 this.setState({
                     RevInv: 2
@@ -318,7 +317,7 @@ class RevDis extends React.Component {
             headers: {accesstoken: this.state.CookieSave, test: -1}
         }).then(res => {
             for (var i = 0; i < res.data.length; i++) {
-                if(res.data[i].FSTATUS === 1) {
+                if (res.data[i].FSTATUS === 1) {
                     temp[i] = res.data[i].FNAME
                 }
             }
@@ -331,7 +330,7 @@ class RevDis extends React.Component {
     createReview = async (e) => {
 
         e.preventDefault()
-        if(this.state.fileName === '' || this.state.error === 3){
+        if (this.state.fileName === '' || this.state.error === 3) {
             this.setState({
                 error: 1
             })
@@ -374,7 +373,7 @@ class RevDis extends React.Component {
 
     setFile = async (e) => {
         e.preventDefault()
-        if(e.target.files[0] === undefined){
+        if (e.target.files[0] === undefined) {
             this.setState({
                 error: 3
             })
@@ -433,10 +432,18 @@ class RevDis extends React.Component {
 
         let popup = null;
         if (this.state.isOpen) {
-            popup = (<Popup message={<div><p>This is permanent, and cannot be reversed</p><input type='submit' className='submit' value='Are you sure?' onClick={this.confirmDel}/></div>} closeMe={this.closePopup}/>);
+            popup = (<Popup
+                message={<div><p>This is permanent, and cannot be reversed</p><input type='submit' className='submit'
+                                                                                     value='Are you sure?'
+                                                                                     onClick={this.confirmDel}/></div>}
+                closeMe={this.closePopup}/>);
         }
 
-        const items = this.state.cHld.map((item, i) => <div key={i}><Link to={"/Projects/" + this.state.routeID + "/" + this.state.routePara} onClick={() => this.inviteRevUser(item)}>{item}<div className='divider'></div></Link></div>)
+        const items = this.state.cHld.map((item, i) => <div key={i}><Link
+            to={"/Projects/" + this.state.routeID + "/" + this.state.routePara}
+            onClick={() => this.inviteRevUser(item)}>{item}
+            <div className='divider'></div>
+        </Link></div>)
 
         switch (this.state.authState) {
             case ('loading'):
@@ -446,26 +453,31 @@ class RevDis extends React.Component {
 
 
                     <div>
-                        <div className="test2" style={{display:'flex', justifyContent:'center'}}>
+                        <div className="test2" style={{display: 'flex', justifyContent: 'center'}}>
                             <NavBar/>
                         </div>
 
-                        <div className='boldtextSB' style={{marginLeft: '20px', marginRight: 'auto', paddingTop:'8px'}}>
+                        <div className='boldtextSB'
+                             style={{marginLeft: '20px', marginRight: 'auto', paddingTop: '8px'}}>
                             Project: <Link to={"/Projects/" + this.state.routeID}>{this.state.ProjName}</Link>
                         </div>
 
                         <div className='boldtextLSB' style={{marginLeft: '20px', marginRight: 'auto'}}>
-                                File: {this.state.routePara}<br></br>File
-                                Type: {this.state.routePara.split('.').pop()}</div>
+                            File: {this.state.routePara}<br></br>File
+                            Type: {this.state.routePara.split('.').pop()}</div>
 
-                        <Link to={"/Projects/" + this.state.routeID + "/" + this.state.routePara + "/History_" + this.state.fileID}className='boldtextSDB' style={{marginLeft: '20px', marginRight: 'auto'}}>
+                        <Link
+                            to={"/Projects/" + this.state.routeID + "/" + this.state.routePara + "/History_" + this.state.fileID}
+                            className='boldtextSDB' style={{marginLeft: '20px', marginRight: 'auto'}}>
                             File History
                         </Link>
 
-                        <div style={{display:'flex'}}>
-                            <div style={{marginLeft:'20px', marginRight:'auto', marginTop: '8px', marginBottom: '8px'}} className='collab-box'>
+                        <div style={{display: 'flex'}}>
+                            <div
+                                style={{marginLeft: '20px', marginRight: 'auto', marginTop: '8px', marginBottom: '8px'}}
+                                className='collab-box'>
 
-                                <div style={{color:'lightcoral'}}>Collaborators:
+                                <div style={{color: 'lightcoral'}}>Collaborators:
 
                                     <div className='divider'></div>
 
@@ -474,76 +486,82 @@ class RevDis extends React.Component {
                                 {items}
 
                                 {this.state.RevInv === 2 &&
-                                    <div className='smllTEST'>Invite Sent!</div>
+                                <div className='smllTEST'>Invite Sent!</div>
                                 }
 
                             </div>
 
                             {this.state.isReview !== 1 &&
 
+                            <div>
+                                {this.state.step !== 3 &&
+                                <input type="submit" className='submit' value="Update File"
+                                       onClick={this.updatingReview}/>
+                                }
+                                {this.state.step === 3 &&
                                 <div>
-                                    {this.state.step !==3 &&
-                                        <input type="submit" className='submit' value="Update File" onClick={this.updatingReview}/>
+
+                                    <input type='submit' className='submitRED' value='Create Review'
+                                           style={{alignSelf: "center"}} onClick={this.createReview}/>
+
+                                    {this.state.error === 1 &&
+                                    <div className='smll'>No file selected. Please try again.</div>
                                     }
-                                    {this.state.step === 3 &&
-                                        <div>
 
-                                            <input type='submit' className='submitRED' value='Create Review' style={{alignSelf: "center"}} onClick={this.createReview}/>
-
-                                            {this.state.error === 1 &&
-                                                <div className = 'smll'>No file selected. Please try again.</div>
-                                            }
-
-                                            {this.state.error === 2 &&
-                                                <div className = 'smll'>File already exists in project!</div>
-                                            }
-
-                                            {this.state.error === 3 &&
-                                                <div className='smll'>Something went wrong selecting a file. Please try again.</div>
-                                            }
-
-                                            <input type="file" onChange={(e) => this.setFile(e)}/>
-
-                                        </div>
+                                    {this.state.error === 2 &&
+                                    <div className='smll'>File already exists in project!</div>
                                     }
+
+                                    {this.state.error === 3 &&
+                                    <div className='smll'>Something went wrong selecting a file. Please try again.</div>
+                                    }
+
+                                    <input type="file" onChange={(e) => this.setFile(e)}/>
+
                                 </div>
+                                }
+                            </div>
                             }
                         </div>
 
                         {this.state.isReview === 0 &&
-                            <div className='grad1'>
-                                <div className='grad2' >
-                                    <div className="file_contents">
-                                        <div className="file_display_header">
-                                            <div className ="file_display_text">
-                                                # of lines: {this.state.num_of_lines + " "}
-                                                | # of blank lines: {this.state.blank_lines + " "}
-                                                | # of adjusted lines: {this.state.adj_num_of_lines}
-                                            </div>
-                                            <div className = "file_display_delete">
-                                                <input type='submit' className='submit_delete' value="Delete Review" onClick={this.openPopup}/>
-                                            </div>
+                        <div className='grad1'>
+                            <div className='grad2'>
+                                <div className="file_contents">
+                                    <div className="file_display_header">
+                                        <div className="file_display_text">
+                                            # of lines: {this.state.num_of_lines + " "}
+                                            | # of blank lines: {this.state.blank_lines + " "}
+                                            | # of adjusted lines: {this.state.adj_num_of_lines}
                                         </div>
-                                        {popup}
-                                        <div className="file_contents_margin">{this.state.gotRev}</div>
+                                        <div className="file_display_delete">
+                                            <input type='submit' className='submit_delete' value="Delete Review"
+                                                   onClick={this.openPopup}/>
+                                        </div>
                                     </div>
+                                    {popup}
+                                    <div className="file_contents_margin">{this.state.gotRev}</div>
                                 </div>
-
                             </div>
+                        </div>
                         }
 
                         {this.state.isReview === 1 &&
-                        <div className="grad1">
-                            <div><input type="submit" className='submit' value="Approve Changes"
-                                        onClick={this.approveReview}/>
-                                <input type="submit" className='submit' value="Reject Changes"
-                                       onClick={this.declineReview}/></div>
-                            <div style={{display: "flex", paddingLeft: 15, alignItems: "center"}}>
-                                <label className="switch">
-                                    <input type="checkbox" checked={this.state.isSplit} onChange={this.handleInputChange}/>
-                                    <span className="slider"/>
-                                </label>
-                                <p style={{paddingLeft: 10}}>Diff style: {(this.state.isSplit ? "Split diff" : "Unified diff")}</p>
+                        <div>
+                            <div className="grad1">
+                                <div><input type="submit" className='submit' value="Approve Changes"
+                                            onClick={this.approveReview}/>
+                                    <input type="submit" className='submit' value="Reject Changes"
+                                           onClick={this.declineReview}/></div>
+                                <div style={{display: "flex", paddingLeft: 15, alignItems: "center"}}>
+                                    <label className="switch">
+                                        <input type="checkbox" checked={this.state.isSplit}
+                                               onChange={this.handleInputChange}/>
+                                        <span className="slider"/>
+                                    </label>
+                                    <p style={{paddingLeft: 10}}>Diff
+                                        style: {(this.state.isSplit ? "Split diff" : "Unified diff")}</p>
+                                </div>
                             </div>
                             {this.state.revContent}
                         </div>

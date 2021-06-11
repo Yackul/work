@@ -130,19 +130,18 @@ class DiffDisplay extends React.Component {
     render() {
 
         const openDiff = {
-            display: 'inline-block',
-            whiteSpace: 'prewrap',
+            display: 'flex',
             backgroundColor: '#fce8c6',
             padding: 5,
             paddingLeft: 10,
             borderStyle: 'solid',
             borderWidth: 2,
             margin: 5,
-            paddingRight: 20
+            paddingRight: 20,
         };
 
         const closedDiff = {
-            backgroundColor: '#FDF5ED',
+            backgroundColor: '#fce8c6',
             width: 20,
             height: 20,
             textAlign: 'center',
@@ -154,11 +153,19 @@ class DiffDisplay extends React.Component {
             paddingRight: 3
         };
 
-        const toggleText = {
+        const toggleTextMinus = {
             fontWeight: 'bold',
             fontSize: 18,
             fontFamily: 'Courier New',
-            cursor: 'pointer'
+            cursor: 'pointer',
+            paddingRight: 5
+        };
+
+        const toggleTextPlus = {
+            fontWeight: 'bold',
+            fontSize: 18,
+            fontFamily: 'Courier New',
+            cursor: 'pointer',
         };
 
         const diffTextStyle = {
@@ -178,11 +185,18 @@ class DiffDisplay extends React.Component {
             color: '#038A30'
         }
 
+        const splitHalf = {
+            flex: 1,
+            minWidth: 0,
+            overflowX: 'scroll',
+            border: 'inset',
+            borderWidth: 2
+        }
+
         if (this.state.show) {
             return (
                 <div className="DiffDisplay" style={openDiff}>
-                    <text style={toggleText} onClick={(e) => this.close()}>-</text>
-
+                    <text style={toggleTextMinus} onClick={(e) => this.close()}>-</text>
                     {this.props.isSplit == false &&
                     <div>
                         {this.state.lineArray.map((line, index) => {
@@ -242,8 +256,8 @@ class DiffDisplay extends React.Component {
                     </div>}
 
                     {this.props.isSplit == true &&
-                    <div style={{display: 'inline-flex'}}>
-                        <div style={{display: 'flex', flexDirection: 'column'}}>{this.state.splitLeft.map((line, index) => {
+                    <div style={{display: 'inline-flex', overflowX: 'auto'}}>
+                        <div style={splitHalf}>{this.state.splitLeft.map((line, index) => {
                             let side = "left"
                             if (line.charAt(0) === '+') {
                                 return <div>
@@ -297,7 +311,7 @@ class DiffDisplay extends React.Component {
                                 </div>
                             }
                         })}</div>
-                        <div>{this.state.splitRight.map((line, index) => {
+                        <div style={splitHalf}>{this.state.splitRight.map((line, index) => {
                             let side = "right"
                             if (line.charAt(0) === '+') {
                                 return <div>
@@ -358,7 +372,7 @@ class DiffDisplay extends React.Component {
         } else {
             return (
                 <div className="DiffDisplay" style={closedDiff}>
-                    <text style={toggleText} onClick={(e) => this.open()}>+</text>
+                    <text style={toggleTextPlus} onClick={(e) => this.open()}>+</text>
                 </div>
             )
         }
