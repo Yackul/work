@@ -9,6 +9,7 @@ class DiffLine extends React.Component {
         this.state = {
             showComment: props.showComment,
             lineArray: [],
+            multiCommentIndex: "",
             comments: []
         };
         this.open = this.open.bind(this)
@@ -27,17 +28,28 @@ class DiffLine extends React.Component {
     render() {
         if (this.state.showComment) {
             return (
-                
+
                 <div>
-                <button className="submit3" onClick={(e) => this.close()}> {this.props.lineIndex}</button>
-                    <text style={{color: this.props.color}}>{this.props.lineText}</text>
-                <Comment PID={this.props.PID} FID={this.props.FID} updateLine={this.props.updateLine} lineIndex={this.props.lineIndex} splitSide={this.props.splitSide} open={this.open} close={this.close}/>
-            </div>
+                    <button className="submit3" onClick={(e) => this.close()}> {this.props.lineIndex}</button>
+                    <text style={{ color: this.props.color }}>{this.props.lineText}</text>
+                    <Comment PID={this.props.PID} FID={this.props.FID} updateLine={this.props.updateLine} lineIndex={this.props.lineIndex} splitSide={this.props.splitSide} open={this.open} close={this.close} />
+                </div>
             )
-        } else {
+        }
+        else if (this.props.lineIndex == this.props.multiCommentIndex) {
+            return (
+
+                <div>
+                    <button className="submit3" onClick={(e) => this.close()}> {this.props.lineIndex}</button>
+                    <text style={{ color: this.props.color }}>{this.props.lineText}</text>
+                    <Comment PID={this.props.PID} FID={this.props.FID} updateLine={this.props.updateLine} lineIndex={this.props.lineIndex} splitSide={this.props.splitSide} open={this.open} close={this.close} />
+                </div>
+            )
+        }
+        else {
             return (<div>
                 <button className="submit3" onClick={this.open}> {this.props.lineIndex}</button>
-                <text style={{color: this.props.color}}>{this.props.lineText}</text>
+                <text style={{ color: this.props.color }}>{this.props.lineText}</text>
             </div>
             )
         }
