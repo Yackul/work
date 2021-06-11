@@ -563,7 +563,6 @@ class RevDis extends React.Component {
                                     {popup}
                                     <div className="file_contents_margin">{this.state.gotRev}</div>
                                 </div>
-                            </div>
                         </div>
                         }
 

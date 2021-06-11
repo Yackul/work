@@ -236,12 +236,12 @@ class DiffDisplay extends React.Component {
 
         if (this.state.show) {
             return (
-
-                <div className="DiffDisplay" style={openDiff}>
-                    <text style={toggleTextMinus} onClick={(e) => this.close()}>-</text>
-                    <button className="submit_delete" onClick={this.selectionFunction}>
+                <div>
+                    <button className="submit_capped" onClick={this.selectionFunction}>
                         MultiComment
                     </button>
+                <div className="DiffDisplay" style={openDiff}>
+                    <text style={toggleTextMinus} onClick={(e) => this.close()}>-</text>
 
                     {this.props.isSplit == false &&
                         <div>
@@ -479,6 +479,7 @@ class DiffDisplay extends React.Component {
                         })}</div>
 
                     </div>}
+                </div>
                 </div>
             );
         } else {
