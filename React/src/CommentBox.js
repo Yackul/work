@@ -14,7 +14,7 @@ class CommentBox extends React.Component {
             commentId: 1,
             Uname: '',
             curTime : new Date().toLocaleString(),
-            comment: '',
+            comment: ''
         };
     }
 
@@ -31,7 +31,7 @@ class CommentBox extends React.Component {
         let comment = {id: this.state.commentId, author: this.state.Uname, text: commentText}
         this.setState({comments: this.state.comments.concat(comment)});
         this.props.close()
-        
+
     }
 
     render() {
@@ -39,7 +39,7 @@ class CommentBox extends React.Component {
             <div>
                 <CommentList comments={this.state.comments}/>
                 <CommentInput PID={this.props.PID} FID={this.props.FID} lineIndex={this.props.lineIndex} updateLine={this.props.updateLine}
-                              onCommentSubmit={this.handleOnSubmit.bind(this)} 
+                              onCommentSubmit={this.handleOnSubmit.bind(this)}
                               Uname={this.state.Uname}
                               splitSide={this.props.splitSide}
                 />
@@ -67,22 +67,23 @@ class CommentInput extends React.Component {
 
     handleOnSubmit(e) {
         let commentText = this.textInput.value;
+        this.popComment(commentText, this.props.lineIndex)
         if (commentText) {
-            this.props.updateLine(this.props.Uname, commentText, this.props.lineIndex - 2)
+            this.props.updateLine(this.props.Uname, commentText, this.props.lineIndex-1, this.props.splitSide)
             this.props.onCommentSubmit(commentText);
             this.textInput.value = '';
         }
-        this.popComment(commentText, this.props.lineIndex)
     }
 
     componentDidMount = async () => {
+        document.body.style.background = "#F5F5DC";
         try {
           await Auth.currentAuthenticatedUser()
-          const tokens = await Auth.currentSession();          
+          const tokens = await Auth.currentSession();
           const userName = tokens.getIdToken().payload['cognito:username'];
           var userNameHold = userName.charAt(0).toUpperCase() + userName.slice(1);
           document.cookie = "clientaccesstoken="+ tokens.getAccessToken().getJwtToken()+';';
-          const temp = Cookies.get('clientaccesstoken')          
+          const temp = Cookies.get('clientaccesstoken')
           this.setState({ authState: 1,
             Uname: userNameHold,
             CookieSave: temp
@@ -99,15 +100,12 @@ class CommentInput extends React.Component {
             FIDREF: this.props.FID,
             COMMENTINDEX: f-1,
             DT: this.state.curTime,
-            COMM: e,            
+            COMM: e,
             UNameC: this.state.Uname,
             SplitSide: this.props.splitSide
         }, {headers: {accesstoken: this.state.CookieSave}}).then(function (res) {
             // console.log(res);
     })
-    this.setState({
-      step: 1
-    });   
 }
 
     render() {
@@ -142,7 +140,7 @@ class CommentList extends Component {
 
 class Comment extends Component {
     render() {
-        
+
         return (
             <li key={this.props.id} className="Comment">
                 {this.props.author}: {this.props.text}

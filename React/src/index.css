@@ -44,6 +44,19 @@ input[type=text], input[type=password] {
   border-radius: 6px;
 }
 
+.submit_capped {
+  font-size: auto;
+  background-color: #6699cc ;;
+  color: black;
+  padding: 4px 4px;
+  border: 4px;
+  cursor: pointer;
+  width: auto;
+  height: 25px;
+  border-radius: 6px;
+  margin-left: 4px;
+}
+
 .submit_Overlay {  
   font-size: auto;
   background-color: #6699cc;

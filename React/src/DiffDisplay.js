@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import DiffLine from "./DiffLine";
 import Comment from "./Comment";
-import { Auth } from 'aws-amplify';
+import {Auth} from 'aws-amplify';
 import Cookies from 'js-cookie';
 import axios from 'axios';
 import './index.css';
@@ -27,22 +27,21 @@ class DiffDisplay extends React.Component {
         this.updateLine = this.updateLine.bind(this)
     }
 
-    updateLine(uname, comment, index) {
+    updateLine(uname, comment, index, split) {
         let d = this.state.commentDict
         let i = index
         let c = uname + ': ' + comment
         if (!d[i]) {
             d[i] = [];
         }
-        d[i].push(<Comment PID={this.props.PID} FID={this.props.FID} isOpen={false} comment={c} />)
-        this.setState({ commentDict: d })
-
+        d[i].push(<Comment PID={this.props.PID} FID={this.props.FID} isOpen={false} comment={c} splitSide={split}/>)
+        this.setState({commentDict: d})
     }
 
     componentDidMount = async () => {
         try {
-            await this.setState({ lineArray: this.props.diffText.split(/\r?\n/) })
-            await this.setState({ lineArrayLength: this.state.lineArray.length })
+            await this.setState({lineArray: this.props.diffText.split(/\r?\n/)})
+            await this.setState({lineArrayLength: this.state.lineArray.length})
         } catch (err) {
             alert(err)
         }
@@ -63,7 +62,7 @@ class DiffDisplay extends React.Component {
                     right[index] = line
                 }
             })
-            this.setState({ splitLeft: left, splitRight: right })
+            this.setState({splitLeft: left, splitRight: right})
         } catch (err) {
             alert(err)
         }
@@ -75,12 +74,11 @@ class DiffDisplay extends React.Component {
             CookieSave: temp
         })
 
-
         const COMMID = this.state.routeID;
         var hld2 = [];
 
         await axios.get("http://localhost:3002/COMMENTS_ON_REVIEWS/" + COMMID, {
-            headers: { accesstoken: this.state.CookieSave }
+            headers: {accesstoken: this.state.CookieSave}
         }).then(res => {
             var x
             for (var i = 0; i < res.data.length; i++) {
@@ -90,7 +88,6 @@ class DiffDisplay extends React.Component {
             this.setState({
                 commList: hld2
             })
-            // console.log(res.data[0].COMM)
         }).catch(error => {
             console.log(error);
         });
@@ -102,11 +99,12 @@ class DiffDisplay extends React.Component {
             }
             let side = this.state.commList[x].SplitSide
             this.state.commentDict[this.state.commList[x].COMMENTINDEX].push(<Comment PID={this.props.PID}
-                FID={this.props.FID}
-                isOpen={true}
-                comment={this.state.commList[x].UNameC + ": " + this.state.commList[x].COMM}
-                splitSide={side}
+                                                                                      FID={this.props.FID}
+                                                                                      isOpen={true}
+                                                                                      comment={this.state.commList[x].UNameC + ": " + this.state.commList[x].COMM}
+                                                                                      splitSide={side}
             />)
+            this.setState({commentDict: this.state.commentDict})
         }
     }
 
@@ -126,11 +124,11 @@ class DiffDisplay extends React.Component {
     }
 
     open() {
-        this.setState({ show: true })
+        this.setState({show: true})
     }
 
     close() {
-        this.setState({ show: false })
+        this.setState({show: false})
     }
 
     selectionFunction = async () => {
@@ -138,8 +136,7 @@ class DiffDisplay extends React.Component {
 
         if (window.getSelection().toString() == "") {
             alert("Please highlight text")
-        }
-        else {
+        } else {
 
             let selection = window.getSelection().getRangeAt(0)
             let sel = window.getSelection();
@@ -157,7 +154,7 @@ class DiffDisplay extends React.Component {
                     <div>{await this.state.lineArray.map((line, index) => {
                         this.setState({ lineText: line })
                         if (line == this.state.endComponent1) {
-                            this.setState({ multiIndex1: index + 1 })
+                            this.setState({multiIndex1: index + 1})
                             // Colorize text
                             document.execCommand("BackColor", false, "#469AFC");
                             document.designMode = "off";
@@ -173,18 +170,19 @@ class DiffDisplay extends React.Component {
     render() {
 
         const openDiff = {
-            display: 'inline-block',
-            whiteSpace: 'prewrap',
+            display: 'flex',
             backgroundColor: '#fce8c6',
             padding: 5,
             paddingLeft: 10,
             borderStyle: 'solid',
             borderWidth: 2,
             margin: 5,
+            paddingRight: 20,
+            maxWidth: '95%'
         };
 
         const closedDiff = {
-            backgroundColor: '#FDF5ED',
+            backgroundColor: '#fce8c6',
             width: 20,
             height: 20,
             textAlign: 'center',
@@ -196,11 +194,19 @@ class DiffDisplay extends React.Component {
             paddingRight: 3
         };
 
-        const toggleText = {
+        const toggleTextMinus = {
             fontWeight: 'bold',
             fontSize: 18,
             fontFamily: 'Courier New',
-            cursor: 'pointer'
+            cursor: 'pointer',
+            paddingRight: 5
+        };
+
+        const toggleTextPlus = {
+            fontWeight: 'bold',
+            fontSize: 18,
+            fontFamily: 'Courier New',
+            cursor: 'pointer',
         };
 
         const diffTextStyle = {
@@ -220,21 +226,162 @@ class DiffDisplay extends React.Component {
             color: '#038A30'
         }
 
+        const splitHalf = {
+            flex: 1,
+            minWidth: 0,
+            overflowX: 'scroll',
+            border: 'inset',
+            borderWidth: 2
+        }
+
+        const container = {
+            padding: 5
+        }
+
         if (this.state.show) {
             return (
+                <div style={container}>
+                    <div style={{textAlign: 'center'}}>
+                        <button className="submit_capped" onClick={this.selectionFunction}>
+                            MultiComment
+                        </button>
+                    </div>
+                    <div style={{display: 'flex', justifyContent: 'center'}}>
+                        <div className="DiffDisplay" style={openDiff}>
+                            <text style={toggleTextMinus} onClick={(e) => this.close()}>-</text>
 
-                <div className="DiffDisplay" style={openDiff}>
-                    <text style={toggleText} onClick={(e) => this.close()}>-</text>
-                    <button className="submit_delete" onClick={this.selectionFunction}>
-                        MultiComment
-                    </button>
+                            {this.props.isSplit == false &&
+                            <div>
+                                {this.state.lineArray.map((line, index) => {
+                                    let side = "none"
+                                    if (line.charAt(0) === '+') {
+                                        if ((index + 1) == this.state.multiIndex1) {
+                                            return <div>
+                                                <DiffLine
 
-                    {this.props.isSplit == false &&
-                        <div>
-                            {this.state.lineArray.map((line, index) => {
-                                let side = "none"
-                                if (line.charAt(0) === '+') {
-                                    if ((index + 1) == this.state.multiIndex1) {
+                                                    PID={this.props.PID}
+                                                    FID={this.props.FID}
+                                                    color={'#038A30'}
+                                                    updateLine={this.updateLine}
+                                                    lineText={line}
+                                                    lineIndex={index + 1}
+                                                    showComment={false}
+                                                    multiCommentIndex={this.state.multiIndex1}
+                                                    splitSide={side}>
+                                                </DiffLine>
+                                                {this.state.commentDict[index] && this.state.commentDict[index][0].props.splitSide === side && this.state.commentDict[index].map(comment =>
+                                                    <div
+                                                        key={comment}> {comment} </div>)}
+                                            </div>
+                                        } else {
+                                            return <div>
+                                                <DiffLine
+
+                                                    PID={this.props.PID}
+                                                    FID={this.props.FID}
+                                                    color={'#038A30'}
+                                                    updateLine={this.updateLine}
+                                                    lineText={line}
+                                                    lineIndex={index + 1}
+                                                    multiCommentIndex={''}
+                                                    showComment={false}
+                                                    splitSide={side}>
+                                                </DiffLine>
+                                                {this.state.commentDict[index] && this.state.commentDict[index][0].props.splitSide === side && this.state.commentDict[index].map(comment =>
+                                                    <div
+                                                        key={comment}> {comment} </div>)}
+                                            </div>
+                                        }
+
+                                    } else if (line.charAt(0) === '-') {
+                                        if ((index + 1) == this.state.multiIndex1) {
+                                            return <div>
+                                                <DiffLine
+
+                                                    PID={this.props.PID}
+                                                    FID={this.props.FID}
+                                                    color={'#EB0E0E'}
+                                                    updateLine={this.updateLine}
+                                                    lineText={line}
+                                                    lineIndex={index + 1}
+                                                    showComment={false}
+                                                    multiCommentIndex={this.state.multiIndex1}
+                                                    splitSide={side}>
+
+                                                </DiffLine>
+                                                {this.state.commentDict[index] && this.state.commentDict[index][0].props.splitSide === side && this.state.commentDict[index].map(comment =>
+                                                    <div
+                                                        key={comment}> {comment} </div>)}
+                                            </div>
+                                        } else {
+                                            return <div>
+                                                <DiffLine
+
+                                                    PID={this.props.PID}
+                                                    FID={this.props.FID}
+                                                    color={'#EB0E0E'}
+                                                    updateLine={this.updateLine}
+                                                    lineText={line}
+                                                    lineIndex={index + 1}
+                                                    multiCommentIndex={''}
+                                                    showComment={false}
+                                                    splitSide={side}>
+
+                                                </DiffLine>
+                                                {this.state.commentDict[index] && this.state.commentDict[index][0].props.splitSide === side && this.state.commentDict[index].map(comment =>
+                                                    <div
+                                                        key={comment}> {comment} </div>)}
+                                            </div>
+
+                                        }
+                                    } else {
+                                        if ((index + 1) == this.state.multiIndex1) {
+                                            return <div>
+                                                <DiffLine
+
+                                                    PID={this.props.PID}
+                                                    FID={this.props.FID}
+                                                    updateLine={this.updateLine}
+                                                    lineText={line}
+                                                    lineIndex={index + 1}
+                                                    showComment={false}
+                                                    multiCommentIndex={this.state.multiIndex1}
+                                                    splitSide={side}>
+
+                                                </DiffLine>
+                                                {this.state.commentDict[index] && this.state.commentDict[index][0].props.splitSide === side && this.state.commentDict[index].map(comment =>
+                                                    <div
+                                                        key={comment}> {comment} </div>)}
+                                            </div>
+                                        } else {
+                                            return <div>
+                                                <DiffLine
+
+                                                    PID={this.props.PID}
+                                                    FID={this.props.FID}
+                                                    updateLine={this.updateLine}
+                                                    lineText={line}
+                                                    lineIndex={index + 1}
+                                                    showComment={false}
+                                                    multiCommentIndex={''}
+                                                    splitSide={side}>
+
+                                                </DiffLine>
+                                                {this.state.commentDict[index] && this.state.commentDict[index][0].props.splitSide === side && this.state.commentDict[index].map(comment =>
+                                                    <div
+                                                        key={comment}> {comment} </div>)}
+                                            </div>
+
+                                        }
+                                    }
+                                })}
+                            </div>}
+
+                            {this.props.isSplit == true &&
+                            <div style={{display: 'inline-flex', overflowX: 'auto'}}>
+                                <div style={splitHalf}>{this.state.splitLeft.map((line, index) => {
+                                    let side = "left"
+                                    if (line.charAt(0) === '+') {
                                         return <div>
                                             <DiffLine
 
@@ -245,14 +392,53 @@ class DiffDisplay extends React.Component {
                                                 lineText={line}
                                                 lineIndex={index + 1}
                                                 showComment={false}
-                                                multiCommentIndex={this.state.multiIndex1}
                                                 splitSide={side}>
+
                                             </DiffLine>
-                                            {this.state.commentDict[index] && this.state.commentDict[index][0].props.splitSide === side && this.state.commentDict[index].map(comment => <div
-                                                key={comment}> {comment} </div>)}
+                                            {this.state.commentDict[index] && this.state.commentDict[index][0].props.splitSide === side && this.state.commentDict[index].map(comment =>
+                                                <div
+                                                    key={comment}> {comment} </div>)}
+                                        </div>
+                                    } else if (line.charAt(0) === '-') {
+                                        return <div>
+                                            <DiffLine
+
+                                                PID={this.props.PID}
+                                                FID={this.props.FID}
+                                                color={'#EB0E0E'}
+                                                updateLine={this.updateLine}
+                                                lineText={line}
+                                                lineIndex={index + 1}
+                                                showComment={false}
+                                                splitSide={side}>
+
+                                            </DiffLine>
+                                            {this.state.commentDict[index] && this.state.commentDict[index][0].props.splitSide === side && this.state.commentDict[index].map(comment =>
+                                                <div
+                                                    key={comment}> {comment} </div>)}
+                                        </div>
+                                    } else {
+                                        return <div>
+                                            <DiffLine
+
+                                                PID={this.props.PID}
+                                                FID={this.props.FID}
+                                                updateLine={this.updateLine}
+                                                lineText={line}
+                                                lineIndex={index + 1}
+                                                showComment={false}
+                                                splitSide={side}>
+
+                                            </DiffLine>
+                                            {this.state.commentDict[index] && this.state.commentDict[index][0].props.splitSide === side && this.state.commentDict[index].map(comment =>
+                                                <div
+                                                    key={comment}> {comment} </div>)}
                                         </div>
                                     }
-                                    else {
+                                })}</div>
+                                <div style={splitHalf}>{this.state.splitRight.map((line, index) => {
+                                    let side = "right"
+                                    if (line.charAt(0) === '+') {
                                         return <div>
                                             <DiffLine
 
@@ -262,17 +448,15 @@ class DiffDisplay extends React.Component {
                                                 updateLine={this.updateLine}
                                                 lineText={line}
                                                 lineIndex={index + 1}
-                                                multiCommentIndex={''}
                                                 showComment={false}
                                                 splitSide={side}>
-                                            </DiffLine>
-                                            {this.state.commentDict[index] && this.state.commentDict[index][0].props.splitSide === side && this.state.commentDict[index].map(comment => <div
-                                                key={comment}> {comment} </div>)}
-                                        </div>
-                                    }
 
-                                } else if (line.charAt(0) === '-') {
-                                    if ((index + 1) == this.state.multiIndex1) {
+                                            </DiffLine>
+                                            {this.state.commentDict[index] && this.state.commentDict[index][0].props.splitSide === side && this.state.commentDict[index].map(comment =>
+                                                <div
+                                                    key={comment}> {comment} </div>)}
+                                        </div>
+                                    } else if (line.charAt(0) === '-') {
                                         return <div>
                                             <DiffLine
 
@@ -283,36 +467,14 @@ class DiffDisplay extends React.Component {
                                                 lineText={line}
                                                 lineIndex={index + 1}
                                                 showComment={false}
-                                                multiCommentIndex={this.state.multiIndex1}
                                                 splitSide={side}>
 
                                             </DiffLine>
-                                            {this.state.commentDict[index] && this.state.commentDict[index][0].props.splitSide === side && this.state.commentDict[index].map(comment => <div
-                                                key={comment}> {comment} </div>)}
+                                            {this.state.commentDict[index] && this.state.commentDict[index][0].props.splitSide === side && this.state.commentDict[index].map(comment =>
+                                                <div
+                                                    key={comment}> {comment} </div>)}
                                         </div>
-                                    }
-                                    else {
-                                        return <div>
-                                            <DiffLine
-
-                                                PID={this.props.PID}
-                                                FID={this.props.FID}
-                                                color={'#EB0E0E'}
-                                                updateLine={this.updateLine}
-                                                lineText={line}
-                                                lineIndex={index + 1}
-                                                multiCommentIndex={''}
-                                                showComment={false}
-                                                splitSide={side}>
-
-                                            </DiffLine>
-                                            {this.state.commentDict[index] && this.state.commentDict[index][0].props.splitSide === side && this.state.commentDict[index].map(comment => <div
-                                                key={comment}> {comment} </div>)}
-                                        </div>
-
-                                    }
-                                } else {
-                                    if ((index + 1) == this.state.multiIndex1) {
+                                    } else {
                                         return <div>
                                             <DiffLine
 
@@ -322,297 +484,25 @@ class DiffDisplay extends React.Component {
                                                 lineText={line}
                                                 lineIndex={index + 1}
                                                 showComment={false}
-                                                multiCommentIndex={this.state.multiIndex1}
                                                 splitSide={side}>
 
                                             </DiffLine>
-                                            {this.state.commentDict[index] && this.state.commentDict[index][0].props.splitSide === side && this.state.commentDict[index].map(comment => <div
-                                                key={comment}> {comment} </div>)}
+                                            {this.state.commentDict[index] && this.state.commentDict[index][0].props.splitSide === side && this.state.commentDict[index].map(comment =>
+                                                <div
+                                                    key={comment}> {comment} </div>)}
                                         </div>
                                     }
-                                    else {
-                                        return <div>
-                                            <DiffLine
+                                })}</div>
 
-                                                PID={this.props.PID}
-                                                FID={this.props.FID}
-                                                updateLine={this.updateLine}
-                                                lineText={line}
-                                                lineIndex={index + 1}
-                                                showComment={false}
-                                                multiCommentIndex={''}
-                                                splitSide={side}>
-
-                                            </DiffLine>
-                                            {this.state.commentDict[index] && this.state.commentDict[index][0].props.splitSide === side && this.state.commentDict[index].map(comment => <div
-                                                key={comment}> {comment} </div>)}
-                                        </div>
-
-                                    }
-                                }
-                            })}
-                        </div>}
-
-                    {this.props.isSplit == true &&
-                        <div style={{ display: 'flex' }}>
-                            <div>{this.state.splitLeft.map((line, index) => {
-                                let side = "left"
-                                if (line.charAt(0) === '+') {
-                                    if ((index + 1) == this.state.multiIndex1) {
-                                        return <div>
-                                            <DiffLine
-
-                                                PID={this.props.PID}
-                                                FID={this.props.FID}
-                                                color={'#038A30'}
-                                                updateLine={this.updateLine}
-                                                lineText={line}
-                                                lineIndex={index + 1}
-                                                multiCommentIndex={this.state.multiIndex1}
-                                                showComment={false}
-                                                splitSide={side}>
-
-                                            </DiffLine>
-                                            {this.state.commentDict[index] && this.state.commentDict[index][0].props.splitSide === side && this.state.commentDict[index].map(comment => <div
-                                                key={comment}> {comment} </div>)}
-                                        </div>
-                                    }
-                                    else {
-                                        return <div>
-                                            <DiffLine
-
-                                                PID={this.props.PID}
-                                                FID={this.props.FID}
-                                                color={'#038A30'}
-                                                updateLine={this.updateLine}
-                                                lineText={line}
-                                                lineIndex={index + 1}
-                                                multiCommentIndex={''}
-                                                showComment={false}
-                                                splitSide={side}>
-
-                                            </DiffLine>
-                                            {this.state.commentDict[index] && this.state.commentDict[index][0].props.splitSide === side && this.state.commentDict[index].map(comment => <div
-                                                key={comment}> {comment} </div>)}
-                                        </div>
-                                    }
-                                } else if (line.charAt(0) === '-') {
-                                    if ((index + 1) == this.state.multiIndex1) {
-
-                                        return <div>
-                                            <DiffLine
-
-                                                PID={this.props.PID}
-                                                FID={this.props.FID}
-                                                color={'#EB0E0E'}
-                                                updateLine={this.updateLine}
-                                                lineText={line}
-                                                lineIndex={index + 1}
-                                                multiCommentIndex={this.multiIndex1}
-                                                showComment={false}
-                                                splitSide={side}>
-
-                                            </DiffLine>
-                                            {this.state.commentDict[index] && this.state.commentDict[index][0].props.splitSide === side && this.state.commentDict[index].map(comment => <div
-                                                key={comment}> {comment} </div>)}
-                                        </div>
-                                    }
-                                    else {
-
-                                        return <div>
-                                            <DiffLine
-
-                                                PID={this.props.PID}
-                                                FID={this.props.FID}
-                                                color={'#EB0E0E'}
-                                                updateLine={this.updateLine}
-                                                lineText={line}
-                                                lineIndex={index + 1}
-                                                multiCommentIndex={""}
-                                                showComment={false}
-                                                splitSide={side}>
-
-                                            </DiffLine>
-                                            {this.state.commentDict[index] && this.state.commentDict[index][0].props.splitSide === side && this.state.commentDict[index].map(comment => <div
-                                                key={comment}> {comment} </div>)}
-                                        </div>
-
-                                    }
-                                } else {
-                                    if ((index + 1) == this.state.multiIndex1) {
-
-                                        return <div>
-                                            <DiffLine
-
-                                                PID={this.props.PID}
-                                                FID={this.props.FID}
-                                                updateLine={this.updateLine}
-                                                lineText={line}
-                                                lineIndex={index + 1}
-                                                showComment={false}
-                                                multiCommentIndex={this.state.multiIndex1}
-                                                splitSide={side}>
-
-                                            </DiffLine>
-                                            {this.state.commentDict[index] && this.state.commentDict[index][0].props.splitSide === side && this.state.commentDict[index].map(comment => <div
-                                                key={comment}> {comment} </div>)}
-                                        </div>
-                                    }
-                                    else {
-                                        return <div>
-                                            <DiffLine
-
-                                                PID={this.props.PID}
-                                                FID={this.props.FID}
-                                                updateLine={this.updateLine}
-                                                lineText={line}
-                                                lineIndex={index + 1}
-                                                showComment={false}
-                                                multiCommentIndex={''}
-                                                splitSide={side}>
-
-                                            </DiffLine>
-                                            {this.state.commentDict[index] && this.state.commentDict[index][0].props.splitSide === side && this.state.commentDict[index].map(comment => <div
-                                                key={comment}> {comment} </div>)}
-                                        </div>
-                                    }
-                                }
-                            })}</div>
-                            <div>{this.state.splitRight.map((line, index) => {
-                                let side = "right"
-                                if (line.charAt(0) === '+') {
-                                    if ((index + 1) == this.state.multiIndex1) {
-
-
-                                        return <div>
-                                            <DiffLine
-
-                                                PID={this.props.PID}
-                                                FID={this.props.FID}
-                                                color={'#038A30'}
-                                                updateLine={this.updateLine}
-                                                lineText={line}
-                                                lineIndex={index + 1}
-                                                multiCommentIndex={this.state.multiIndex1}
-                                                showComment={false}
-                                                splitSide={side}>
-
-                                            </DiffLine>
-                                            {this.state.commentDict[index] && this.state.commentDict[index][0].props.splitSide === side && this.state.commentDict[index].map(comment => <div
-                                                key={comment}> {comment} </div>)}
-                                        </div>
-                                    }
-                                    else {
-                                        return <div>
-                                            <DiffLine
-
-                                                PID={this.props.PID}
-                                                FID={this.props.FID}
-                                                color={'#038A30'}
-                                                updateLine={this.updateLine}
-                                                lineText={line}
-                                                lineIndex={index + 1}
-                                                multiCommentIndex={""}
-                                                showComment={false}
-                                                splitSide={side}>
-
-                                            </DiffLine>
-                                            {this.state.commentDict[index] && this.state.commentDict[index][0].props.splitSide === side && this.state.commentDict[index].map(comment => <div
-                                                key={comment}> {comment} </div>)}
-                                        </div>
-
-                                    }
-
-                                } else if (line.charAt(0) === '-') {
-                                    if ((index + 1) == this.state.multiIndex1) {
-                                        return <div>
-                                            <DiffLine
-
-                                                PID={this.props.PID}
-                                                FID={this.props.FID}
-                                                color={'#EB0E0E'}
-                                                updateLine={this.updateLine}
-                                                lineText={line}
-                                                lineIndex={index + 1}
-                                                multiCommentIndex={this.state.multiIndex1}
-                                                showComment={false}
-                                                splitSide={side}>
-
-                                            </DiffLine>
-                                            {this.state.commentDict[index] && this.state.commentDict[index][0].props.splitSide === side && this.state.commentDict[index].map(comment => <div
-                                                key={comment}> {comment} </div>)}
-                                        </div>
-                                    }
-                                    else {
-                                        return <div>
-                                            <DiffLine
-
-                                                PID={this.props.PID}
-                                                FID={this.props.FID}
-                                                color={'#EB0E0E'}
-                                                updateLine={this.updateLine}
-                                                lineText={line}
-                                                lineIndex={index + 1}
-                                                multiCommentIndex={''}
-                                                showComment={false}
-                                                splitSide={side}>
-
-                                            </DiffLine>
-                                            {this.state.commentDict[index] && this.state.commentDict[index][0].props.splitSide === side && this.state.commentDict[index].map(comment => <div
-                                                key={comment}> {comment} </div>)}
-                                        </div>
-
-                                    }
-                                } else {
-                                    if ((index + 1) == this.state.multiIndex1) {
-                                        return <div>
-
-                                            <DiffLine
-
-                                                PID={this.props.PID}
-                                                FID={this.props.FID}
-                                                updateLine={this.updateLine}
-                                                lineText={line}
-                                                lineIndex={index + 1}
-                                                multiCommentIndex={this.multiIndex1}
-                                                showComment={false}
-                                                splitSide={side}>
-
-                                            </DiffLine>
-                                            {this.state.commentDict[index] && this.state.commentDict[index][0].props.splitSide === side && this.state.commentDict[index].map(comment => <div
-                                                key={comment}> {comment} </div>)}
-                                        </div>
-                                    }
-                                    else {
-                                        return <div>
-
-                                            <DiffLine
-
-                                                PID={this.props.PID}
-                                                FID={this.props.FID}
-                                                updateLine={this.updateLine}
-                                                lineText={line}
-                                                lineIndex={index + 1}
-                                                multiCommentIndex={''}
-                                                showComment={false}
-                                                splitSide={side}>
-
-                                            </DiffLine>
-                                            {this.state.commentDict[index] && this.state.commentDict[index][0].props.splitSide === side && this.state.commentDict[index].map(comment => <div
-                                                key={comment}> {comment} </div>)}
-                                        </div>
-
-                                    }
-                                }
-                            })}</div>
-
-                        </div>}
+                            </div>}
+                        </div>
+                    </div>
                 </div>
             );
         } else {
             return (
                 <div className="DiffDisplay" style={closedDiff}>
-                    <text style={toggleText} onClick={(e) => this.open()}>+</text>
+                    <text style={toggleTextPlus} onClick={(e) => this.open()}>+</text>
                 </div>
             )
         }
