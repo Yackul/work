@@ -133,7 +133,7 @@ class DiffDisplay extends React.Component {
         this.setState({ show: false })
     }
 
-    selectionFunction = () => {
+    selectionFunction = async () => {
 
 
         if (window.getSelection().toString() == "") {
@@ -148,13 +148,13 @@ class DiffDisplay extends React.Component {
             sel.removeAllRanges();
             sel.addRange(range);
 
-            this.setState({ testComponent: <div> {selection.toString()} </div> })
+            await this.setState({ testComponent: <div> {selection.toString()} </div> })
             let endNode = selection.endContainer
             let endNode1 = endNode.nodeValue
-            this.setState({ endComponent1: endNode1 })
-            this.setState({
+            await this.setState({ endComponent1: endNode1 })
+            await this.setState({
                 lineComponent: this.state.lineComponent.concat(
-                    <div>{this.state.lineArray.map((line, index) => {
+                    <div>{await this.state.lineArray.map((line, index) => {
                         this.setState({ lineText: line })
                         if (line == this.state.endComponent1) {
                             this.setState({ multiIndex1: index + 1 })
