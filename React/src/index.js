@@ -15,6 +15,7 @@ import PDP from './ProjectsDisplayPage';
 import RevDis from './RevDis';
 import Err from './404';
 import FH from './File_History';
+import AU from './AboutUs'
 
 import './index2.css';
 Amplify.configure(awsconfig);
@@ -35,12 +36,14 @@ function App() {
         <Route exact path='/Projects/:id/:id2?' component={RevDis}/>
         <Route exact path={"/Projects/:id/:id2/History_:id3?"} component={FH}/>
         <Route exact path="/CommentTest" component={InComment} />
+        <Route exact path="/AboutUs" component={AU} />
         <Route exact path='/Err404' component={Err}/>
         <Redirect from='/Me/*' to='/Err404'/>
         <Redirect from='/Register/*' to='/Err404'/>
         <Redirect from='/Home/*' to='/Err404'/>
         <Redirect from='/Projects/*' to='/Err404'/>
         <Redirect from='/ProjectsTest/*' to='/Err404'/>
+        <Redirect from='/AboutUs/*' to='/Err404'/>
         <Redirect from='/RecoverAccount/*' to='/Err404'/>
         <Redirect from='/Review/*' to='/Err404'/>
         <Redirect from='/Projects/:id*' to='/Err404'/>
