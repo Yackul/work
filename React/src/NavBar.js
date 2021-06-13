@@ -115,7 +115,6 @@ class NavBar extends React.Component{
 
       creRevInvButts() {
         let list3 = this.state.rFidRefLST
-        console.log(list3)
         let list4 = this.state.RinvULST
         var dRResult = {}
         list3.forEach((key2, i2) => dRResult[key2] = list4[i2])
@@ -193,7 +192,6 @@ class NavBar extends React.Component{
     render(){
         const invites = this.creInvButts()
         const Rinvites = this.creRevInvButts()
-
         return(
             <div className="navbar">
             <div className="pill-nav">
@@ -207,7 +205,7 @@ class NavBar extends React.Component{
                 <a href="/Home">Home</a>  
                 <a href="/Me">My Profile</a>
                 <a href="/Projects">My Projects</a>
-                <a href="/Review">Review (Beta)</a>
+                <a href="/AboutUs">About Us</a>
                 <a href='/' className="sign-out" onClick={this.signOut}>Sign Out</a>
 
                 {this.state.Count > 0 && 

@@ -4,9 +4,7 @@ import NavBar from './NavBar'
 import { Auth } from 'aws-amplify'
 import axios from 'axios';
 import Cookies from 'js-cookie'
-import Popup from './File_History_Popup'; 
 import DiffDisplay from "./DiffDisplay";
-
 
 class File_Hist extends React.Component {
 
@@ -23,21 +21,10 @@ class File_Hist extends React.Component {
             Diffs_Arr: [],
             Collab_List: [],
             isOpen: false,
-            hold_me_bb: -1
+            hold_me_bb: -1,
+            message: ""
         };
 
-    }
-
-    openPopup = (e) => {
-        this.setState({
-            isOpen: true,
-            hold_me_bb: e
-        });        
-    }
-    closePopup = () => {
-        this.setState({
-            isOpen: false
-        });
     }
 
     //on page render, this function is automatically called! Keep it clean and write functions for stuff you need here!
@@ -132,31 +119,36 @@ class File_Hist extends React.Component {
             this.setState({
                 Diffs_Arr: temp_arr
             })
-            console.log(this.state.Diffs_Arr)
         })
     }  
+    
+    on = (e) => {
+        const Pop_Mess = new Buffer.from(this.state.Diffs_Arr[e].CommDiff, "binary").toString()
+        var message_cons=
+        <DiffDisplay
+            FID={this.state.File_ID}
+            PID={this.state.Project_ID}
+            isOpen={true}
+            diffText={Pop_Mess}
+            isSplit={false}
+            >
+        </DiffDisplay>;
+        this.setState({
+            message: message_cons
+        })
+        document.getElementById("hist_overlay").style.display = "block";
+    }
+
+    off() {
+        document.getElementById("hist_overlay").style.display = "none";
+    }
 
     render() {
         document.body.style.background = "#F5F5DC";    
         
         const Collab_Display = this.state.Collab_List.map((item, i) => <div key={i}>{item}<div className='divider'></div></div>)
-        const Hist_Display = this.state.Diffs_Arr.map((item, i) => <tr key={i}><th>{this.state.Diffs_Arr[i].DID}</th><th>{this.state.Diffs_Arr[i].CREATEDBY}</th><th>{this.state.Diffs_Arr[i].FIDREF}</th><th>{this.state.Diffs_Arr[i].CommDT}</th><th>{this.state.Diffs_Arr[i].APPROVED}</th><th>{this.state.Diffs_Arr[i].OldFNAME}</th><th>{this.state.Diffs_Arr[i].OldFTYPE}</th><th><button style={{background:'lightblue', fontWeight:'bold'}} onClick={() => this.openPopup(i)}>x</button></th></tr>);
-
-        let popup = null;
-
-        if(this.state.isOpen){
-            const Pop_Mess = new Buffer.from(this.state.Diffs_Arr[this.state.hold_me_bb].CommDiff, "binary").toString()
-            popup = (<Popup message={
-            <DiffDisplay
-                FID={this.state.File_ID}
-                PID={this.state.Project_ID}
-                isOpen={true}
-                diffText={Pop_Mess}
-                isSplit={false}
-                >
-            </DiffDisplay>} closeMe={this.closePopup}/>);
-        }
-
+        const Hist_Display = this.state.Diffs_Arr.map((item, i) => <tr key={i}><th>{this.state.Diffs_Arr[i].DID}</th><th>{this.state.Diffs_Arr[i].CREATEDBY}</th><th>{this.state.Diffs_Arr[i].FIDREF}</th><th>{this.state.Diffs_Arr[i].CommDT}</th><th>{this.state.Diffs_Arr[i].APPROVED}</th><th>{this.state.Diffs_Arr[i].OldFNAME}</th><th>{this.state.Diffs_Arr[i].OldFTYPE}</th><th><input style={{display: "block", margin: "5 auto"}} type = "submit" className="submit_delete" value= "File" onClick={() => this.on(i)}/></th></tr>);
+    
         switch (this.state.authState) {
 
             case ('loading'):
@@ -202,13 +194,14 @@ class File_Hist extends React.Component {
                                         <th>File_Type</th>
                                         <th>View</th>
                                     </tr>
-
-                                    {Hist_Display}                                    
+                                    {Hist_Display}                                                         
                                 </table> 
-                                </div>   
+                                <div id="hist_overlay" onClick={this.off}>
+                                    <div><p id="hist_text">{this.state.message}</p></div>
+                                </div> 
+                            </div>   
                             </div>                            
-                        </div>  
-                        {popup}        
+                        </div>       
                     </div>
                 );
 

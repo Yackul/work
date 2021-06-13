@@ -4,7 +4,6 @@ import {Auth} from 'aws-amplify'
 import axios from 'axios'
 import NavBar from './NavBar'
 import Cookies from 'js-cookie'
-import Popup from './invPopup'
 import {Link} from "react-router-dom";
 
 class ProjectsDisplayPage extends React.Component {
@@ -26,22 +25,12 @@ class ProjectsDisplayPage extends React.Component {
             fileContent: '',
             fileName: '',
             fileNames: [],
+            fileDates: [],
             error: -1,
             inv: 0,
             creator_flag: -1
         };
         this.handleiUserNChange = this.handleiUserNChange.bind(this);
-    }
-    
-    openPopup = () => {
-        this.setState({
-            isOpen: true
-        });
-    }
-    closePopup = () => {
-        this.setState({
-            isOpen: false
-        });
     }
 
     handleiUserNChange(evt) {
@@ -57,16 +46,19 @@ class ProjectsDisplayPage extends React.Component {
         
             const PIDREF = this.state.routePara;
             var temp = []
+            var temp_dates = []
             await axios.get("https://www.4424081204.com:1111/FILES_IN_PROJ/" + PIDREF, {
                 headers: {accesstoken: this.state.CookieSave, test: -1}
             }).then(res => {
                 for (var i = 0; i < res.data.length; i++) {
                     if(res.data[i].FSTATUS === 1) {
                         temp[i] = res.data[i].FNAME
+                        temp_dates[i] = res.data[i].DT
                     }                    
                 }
                 this.setState({
-                    fileNames: temp
+                    fileNames: temp,
+                    fileDates: temp_dates
                 })
             })
         }
@@ -336,6 +328,14 @@ class ProjectsDisplayPage extends React.Component {
         this.updateStep();
       }
 
+    on() {
+        document.getElementById("delete_overlay").style.display = "block";
+    }
+
+    off() {
+        document.getElementById("delete_overlay").style.display = "none";
+    }
+
     updateStep = async () => {
         if(this.state.step === -1){
           this.setState({
@@ -361,24 +361,11 @@ class ProjectsDisplayPage extends React.Component {
       }
 
     createFileLinks() {
-        const items = this.state.fileNames.map((item, i) =><div><Link key={i} to ={this.state.routePara + "/" + this.state.fileNames[i]}>{"|--" + item}</Link></div>)
+        const items = this.state.fileNames.map((item, i) =><tr key= {i}><th><a key={i} href ={this.state.routePara + "/" + this.state.fileNames[i]}>{item}</a></th><th>{item.split(".").pop()}</th><th>{this.state.fileDates[i]}</th></tr>)
         return items
     }
 
     render() {
-
-        let popup = null;
-        if (this.state.isOpen) {
-            popup = (<Popup 
-                message= {
-                <div>
-                    <p>This is permanent, and cannot be reversed</p>
-                    <input type='submit' className='submit' value='Are you sure?' onClick={this.confirmDel}/>
-                </div>
-                } 
-                closeMe={this.closePopup}/>);
-        }
-
         const items = this.state.cHld.map((item, i) => <div key={i}>{item}<div className='divider'></div></div>)
 
         const fileLinks = this.createFileLinks()
@@ -468,17 +455,30 @@ class ProjectsDisplayPage extends React.Component {
 
                         <div className='grad1'>
                             <div className= "files-box">
-                                <b style={{fontWeight: "bolder", textDecoration: "underline", color: 'black'}}>|--File Name{"    --    "}File Type -- Date Upload -- Date Modified --|</b>
-                                {fileLinks}
+                            <div style={{whiteSpace: 'pre-wrap'}}>
+                                <table>
+                                    <tr>
+                                        <th>File_Name</th>
+                                        <th>File_Type</th>
+                                        <th>Date Modified</th>
+                                    </tr>
+                                    {fileLinks}                                                         
+                                </table> 
+                                <div id="hist_overlay" onClick={this.off}>
+                                    <div><p id="hist_text">{this.state.message}</p></div>
+                                </div> 
+                            </div>   
                             </div>
                         </div>
 
                         {this.state.creator_flag === 1 &&
                             <div style={{float:'right'}}>
-                                <div style={{display:'flex', justifyContent:'right'}}>
-                                    <input type='submit' className='submit' value="Delete Project" onClick={this.openPopup}/>
+                                <div className = "file_display_delete">
+                                        <input type='submit' className='submit_delete' value="Delete Project" onClick={this.on}/>
                                 </div>
-                                {popup}
+                                <div id="delete_overlay" onClick={this.off}>
+                                    <div id="del_text"><p>This is permanent, and cannot be reversed</p><input style={{display: "block", margin: "0 auto"}} type='submit' className='submit' value='Are you sure?' onClick={this.confirmDel}/></div>
+                                </div>
                             </div>
                         }
                     </div>                    

@@ -198,7 +198,6 @@ class RevDis extends React.Component {
                 })
             }
         })
-        console.log(this.state.resu)
         if (this.state.resu === -2) {
             await axios.post("https://www.4424081204.com:1111/INVITE_TO_REV/", {
                 FIDREF: this.state.fileID,
@@ -546,7 +545,7 @@ class RevDis extends React.Component {
                                                 <input type='submit' className='submit_delete' value="Delete Review" onClick={this.on}/>
                                             </div>
                                             <div id="delete_overlay" onClick={this.off}>
-                                                <div style={{justifyContent:"center"}}><p style={{justifyContent:"center"}}>This is permanent, and cannot be reversed</p><input type='submit' className='submit' value='Are you sure?' onClick={this.confirmDel}/></div>
+                                                <div id="del_text"><p>This is permanent, and cannot be reversed</p><input style={{display: "block", margin: "0 auto"}} type='submit' className='submit' value='Are you sure?' onClick={this.confirmDel}/></div>
                                             </div>
                                         </div>
                                         <div>
@@ -560,8 +559,7 @@ class RevDis extends React.Component {
                                         </div>
                                         {/*<div className="file_contents_margin">{this.state.gotRev}</div>*/}
                                     </div>
-                                    {popup}
-                                    <div className="file_contents_margin">{this.state.gotRev}</div>
+                                   
                                 </div>
                         </div>
                         }

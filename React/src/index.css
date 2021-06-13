@@ -118,6 +118,11 @@ input[type=text], input[type=password] {
   color: #157272e1;
 }
 
+.boldtextAU{
+  font-weight: bold;
+  color: black;
+}
+
 .boldtextLSB{
   font-weight: bold;
   color: rgb(52, 106, 187);
@@ -130,9 +135,9 @@ input[type=text], input[type=password] {
 
 .files-box{
   display: grid;
-  font-weight: bold;
-  color:rgb(62, 26, 148);
+  font-weight: bold;  
   text-align: left;
+  color: black;
   border: #157272e1;
   border-style:solid;
   border-width:3px;
@@ -257,6 +262,15 @@ img.avatar2 {
   padding: 5px 20px 5px 20px;
 }
 
+img.avatar3 {   
+  float: left;
+  width: 200px;
+  border-radius: 12px;
+  margin-left: 5px;
+  margin-right: 5px;
+  border: solid black;
+}
+
 img.notif {   
   float: left;
   width: 30px;
@@ -300,8 +314,22 @@ img.notif {
   top: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(250, 136, 42, 0.3); /* Black background with opacity */
+  overflow-y: auto;
+  background-color: rgba(247, 218, 195, 0.3); /* Black background with opacity */
   z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+  cursor: pointer; /* Add a pointer on hover */
+}
+
+#hist_overlay {
+  position: fixed; /* Sit on top of the page content */
+  display: none; /* Hidden by default */
+  width: 100%; /* Full width (cover the whole page) */
+  height: 100%; /* Full height (cover the whole page) */
+  top: 0;
+  left: 0;
+  overflow-x: hidden;
+  background-color: rgba(247, 218, 195, 0.3); /* Black background with opacity */
+  z-index: 1; /* Specify a stack order in case you're using a different order for other elements */
   cursor: pointer; /* Add a pointer on hover */
 }
 
@@ -317,6 +345,31 @@ img.notif {
   color: rgb(0, 0, 0);
   transform: translate(-50%,-50%);
   -ms-transform: translate(-50%,-50%);
+}
+
+#del_text{
+  display: block;
+  position:absolute;
+  background-color: #4682b4;
+  top:50%;
+  left: 50%;
+  border-radius: 4px;
+  padding: 12px;
+  font-size: 17px;
+  color: rgb(0, 0, 0);
+  transform: translate(-50%,-50%);
+  -ms-transform: translate(-50%,-50%);
+}
+
+#hist_text{
+  position:relative;
+  background-color: #4682b4;
+  margin-top: 0;
+  top: 25%;
+  width: 100%;
+  justify-content: center;
+  border-radius: 4px;
+  color: rgb(0, 0, 0);
 }
 
 .container {
@@ -562,10 +615,13 @@ td, th {
   border: 1px solid #020202;
   text-align: left;
   padding: 4px;
+  padding-right: 200px;
+  overflow-y: auto;
 }
 
 tr:nth-child(even) {
   background-color: #f7e1bc;
+  
 }
 
 tr:nth-child(odd) {
