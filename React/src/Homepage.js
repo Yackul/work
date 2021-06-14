@@ -52,7 +52,18 @@ class Homepage extends React.Component {
                     </div>
                 );
             case ('unauthorized'):
-                return window.location = "/"
+                return (
+                    <div>
+                        <div className='test2'><NavBar/></div>        
+                        <br></br>
+                        <br></br>
+                        <br></br> 
+                        <div className = "grad1">
+                            <h1 style={{paddingLeft: 20}}>Welcome to Git Going!</h1>
+                        </div>
+                        <br></br>                        
+                    </div>
+                )
             default:
                 return null
         }
