@@ -3,7 +3,7 @@ import './index.css';
 import NavBar from './NavBar'
 import { Auth } from 'aws-amplify'
 import Cookies from 'js-cookie' 
-
+import TT from './Youtube'
 
 class Homepage extends React.Component {
 
@@ -46,9 +46,11 @@ class Homepage extends React.Component {
                         <br></br>
                         <br></br> 
                         <div className = "grad1">
-                            <h1 style={{paddingLeft: 20}}>Welcome to Git Going, {this.state.Uname}!</h1>
+                            <h1>Welcome to Git Going, {this.state.Uname}!</h1>
+                            <h2>How we did it</h2>
                         </div>
-                        <br></br>                        
+                        
+                        <TT style={{innerWidth: "20px"}} embedId="EWjT-4eBZPs"/>                    
                     </div>
                 );
             case ('unauthorized'):
@@ -59,9 +61,11 @@ class Homepage extends React.Component {
                         <br></br>
                         <br></br> 
                         <div className = "grad1">
-                            <h1 style={{paddingLeft: 20}}>Welcome to Git Going!</h1>
+                            <h1>Welcome to Git Going!</h1>
+                            <h2>How we did it</h2>
                         </div>
-                        <br></br>                        
+                        <br></br>    
+                        <TT embedId="EWjT-4eBZPs"/>                    
                     </div>
                 )
             default:
