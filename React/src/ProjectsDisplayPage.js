@@ -391,6 +391,8 @@ class ProjectsDisplayPage extends React.Component {
                             Project History
                         </Link>
 
+                        <br></br>
+
                         <div style={{display:'flex'}}>
 
                             <div style={{marginLeft:'20px', marginRight:'auto', marginTop: '8px', marginBottom: '8px'}} className='collab-box'>
@@ -452,14 +454,15 @@ class ProjectsDisplayPage extends React.Component {
 
                             </div>
                         </div>
-
+                                <br></br>
+                                <br></br>
                         <div className='grad1'>
                             <div className= "files-box">
                             <div style={{whiteSpace: 'pre-wrap'}}>
                                 <table>
                                     <tr>
-                                        <th>File_Name</th>
-                                        <th>File_Type</th>
+                                        <th>File Name</th>
+                                        <th>File Type</th>
                                         <th>Date Modified</th>
                                     </tr>
                                     {fileLinks}                                                         
