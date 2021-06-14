@@ -63,7 +63,7 @@ class AboutUs extends React.Component {
                         <br></br>                 
                         <br></br>                
                         <img src={M_pic} alt="avatar3" className="avatar3" />   
-                        <div className="boldtextAU">Michael Bloomquist - Project Manager (Backend Solutions)</div>
+                        <div className="boldtextAU">Michael Bloomquist - Project Manager (Backend Solutions Lead)</div>
                         <p style={{color:"darkblue"}}>Statement from Michael:</p>      
                         <div style={{color:"darkcyan"}}>"As a developer, my interests lie in ensuring ethical sustainability for future generations. </div>
                         <div style={{color:"darkcyan"}}>My priorities are working on equitable solutions, including for the betterment of the environment, </div>
@@ -73,7 +73,7 @@ class AboutUs extends React.Component {
                         <br></br>   
                         <br></br>
                         <img src={S_pic} alt="avatar3" className="avatar3" />   
-                        <div className="boldtextAU">Sarah Ramazani - Project Manager (Visual Design Lead)</div>
+                        <div className="boldtextAU">Sarah Ramazani - Project Manager (Dev Ops Lead)</div>
                         <div style={{color:"darkblue"}}>Statement from Sarah:</div>      
                         <div style={{color:"darkcyan"}}>"As a black woman in STEM, I aim to inspire future generations of underrepresented minorities,</div>
                         <div style={{color:"darkcyan"}}>especially black women, to pursue STEM education and careers. After years of walking into rooms</div>
@@ -85,7 +85,7 @@ class AboutUs extends React.Component {
                         <br></br>                  
                         <br></br>                
                         <img src={T_pic} alt="avatar3" className="avatar3" />   
-                        <div className="boldtextAU">Travis Lamb - Project Manager (Frontend Architect)</div>
+                        <div className="boldtextAU">Travis Lamb - Project Manager (Frontend Architect Lead)</div>
                         <p style={{color:"darkblue"}}>Statement from Travis:</p>      
                         <div style={{color:"darkcyan"}}>"I was someone who fell through the cracks a bit in my youth, but managed to discover myself </div>
                         <div style={{color:"darkcyan"}}>through my return to college at the age of 25. This gives me a unique perspective on the development </div>
