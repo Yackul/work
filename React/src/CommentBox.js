@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import './CommentBox.css';
 import PropTypes from 'prop-types';
 import {Auth} from 'aws-amplify'
-import {number} from "prop-types";
 import axios from 'axios'
 import Cookies from 'js-cookie'
 
@@ -142,8 +141,7 @@ class Comment extends Component {
     render() {
 
         return (
-            <li key={this.props.id} className="Comment">
-                {this.props.author}: {this.props.text}
+            <li key={this.props.id} className="Comment">{this.props.author}: {this.props.text}
             </li>
         );
     }

@@ -1,4 +1,3 @@
-import DiffLine from "./DiffLine";
 import PropTypes from "prop-types";
 import React from 'react';
 
@@ -75,8 +74,8 @@ class Comment extends React.Component {
             return (
                 <div className="Comment" style={openDiff}>
                     <text style={toggleText} onClick={(e) => this.close()}>-</text>
-                                <div>
-                                    {this.props.comment}
+                                <div><span style={{color:"red"}}>{this.props.comment.split(":")[0]}:</span>
+                                   {this.props.comment.split(":")[1]}
                                 </div>
                 </div>
             )
