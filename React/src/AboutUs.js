@@ -73,7 +73,7 @@ class AboutUs extends React.Component {
                         <br></br>   
                         <br></br>
                         <img src={S_pic} alt="avatar3" className="avatar3" />   
-                        <div className="boldtextAU">Sarah Ramazani - Project Manager (Dev Ops Lead)</div>
+                        <div className="boldtextAU">Sarah Ramazani - Project Manager (DevOps Lead)</div>
                         <div style={{color:"darkblue"}}>Statement from Sarah:</div>      
                         <div style={{color:"darkcyan"}}>"As a black woman in STEM, I aim to inspire future generations of underrepresented minorities,</div>
                         <div style={{color:"darkcyan"}}>especially black women, to pursue STEM education and careers. After years of walking into rooms</div>

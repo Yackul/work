@@ -176,6 +176,9 @@ class File_Hist extends React.Component {
 
                             </div>
                         </div>
+                    
+                        <br></br>
+                        <br></br>
 
                         <div className = 'grad1'>
                             <div style={{
