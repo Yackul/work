@@ -110,12 +110,12 @@ input[type=text], input[type=password] {
 }
 
 .boldtext{
-  font-weight: bold;
+  font-weight: 600;
 }
 
 .boldtextSB{
   font-weight: 600;
-  color: #157272e1;
+  color: rgb(52, 106, 187);
 }
 
 .boldtextAU{
@@ -124,15 +124,15 @@ input[type=text], input[type=password] {
 }
 
 .boldtextLSB{
-  font-weight: bold;
+  font-weight: 600;
   color: rgb(52, 106, 187);
 }
 
 .boldtextSDB{
   font-weight: 600;
   /* color:rgb(9, 170, 199); */
-  color: #4682b4;
-  text-decoration: none;
+  color: rgb(61, 33, 128);
+  text-decoration:underline;
 }
 
 .files-box{
@@ -229,7 +229,7 @@ input[type=text], input[type=password] {
 
 .submit3 {
   font-size: auto;
-  background-color: #4ab3b3e1;
+  background-color: #6192a5;
   margin-right: 10px;
   color: black;
   cursor: pointer;

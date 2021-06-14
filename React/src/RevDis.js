@@ -470,7 +470,7 @@ class RevDis extends React.Component {
                         </div>
 
                         <div className='boldtextLSB' style={{marginLeft: '20px', marginRight: 'auto'}}>
-                            File: {this.state.routePara}<br></br>File
+                            File Name: {this.state.routePara}<br></br>File
                             Type: {this.state.routePara.split('.').pop()}</div>
 
                         <Link
