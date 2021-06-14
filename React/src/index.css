@@ -265,6 +265,7 @@ img.avatar2 {
 img.avatar3 {   
   float: left;
   width: 200px;
+  height: 200px;
   border-radius: 12px;
   margin-left: 5px;
   margin-right: 5px;
