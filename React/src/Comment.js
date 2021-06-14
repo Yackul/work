@@ -74,8 +74,10 @@ class Comment extends React.Component {
             return (
                 <div className="Comment" style={openDiff}>
                     <text style={toggleText} onClick={(e) => this.close()}>-</text>
-                                <div><span style={{color:"red"}}>{this.props.comment.split(":")[0]}:</span>
-                                   {this.props.comment.split(":").slice(1, this.props.comment.length-1)}
+
+                                <div><span style={{color:"#2196F3", fontWeight:"600"}}>{this.props.comment.split(":")[0]}:</span>
+                                   {this.props.comment.split(":")[1]}
+
                                 </div>
                 </div>
             )
