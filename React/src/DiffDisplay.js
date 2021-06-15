@@ -156,7 +156,8 @@ class DiffDisplay extends React.Component {
                         if (line == this.state.endComponent1) {
                             this.setState({multiIndex1: index + 1})
                             // Colorize text
-                            document.execCommand("BackColor", false, "#469AFC");
+                            document.execCommand("BackColor", true, "#469AFC");  
+                            document.body.style.background = "#F5F5DC";                          
                             document.designMode = "off";
                         }
 
@@ -246,7 +247,7 @@ class DiffDisplay extends React.Component {
         if (this.state.show) {
             return (
                 <div style={container1}>
-                    <div style={{textAlign: 'center'}}>
+                    <div style={{textAlign: 'center', backgroundColor: "#fce8c6"}}>
                         <button className="submit_capped" onClick={this.selectionFunction}>
                             MultiComment
                         </button>
