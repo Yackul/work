@@ -155,7 +155,7 @@ class RevDis extends React.Component {
     //and if so, it renders the page into a review display, instead of a
     //file contents display
     loadReview = async () => {
-        await axios.get("http://localhost:3002/DIFFS_ON_FILES/" + this.state.fileID, {
+        await axios.get("https://www.4424081204.com:1111/DIFFS_ON_FILES/" + this.state.fileID, {
             headers: {accesstoken: this.state.CookieSave}
         }).then(res => {
             if (res.data.APPROVED === 0) {
@@ -188,7 +188,7 @@ class RevDis extends React.Component {
     //by clicking on a name from the Collaborator menu, a user can be invited
     //to review the file immediately
     inviteRevUser = async (iuName) => {
-        await axios.get("http://localhost:3002/INVITE_TO_REV/" + iuName, {
+        await axios.get("https://www.4424081204.com:1111/INVITE_TO_REV/" + iuName, {
             headers: {accesstoken: this.state.CookieSave, fidref: this.state.fileID}
         }).then(res => {
             if ((res.data[0] === undefined) === false) {
@@ -295,7 +295,7 @@ class RevDis extends React.Component {
     }
 
     getProjName = async () => {
-        await axios.get("http://localhost:3002/project/" + this.state.routeID, {
+        await axios.get("https://www.4424081204.com:1111/project/" + this.state.routeID, {
             headers: {accesstoken: this.state.CookieSave}
         }).then(res => {
             this.setState({
@@ -391,7 +391,7 @@ class RevDis extends React.Component {
     }
 
     approveReview = async () => {
-        await axios.get("http://localhost:3002/DIFFS_ON_FILES/" + this.state.fileID, {
+        await axios.get("https://www.4424081204.com:1111/DIFFS_ON_FILES/" + this.state.fileID, {
             headers: {accesstoken: this.state.CookieSave}
         }).then(async res => {
             const newContent = new Buffer.from(res.data.NewFCONTENT, "binary").toString()
@@ -402,7 +402,7 @@ class RevDis extends React.Component {
                 DT: this.state.curTime
             }, {headers: {accesstoken: this.state.CookieSave}})
         })
-        await axios.put("http://localhost:3002/DIFFS_ON_FILES/" + this.state.fileID, {
+        await axios.put("https://www.4424081204.com:1111/DIFFS_ON_FILES/" + this.state.fileID, {
             APPROVED: 1
         }, {headers: {accesstoken: this.state.CookieSave}}).then(res => {
 

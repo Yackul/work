@@ -77,7 +77,7 @@ class DiffDisplay extends React.Component {
         const COMMID = this.state.routeID;
         var hld2 = [];
 
-        await axios.get("http://localhost:3002/COMMENTS_ON_REVIEWS/" + COMMID, {
+        await axios.get("https://www.4424081204.com:1111/COMMENTS_ON_REVIEWS/" + COMMID, {
             headers: {accesstoken: this.state.CookieSave}
         }).then(res => {
             var x

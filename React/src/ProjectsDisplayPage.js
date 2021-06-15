@@ -219,7 +219,7 @@ class ProjectsDisplayPage extends React.Component {
     }
 
     getProjName = async () => {
-        await axios.get("http://localhost:3002/project/" + this.state.routePara, {
+        await axios.get("https://www.4424081204.com:1111/project/" + this.state.routePara, {
             headers: {accesstoken: this.state.CookieSave}
         }).then(res => {
             this.setState({

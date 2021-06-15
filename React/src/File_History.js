@@ -109,7 +109,7 @@ class File_Hist extends React.Component {
     //loads all of the changes to a file into an array. Should be fun figuring out how to render everything!
     Load_File_History = async () => {
 
-        await axios.get("http://localhost:3002/DIFFS_ON_FILES/" + this.state.File_ID, {
+        await axios.get("https://www.4424081204.com:1111/DIFFS_ON_FILES/" + this.state.File_ID, {
             headers: {accesstoken: this.state.Cookie_Save, history_var: this.state.File_ID}
         }).then(res => {
             var temp_arr = []
