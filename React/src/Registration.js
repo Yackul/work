@@ -155,7 +155,7 @@ class RegisterPage extends React.Component {
     }
 
     redirect(){
-      return window.location = "/"      
+      return window.location = "/LogIn"      
     }
 
     handleUserChange(evt) {

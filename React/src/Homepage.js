@@ -55,9 +55,6 @@ class Homepage extends React.Component {
                 return (
                     <div>
                         <div className='test2'><NavBar/></div>        
-                        <br></br>
-                        <br></br>
-                        <br></br> 
                         <div className = "grad1">
                             <h1>Welcome to Git Going!</h1>
                             <h2>How we did it</h2>

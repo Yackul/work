@@ -25,10 +25,10 @@ function App() {
   return (
     <BrowserRouter>
       <Switch>
-        <Route exact path="/" component={LogIn} />
+        <Route exact path="/LogIn" component={LogIn} />
         <Route exact path="/Me" component={Prof} />
         <Route exact path="/Register" component={RegIn} />
-        <Route exact path="/Home" component={HPage} />
+        <Route exact path="/" component={HPage} />
         <Route exact path="/Projects" component={ProjTest} />
         <Route exact path="/RecoverAccount" component={RA} />
         <Route exact path="/Review" component={Rev} />
@@ -40,7 +40,7 @@ function App() {
         <Route exact path='/Err404' component={Err}/>
         <Redirect from='/Me/*' to='/Err404'/>
         <Redirect from='/Register/*' to='/Err404'/>
-        <Redirect from='/Home/*' to='/Err404'/>
+        <Redirect from='/LogIn/*' to='/Err404'/>
         <Redirect from='/Projects/*' to='/Err404'/>
         <Redirect from='/ProjectsTest/*' to='/Err404'/>
         <Redirect from='/AboutUs/*' to='/Err404'/>

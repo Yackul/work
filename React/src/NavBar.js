@@ -202,11 +202,11 @@ class NavBar extends React.Component{
                 {this.state.Count > 0 &&
                 <img src={bell_on} alt="notif" className="notif" onClick ={this.on} style={{borderRadius: "100%", borderRadius: "25px", background:"red"}}/>   
                 } 
-                <a href="/Home">Home</a>  
+                <a href="/">Home</a>  
                 <a href="/Me">My Profile</a>
                 <a href="/Projects">My Projects</a>
                 <a href="/AboutUs">About Us</a>
-                <a href='/' className="sign-out" onClick={this.signOut}>Sign Out</a>
+                <a href='/LogIn' className="sign-out" onClick={this.signOut}>Sign Out</a>
 
                 {this.state.Count > 0 && 
                     <div id="overlay" onClick={this.off}>

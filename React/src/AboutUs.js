@@ -15,7 +15,7 @@ class AboutUs extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            authState: 'loading',
+            authState: 1,
             Uname: '',
             CookieSave: '',
         };
@@ -34,7 +34,7 @@ class AboutUs extends React.Component {
             CookieSave: temp
          })
         } catch (err) {
-          this.setState({ authState: 'unauthorized' })
+          console.log("Just for Michael")
         }        
     }
 
@@ -97,7 +97,7 @@ class AboutUs extends React.Component {
                     
                 );
             case ('unauthorized'):
-                return window.location = "/"
+                return window.location = "/LogIn"
             default:
                 return null
         }

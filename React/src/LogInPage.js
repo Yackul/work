@@ -100,7 +100,7 @@ class LoginPage extends React.Component {
             <div className ="imgcontainer">
               <img src = {logo} alt = "avatar" className="avatar"/>
             </div>
-            { this.state.rediHome ? (<Redirect to="/Home"/>) : null  }
+            { this.state.rediHome ? (<Redirect to="/"/>) : null  }
             <h2>Log In and Git Going!</h2>
             <label><b>Username</b></label>
             <br/>
