@@ -105,7 +105,7 @@ class Project extends React.Component {
                     </div>
                 );
             case ('unauthorized'):
-                return window.location = "/"
+                return window.location = "/LogIn"
             default:
                 return null
         }

@@ -219,7 +219,7 @@ class ProjectsDisplayPage extends React.Component {
     }
 
     getProjName = async () => {
-        await axios.get("http://localhost:3002/project/" + this.state.routePara, {
+        await axios.get("https://www.4424081204.com:1111/project/" + this.state.routePara, {
             headers: {accesstoken: this.state.CookieSave}
         }).then(res => {
             this.setState({
@@ -361,7 +361,13 @@ class ProjectsDisplayPage extends React.Component {
       }
 
     createFileLinks() {
-        const items = this.state.fileNames.map((item, i) =><tr key= {i}><th><a key={i} href ={this.state.routePara + "/" + this.state.fileNames[i]}>{item}</a></th><th>{item.split(".").pop()}</th><th>{this.state.fileDates[i]}</th></tr>)
+        const items = this.state.fileNames.map((item, i) =>
+        <tr key= {i}>
+            <th>
+                <a key={i} href ={this.state.routePara + "/" + this.state.fileNames[i]}>{item}</a></th>
+                <th>{item.split(".").pop()}</th>
+                <th>{this.state.fileDates[i]}</th>
+            </tr>)
         return items
     }
 
@@ -458,19 +464,16 @@ class ProjectsDisplayPage extends React.Component {
                                 <br></br>
                         <div className='grad1'>
                             <div className= "files-box">
-                            <div style={{whiteSpace: 'pre-wrap'}}>
-                                <table>
-                                    <tr>
-                                        <th>File Name</th>
-                                        <th>File Type</th>
-                                        <th>Date Modified</th>
-                                    </tr>
-                                    {fileLinks}                                                         
-                                </table> 
-                                <div id="hist_overlay" onClick={this.off}>
-                                    <div><p id="hist_text">{this.state.message}</p></div>
-                                </div> 
-                            </div>   
+                                <div style={{whiteSpace: 'pre-wrap'}}>
+                                    <table>
+                                        <tr>
+                                            <th style ={{paddingRight: "200px"}}>File Name</th>
+                                            <th style ={{paddingRight: "200px"}}>File Type</th>
+                                            <th style ={{paddingRight: "200px"}}>Date Modified</th>
+                                        </tr>
+                                        {fileLinks}                                                         
+                                    </table>  
+                                </div>   
                             </div>
                         </div>
 
@@ -488,7 +491,7 @@ class ProjectsDisplayPage extends React.Component {
                 );
 
             case ('unauthorized'):
-                return window.location = "/"
+                return window.location = "/LogIn"
 
             default:
                 return null

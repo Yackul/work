@@ -42,7 +42,7 @@ class File_Hist extends React.Component {
     //sets the background for the page
     Set_Background = async() => {
 
-        document.body.style.background = "#d0f0f0e1";
+        document.body.style.background = "#F5F5DC";  
     }
 
     //builds out user auth on the page (making sure they're logged in, etc) and grabs username from Cognito
@@ -109,7 +109,7 @@ class File_Hist extends React.Component {
     //loads all of the changes to a file into an array. Should be fun figuring out how to render everything!
     Load_File_History = async () => {
 
-        await axios.get("http://localhost:3002/DIFFS_ON_FILES/" + this.state.File_ID, {
+        await axios.get("https://www.4424081204.com:1111/DIFFS_ON_FILES/" + this.state.File_ID, {
             headers: {accesstoken: this.state.Cookie_Save, history_var: this.state.File_ID}
         }).then(res => {
             var temp_arr = []
@@ -144,10 +144,21 @@ class File_Hist extends React.Component {
     }
 
     render() {
-        document.body.style.background = "#F5F5DC";    
+          
         
         const Collab_Display = this.state.Collab_List.map((item, i) => <div key={i}>{item}<div className='divider'></div></div>)
-        const Hist_Display = this.state.Diffs_Arr.map((item, i) => <tr key={i}><th>{this.state.Diffs_Arr[i].DID}</th><th>{this.state.Diffs_Arr[i].CREATEDBY}</th><th>{this.state.Diffs_Arr[i].FIDREF}</th><th>{this.state.Diffs_Arr[i].CommDT}</th><th>{this.state.Diffs_Arr[i].APPROVED}</th><th>{this.state.Diffs_Arr[i].OldFNAME}</th><th>{this.state.Diffs_Arr[i].OldFTYPE}</th><th><input style={{display: "block", margin: "5 auto"}} type = "submit" className="submit_delete" value= "File" onClick={() => this.on(i)}/></th></tr>);
+        
+        const Hist_Display = this.state.Diffs_Arr.map((item, i) => 
+        <tr key={i}>
+            <th>{this.state.Diffs_Arr[i].DID}</th>
+            <th>{this.state.Diffs_Arr[i].CREATEDBY}</th>
+            <th>{this.state.Diffs_Arr[i].FIDREF}</th>
+            <th>{this.state.Diffs_Arr[i].CommDT}</th>
+            <th>{this.state.Diffs_Arr[i].APPROVED}</th>
+            <th>{this.state.Diffs_Arr[i].OldFNAME}</th>
+            <th>{this.state.Diffs_Arr[i].OldFTYPE}</th>
+            <th><input type = "submit" className="submit_fix" value= "View File" onClick={() => this.on(i)}/></th>
+            </tr>);
     
         switch (this.state.authState) {
 
@@ -180,16 +191,16 @@ class File_Hist extends React.Component {
                         <br></br>
                         <br></br>
 
-                        <div className = 'grad1'>
-                            <div style={{
+                        <div className = 'grad4'>
+                            <div className='grad3' style={{
                                 alignItems: 'center',
                                 flexDirection:"column"
-                            }}>     
+                            }}>    
                             <div style={{whiteSpace: 'pre-wrap'}}>
                                 <table>
                                     <tr>
                                         <th>Update ID</th>
-                                        <th>Updated by</th>
+                                        <th>Updated By</th>
                                         <th>File ID</th>
                                         <th>Date</th>
                                         <th>Approved?</th>
@@ -199,17 +210,17 @@ class File_Hist extends React.Component {
                                     </tr>
                                     {Hist_Display}                                                         
                                 </table> 
-                                <div id="hist_overlay" onClick={this.off}>
-                                    <div><p id="hist_text">{this.state.message}</p></div>
-                                </div> 
                             </div>   
                             </div>                            
-                        </div>       
+                        </div>
+                        <div id="hist_overlay" onClick={this.off}>
+                                    <div><p id="hist_text">{this.state.message}</p></div>
+                                </div>        
                     </div>
                 );
 
             case ('unauthorized'):
-                return window.location = "/"
+                return window.location = "/LogIn"
 
             default:
                 return null

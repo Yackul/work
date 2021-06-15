@@ -135,6 +135,18 @@ input[type=text], input[type=password] {
   text-decoration:underline;
 }
 
+.submit_fix {  
+  font-size: auto;
+  display: flex;
+  float: right;
+  background-color: #4ab3b3e1;
+  color: black;
+  padding: 4px 4px;
+  border: 4px;
+  cursor: pointer;
+  width: auto;
+  border-radius: 6px;
+}
 .files-box{
   display: grid;
   /* font-weight: bold;   */
@@ -164,6 +176,25 @@ input[type=text], input[type=password] {
   flex-grow: 1;
   border-bottom: 1px solid black;
   margin: -2px
+}
+
+.grad3 {
+  display: flex;
+  justify-content: center;
+  margin: 0 auto;
+  padding-left: 20px;
+  padding-right: 20px;
+  border-radius:12px;
+  margin-left: 4px;
+  margin-right: 4px;
+  overflow-x:auto;
+  overflow-y:hidden;
+}
+
+.grad4 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .colors {
@@ -619,8 +650,6 @@ td, th {
   border: 1px solid #020202;
   text-align: left;
   padding: 4px;
-  padding-right: 200px;
-  overflow-y: auto;
 }
 
 tr:nth-child(even) {

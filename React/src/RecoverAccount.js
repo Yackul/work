@@ -65,7 +65,7 @@ class AccountRecovery extends React.Component {
     const {username, code, pw} = this.state
     try {
       await Auth.forgotPasswordSubmit(username, code, pw)
-      return window.location = "/"
+      return window.location = "/LogIn"
     } catch(err){
       console.log("submit", err)
     }
